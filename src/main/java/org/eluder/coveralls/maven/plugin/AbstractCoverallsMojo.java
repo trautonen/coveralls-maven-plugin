@@ -55,7 +55,7 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
         } catch (ProcessingException ex) {
             throw new MojoExecutionException("Processing of input or output data failed", ex);
         } catch (IOException ex) {
-            throw new MojoExecutionException("IO operation failed during build", ex);
+            throw new MojoExecutionException("IO operation failed", ex);
         } catch (Exception ex) {
             throw new MojoExecutionException("Build error", ex);
         }
