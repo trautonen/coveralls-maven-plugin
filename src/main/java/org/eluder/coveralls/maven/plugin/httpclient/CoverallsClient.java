@@ -16,6 +16,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParamBean;
 import org.apache.http.params.HttpParams;
+import org.codehaus.plexus.util.IOUtil;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.CoverallsResponse;
 
@@ -63,7 +64,7 @@ public class CoverallsClient {
         } catch (JsonProcessingException ex) {
             throw new ProcessingException(ex);
         } finally {
-            reader.close();
+            IOUtil.close(reader);
         }
     }
     
