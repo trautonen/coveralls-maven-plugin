@@ -14,11 +14,11 @@ import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParamBean;
 import org.apache.http.params.HttpParams;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.CoverallsResponse;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -28,15 +28,21 @@ public class CoverallsClient {
     private static final String FILE_NAME = "coveralls.json";
     private static final String MIME_TYPE = "application/octet-stream";
     
-    protected final HttpClient client;
-    protected final ObjectMapper objectMapper;
-    protected final String coverallsUrl;
+    private static final int DEFAULT_CONNECTION_TIMEOUT = 10000;
+    private static final int DEFAULT_SOCKET_TIMEOUT = 60000;
+    
+    private final String coverallsUrl;
+    private final HttpClient httpClient;
+    private final ObjectMapper objectMapper;
     
     public CoverallsClient(final String coverallsUrl) {
-        HttpParams params = new BasicHttpParams();
-        this.client = new DefaultHttpClient(params);
-        this.objectMapper = new ObjectMapper();
+        this(coverallsUrl, new DefaultHttpClient(defaultParams()), new ObjectMapper());
+    }
+    
+    public CoverallsClient(final String coverallsUrl, final HttpClient httpClient, final ObjectMapper objectMapper) {
         this.coverallsUrl = coverallsUrl;
+        this.httpClient = httpClient;
+        this.objectMapper = objectMapper;
     }
     
     public CoverallsResponse submit(final File file) throws ProcessingException, IOException {
@@ -44,11 +50,11 @@ public class CoverallsClient {
         entity.addPart("json_file", new FileBody(file, FILE_NAME, MIME_TYPE, CHARSET));
         HttpPost post = new HttpPost(coverallsUrl);
         post.setEntity(entity);
-        HttpResponse response = client.execute(post);
+        HttpResponse response = httpClient.execute(post);
         return parseResponse(response);
     }
     
-    protected CoverallsResponse parseResponse(final HttpResponse response) throws ProcessingException, IOException {
+    private CoverallsResponse parseResponse(final HttpResponse response) throws ProcessingException, IOException {
         HttpEntity entity = response.getEntity();
         ContentType contentType = ContentType.getOrDefault(entity);
         InputStreamReader reader = new InputStreamReader(entity.getContent(), contentType.getCharset());
@@ -56,6 +62,16 @@ public class CoverallsClient {
             return objectMapper.readValue(reader, CoverallsResponse.class);
         } catch (JsonProcessingException ex) {
             throw new ProcessingException(ex);
+        } finally {
+            reader.close();
         }
+    }
+    
+    private static HttpParams defaultParams() {
+        HttpParams params = new BasicHttpParams();
+        HttpConnectionParamBean connectionParams = new HttpConnectionParamBean(params);
+        connectionParams.setConnectionTimeout(DEFAULT_CONNECTION_TIMEOUT);
+        connectionParams.setSoTimeout(DEFAULT_SOCKET_TIMEOUT);
+        return params;
     }
 }

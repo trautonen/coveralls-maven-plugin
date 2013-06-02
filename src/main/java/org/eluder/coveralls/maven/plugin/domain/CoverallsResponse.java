@@ -3,7 +3,7 @@ package org.eluder.coveralls.maven.plugin.domain;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class CoverallsResponse implements JsonObject {
+public final class CoverallsResponse implements JsonObject {
 
     private final String message;
     private final boolean error;
@@ -30,5 +30,4 @@ public class CoverallsResponse implements JsonObject {
     public String getUrl() {
         return url;
     }
-    
 }
