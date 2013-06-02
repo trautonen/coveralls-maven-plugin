@@ -19,7 +19,7 @@ public final class Source implements JsonObject {
     private final Integer[] coverage;
     
     public Source(final String name, final String source) {
-        int lines = 0;
+        int lines = 1;
         StringBuffer replaced = new StringBuffer(source.length());
         Matcher matcher = NEWLINE.matcher(source);
         while (matcher.find()) {
