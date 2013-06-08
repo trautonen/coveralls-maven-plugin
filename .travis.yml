@@ -1,0 +1,21 @@
+language: java
+
+jdk:
+  - oraclejdk7
+  
+branches:
+  only:
+    - master
+
+env:
+  global:
+    - secure: "pmNBqCAW1rc4WKHEmnroZNwAMus18K1VWhRYwt+CN0acH8griJp612tjwWcI\n9XkZcSPR0CJx1TZqGDZZTFH44Pkm6ELU1kc54xtJR6WMXnubEVoEom0tcv/1\nNyzxv9UFJfaNgaTESww+OXSlO9wQre5ZS0/wn2xrz0+twtOPYDU="
+    - secure: "CZ9mejMLJdrh+a5TFXsNSiYyK9K/zNYOtubv2sPq1OEGhuohdUfLtdsk7bK9\nQcIlhZjrE5Q/wVgjZcFsnVpKhnUSRLC7sTOh6tu08EwpNtnNLl5AeUztOMCs\nxhG5H7jDu9uEH81WDZnIuK4Zq4qxXx523rnqQfk4DsTCKLVh9jI="
+
+script: mvn clean install
+
+before_install:
+  - git submodule update --init --recursive
+
+after_success:
+  - grep '\-SNAPSHOT</version>' pom.xml && python etc/travis-sonatype.py && mvn -Pprepare-deploy clean deploy --settings ~/.m2/sonatype.xml
