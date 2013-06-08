@@ -1,0 +1,3 @@
+[submodule "etc"]
+	path = etc
+	url = git://github.com/trautonen/etc.git
