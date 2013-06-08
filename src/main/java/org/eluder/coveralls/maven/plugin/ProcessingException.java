@@ -1,5 +1,8 @@
 package org.eluder.coveralls.maven.plugin;
 
+/**
+ * Exception to indicate if processing of input or output data fails.
+ */
 public class ProcessingException extends Exception {
 
     public ProcessingException() {
