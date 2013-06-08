@@ -38,7 +38,7 @@ public class JsonWriter implements SourceCallback, Closeable {
     public void writeStart() throws ProcessingException, IOException {
         try {
             generator.writeStartObject();
-            write("service_name", job.getServiceName());
+            writeOptional("service_name", job.getServiceName());
             writeOptional("service_job_id", job.getServiceJobId());
             writeOptional("repo_token", job.getRepoToken());
             generator.writeArrayFieldStart("source_files");

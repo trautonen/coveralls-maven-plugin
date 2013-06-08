@@ -5,19 +5,16 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.codehaus.plexus.util.IOUtil;
 import org.eluder.coveralls.maven.plugin.domain.Git;
 import org.eluder.coveralls.maven.plugin.domain.Job;
 import org.eluder.coveralls.maven.plugin.domain.Source;
+import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -62,7 +59,7 @@ public class JsonWriterTest {
         } finally {
             writer.close();
         }
-        String content = fileToString(file);
+        String content = TestIoUtil.readFileContent(file);
         Map<String, Object> jsonMap = stringToJsonMap(content);
         assertEquals(jsonMap.get("service_name"), "service");
         assertEquals(jsonMap.get("service_job_id"), "job123");
@@ -78,7 +75,7 @@ public class JsonWriterTest {
         } finally {
             writer.close();
         }
-        String content = fileToString(file);
+        String content = TestIoUtil.readFileContent(file);
         Map<String, Object> jsonMap = stringToJsonMap(content);
         assertEquals(jsonMap.get("name"), "Foo.java");
         assertEquals(jsonMap.get("source"), "public class Foo { }");
@@ -93,15 +90,6 @@ public class JsonWriterTest {
     
     private Source source() {
         return new Source("Foo.java", "public class Foo { }");
-    }
-    
-    private String fileToString(final File file) throws Exception {
-        InputStreamReader reader = new InputStreamReader(new FileInputStream(file), Charset.forName("UTF-8"));
-        try {
-            return IOUtil.toString(reader);
-        } finally {
-            reader.close();
-        }
     }
     
     private Map<String, Object> stringToJsonMap(final String content) throws Exception {

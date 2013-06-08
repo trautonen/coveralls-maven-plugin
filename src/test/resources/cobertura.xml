@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
+
+<coverage line-rate="0.5" branch-rate="1.0" lines-covered="2" lines-valid="4" branches-covered="0" branches-valid="0" complexity="1.0" version="1.9.4.1" timestamp="1370723272259">
+	<sources>
+		<source>src/main/java</source>
+		<source>--source</source>
+	</sources>
+	<packages>
+		<package name="org.eluder.coverage.test" line-rate="0.5" branch-rate="1.0" complexity="1.0">
+			<classes>
+				<class name="org.eluder.coverage.test.CoverageTest" filename="org/eluder/coverage/test/CoverageTest.java" line-rate="0.5" branch-rate="1.0" complexity="1.0">
+					<methods>
+						<method name="&lt;init&gt;" signature="()V" line-rate="1.0" branch-rate="1.0">
+							<lines>
+								<line number="3" hits="1" branch="false"/>
+							</lines>
+						</method>
+						<method name="isTested" signature="()Z" line-rate="1.0" branch-rate="1.0">
+							<lines>
+								<line number="6" hits="1" branch="false"/>
+							</lines>
+						</method>
+						<method name="neverRun" signature="()V" line-rate="0.0" branch-rate="1.0">
+							<lines>
+								<line number="10" hits="0" branch="false"/>
+								<line number="11" hits="0" branch="false"/>
+							</lines>
+						</method>
+					</methods>
+					<lines>
+						<line number="3" hits="1" branch="false"/>
+						<line number="6" hits="1" branch="false"/>
+						<line number="10" hits="0" branch="false"/>
+						<line number="11" hits="0" branch="false"/>
+					</lines>
+				</class>
+			</classes>
+		</package>
+	</packages>
+</coverage>

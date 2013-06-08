@@ -4,8 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
-import java.io.PrintWriter;
 
+import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -53,19 +53,10 @@ public class SourceLoaderTest {
     @Test
     public void testLoadSource() throws Exception {
         File file = folder.newFile();
-        writeSource("public class Foo {\r\n    \n}\r", file);
+        TestIoUtil.writeFileContent("public class Foo {\r\n    \n}\r", file);
         Source source = new SourceLoader(folder.getRoot(), "UTF-8").load(file.getName());
         assertEquals(file.getName(), source.getName());
         assertEquals("public class Foo {\n    \n}\n", source.getSource());
         assertEquals(4, source.getCoverage().length);
-    }
-    
-    private void writeSource(final String source, final File file) throws Exception {
-        PrintWriter writer = new PrintWriter(file);
-        try {
-            writer.write(source);
-        } finally {
-            writer.close();
-        }
     }
 }
