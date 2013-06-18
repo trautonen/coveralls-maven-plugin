@@ -33,9 +33,10 @@ public class JaCoCoParser extends AbstractXmlEventParser {
         } else
         
         if (isStartElement(xml, "line") && this.source != null) {
+            int ci = Integer.parseInt(xml.getAttributeValue(null, "ci"));
             this.source.addCoverage(
                     Integer.parseInt(xml.getAttributeValue(null, "nr")),
-                    Integer.valueOf(xml.getAttributeValue(null, "ci"))
+                    (ci == 0 ? 0 : 1) // jacoco does not count hits
             );
         } else
         
