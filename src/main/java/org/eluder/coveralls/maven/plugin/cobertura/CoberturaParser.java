@@ -24,7 +24,12 @@ public class CoberturaParser extends AbstractXmlEventParser {
     @Override
     protected void onEvent(final XMLStreamReader xml, final SourceCallback callback) throws XMLStreamException, ProcessingException, IOException {
         if (isStartElement(xml, "class")) {
-            this.source = loadSource(xml.getAttributeValue(null, "filename"));
+            source = loadSource(xml.getAttributeValue(null, "filename"));
+            String className = xml.getAttributeValue(null, "name");
+            int classifierPosition = className.indexOf('$');
+            if (classifierPosition > 0) {
+                source.setClassifier(className.substring(classifierPosition));
+            }
         } else
         
         if (isStartElement(xml, "methods") && source != null) {

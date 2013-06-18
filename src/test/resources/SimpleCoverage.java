@@ -1,6 +1,6 @@
-package org.eluder.coverage.test;
+package org.eluder.coverage.sample;
 
-public class CoverageTest {
+public class SimpleCoverage {
 
     public boolean isTested() {
         return false;
