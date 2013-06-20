@@ -17,24 +17,45 @@ import org.eluder.coveralls.maven.plugin.json.JsonWriter;
 
 public abstract class AbstractCoverallsMojo extends AbstractMojo {
 
+    /**
+     * File path to write and submit Coveralls data.
+     */
     @Parameter(property = "coverallsFile", defaultValue = "${project.build.directory}/coveralls.json")
     protected File coverallsFile;
     
+    /**
+     * Url for the Coveralls API.
+     */
     @Parameter(property = "coverallsUrl", defaultValue = "https://coveralls.io/api/v1/jobs")
     protected String coverallsUrl;
     
+    /**
+     * Directory path for project source code.
+     */
     @Parameter(property = "sourceDirectory", defaultValue = "${project.build.sourceDirectory}")
     protected File sourceDirectory;
     
+    /**
+     * Source file encoding.
+     */
     @Parameter(property = "sourceEncoding", defaultValue = "${project.build.sourceEncoding}")
     protected String sourceEncoding;
     
+    /**
+     * Coveralls service name.
+     */
     @Parameter(property = "serviceName")
     protected String serviceName;
     
+    /**
+     * Coveralls service job id.
+     */
     @Parameter(property = "serviceJobId")
     protected String serviceJobId;
     
+    /**
+     * Coveralls repository token.
+     */
     @Parameter(property = "repoToken")
     protected String repoToken;
     

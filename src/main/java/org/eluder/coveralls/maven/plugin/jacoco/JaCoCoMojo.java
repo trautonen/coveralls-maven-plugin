@@ -11,6 +11,9 @@ import org.eluder.coveralls.maven.plugin.domain.SourceLoader;
 @Mojo(name = "jacoco", threadSafe = false)
 public class JaCoCoMojo extends AbstractCoverallsMojo {
 
+    /**
+     * File path to JaCoCo coverage file.
+     */
     @Parameter(property = "coverageFile", defaultValue = "${project.reporting.outputDirectory}/jacoco/jacoco.xml")
     protected File coverageFile;
 

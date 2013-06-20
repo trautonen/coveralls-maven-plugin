@@ -11,6 +11,9 @@ import org.eluder.coveralls.maven.plugin.domain.SourceLoader;
 @Mojo(name = "cobertura", threadSafe = false)
 public class CoberturaMojo extends AbstractCoverallsMojo {
 
+    /**
+     * File path to Cobertura coverage file.
+     */
     @Parameter(property = "coverageFile", defaultValue = "${project.reporting.outputDirectory}/cobertura/coverage.xml")
     protected File coverageFile;
     
