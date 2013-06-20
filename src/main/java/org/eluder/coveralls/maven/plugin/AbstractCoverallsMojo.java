@@ -121,27 +121,27 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
     
     private void writeCoveralls(final JsonWriter writer, final CoverageParser parser) throws ProcessingException, IOException {
         try {
-            getLog().info("Starting to write coveralls data to " + writer.getCoverallsFile().getAbsolutePath() + " from coverage report " + parser.getCoverageFile().getAbsolutePath());
+            getLog().info("Writing Coveralls data to " + writer.getCoverallsFile().getAbsolutePath() + " from coverage report " + parser.getCoverageFile().getAbsolutePath());
             long timestamp = System.currentTimeMillis();
             writer.writeStart();
             parser.parse(writer);
             writer.writeEnd();
             long duration = System.currentTimeMillis() - timestamp;
-            getLog().info("Wrote coveralls data in " + duration + "ms");
+            getLog().info("Successfully wrote Coveralls data in " + duration + "ms");
         } finally {
             writer.close();
         }
     }
     
     private void submitData(final CoverallsClient client, final File coverallsFile) throws MojoFailureException, ProcessingException, IOException {
-        getLog().info("Starting to submit coveralls data to API");
+        getLog().info("Submitting Coveralls data to API");
         long timestamp = System.currentTimeMillis();
         CoverallsResponse response = client.submit(coverallsFile);
         long duration = System.currentTimeMillis() - timestamp;
         if (!response.isError()) {
-            getLog().info("Successfully submitted coveralls data in " + duration + "ms");
+            getLog().info("Successfully submitted Coveralls data in " + duration + "ms");
         } else {
-            getLog().error("Failed to submit coveralls data in " + duration + "ms");
+            getLog().error("Failed to submit Coveralls data in " + duration + "ms");
             throw new MojoFailureException("Failed to submit coveralls report: " + response.getMessage());
         }
     }
