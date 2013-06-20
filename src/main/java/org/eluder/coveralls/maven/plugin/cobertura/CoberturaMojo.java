@@ -12,7 +12,7 @@ import org.eluder.coveralls.maven.plugin.domain.SourceLoader;
 public class CoberturaMojo extends AbstractCoverallsMojo {
 
     @Parameter(property = "coverageFile", defaultValue = "${project.reporting.outputDirectory}/cobertura/coverage.xml")
-    private File coverageFile;
+    protected File coverageFile;
     
     @Override
     protected CoverageParser createCoverageParser(final SourceLoader sourceLoader) {

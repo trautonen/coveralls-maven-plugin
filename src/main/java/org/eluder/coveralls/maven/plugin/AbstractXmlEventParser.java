@@ -43,6 +43,11 @@ public abstract class AbstractXmlEventParser implements CoverageParser {
         }
     }
     
+    @Override
+    public final File getCoverageFile() {
+        return coverageFile;
+    }
+    
     protected XMLStreamReader createEventReader(final Reader reader) throws ProcessingException {
         try {
             return XMLInputFactory.newInstance().createXMLStreamReader(reader);

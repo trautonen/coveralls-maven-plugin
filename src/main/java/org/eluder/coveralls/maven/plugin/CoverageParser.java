@@ -1,5 +1,6 @@
 package org.eluder.coveralls.maven.plugin;
 
+import java.io.File;
 import java.io.IOException;
 
 
@@ -7,8 +8,6 @@ import java.io.IOException;
  * Handles parsing of a coverage report. The implemenation can be statefull, and the same instance
  * should be used only one time to parse a coverage report. Completed source files are passed to
  * the {@link SourceCallback} handler. To maximize performance, the parser should use streaming.
- * @author tapio
- *
  */
 public interface CoverageParser {
 
@@ -22,4 +21,8 @@ public interface CoverageParser {
      */
     public void parse(SourceCallback callback) throws ProcessingException, IOException;
     
+    /**
+     * @return the coverage report file under processing
+     */
+    public File getCoverageFile();
 }

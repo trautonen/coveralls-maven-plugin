@@ -30,12 +30,6 @@ import org.mockito.stubbing.Answer;
 
 @RunWith(MockitoJUnitRunner.class)
 public abstract class AbstractCoverageParserTest {
-
-    private static final String[][] COVERAGE_FILES = new String[][] {
-        // file                      lines  covered lines            missed lines
-        { "SimpleCoverage.java",     "14",  "3,6",                   "10,11" },
-        { "InnerClassCoverage.java", "30",  "3,6,9,10,12,15,18,21",  "25,26" }
-    };
     
     @Mock
     private SourceLoader sourceLoaderMock;
@@ -45,7 +39,7 @@ public abstract class AbstractCoverageParserTest {
     
     @Before
     public void init() throws IOException {
-        for (String[] coverageFile : COVERAGE_FILES) {
+        for (String[] coverageFile : CoverageFixture.COVERAGE_FILES) {
             final String name = coverageFile[0];
             final String content = TestIoUtil.readFileContent(TestIoUtil.getFile("/" + name));
             when(sourceLoaderMock.load("org/eluder/coverage/sample/" + name)).then(new Answer<Source>() {
@@ -63,10 +57,10 @@ public abstract class AbstractCoverageParserTest {
         parser.parse(sourceCallbackMock);
         
         ArgumentCaptor<Source> captor = ArgumentCaptor.forClass(Source.class);
-        verify(sourceCallbackMock, atLeast(COVERAGE_FILES.length)).onSource(captor.capture());
+        verify(sourceCallbackMock, atLeast(CoverageFixture.COVERAGE_FILES.length)).onSource(captor.capture());
         
         Collection<Source> combined = combineCoverage(captor.getAllValues());
-        for (String[] coverageFile : COVERAGE_FILES) {
+        for (String[] coverageFile : CoverageFixture.COVERAGE_FILES) {
             assertCoverage(combined, coverageFile[0], Integer.parseInt(coverageFile[1]), toSet(coverageFile[2]), toSet(coverageFile[3]));
         }
     }
