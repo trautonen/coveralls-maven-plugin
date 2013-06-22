@@ -16,9 +16,11 @@ import org.eclipse.jgit.revwalk.RevWalk;
 public class GitRepository {
     
     private final File sourceDirectory;
+    private final String branch;
     
-    public GitRepository(final File sourceDirectory) {
+    public GitRepository(final File sourceDirectory, final String branch) {
         this.sourceDirectory = sourceDirectory;
+        this.branch = branch;
     }
     
     public Git load() throws IOException {
@@ -48,7 +50,11 @@ public class GitRepository {
     }
     
     private String getBranch(final Repository repository) throws IOException {
-        return repository.getBranch();
+        if (this.branch != null) {
+            return this.branch;
+        } else {
+            return repository.getBranch();
+        }
     }
     
     private List<Git.Remote> getRemotes(final Repository repository) {

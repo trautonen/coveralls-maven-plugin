@@ -59,6 +59,12 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
     @Parameter(property = "repoToken")
     protected String repoToken;
     
+    /**
+     * Git branch name.
+     */
+    @Parameter(property = "branch")
+    protected String branch;
+    
     @Override
     public final void execute() throws MojoExecutionException, MojoFailureException {
         try {
@@ -100,7 +106,7 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
      * @throws IOException if an I/O error occurs
      */
     protected Job createJob() throws IOException {
-        Git git = new GitRepository(sourceDirectory).load();
+        Git git = new GitRepository(sourceDirectory, branch).load();
         return new Job(repoToken, serviceName, serviceJobId, git);
     }
     
