@@ -2,6 +2,7 @@ maven-coveralls-plugin
 ======================
 
 [![Build Status](https://travis-ci.org/trautonen/coveralls-maven-plugin.png?branch=master)](https://travis-ci.org/trautonen/coveralls-maven-plugin)
+[![Coverage Status](https://coveralls.io/repos/trautonen/coveralls-maven-plugin/badge.png?branch=master)](https://coveralls.io/r/trautonen/coveralls-maven-plugin?branch=master)
 
 Maven plugin for submitting Java code coverage reports to [Coveralls](https://coveralls.io/) web
 service.
@@ -40,7 +41,8 @@ configuration section in the plugin or setting a system property for VM using
 
 With Travis CI you need to provide service name and job id either via plugin configuration or
 system property. The corresponding configuration values are `-DserviceName=travis-ci` and
-`-DserviceJobId=$TRAVIS_JOB_ID`.
+`-DserviceJobId=$TRAVIS_JOB_ID`. Travis CI fetches the repository in detached HEAD state so the
+branch name must be explicitly defined with property `-Dbranch=$TRAVIS_BRANCH`.
 
 
 #### Cobertura
