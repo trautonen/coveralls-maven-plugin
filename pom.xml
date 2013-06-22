@@ -175,6 +175,11 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.eluder.coveralls</groupId>
+				<artifactId>coveralls-maven-plugin</artifactId>
+				<version>${project.version}</version>
+			</plugin>
 		</plugins>
 	</build>
 </project>
