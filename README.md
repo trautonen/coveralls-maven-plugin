@@ -13,7 +13,7 @@ service.
   [Cobertura](http://mojo.codehaus.org/cobertura-maven-plugin/) coverage tools
 * Fully streaming implementation for fast report generation and small memory footprint
 * Provides clean interfaces to allow easy extending to different coverage tools
-* Convention over configuration to allow almost zero configuration usage
+* Convention over configuration for almost zero configuration usage
 
 
 ### Usage

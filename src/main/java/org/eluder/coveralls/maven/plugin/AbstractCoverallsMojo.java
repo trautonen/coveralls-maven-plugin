@@ -66,6 +66,7 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
             Job job = createJob();
             JsonWriter writer = createJsonWriter(job);
             CoverallsClient client = createCoverallsClient();
+            describeJob(job);
             writeCoveralls(writer, parser);
             submitData(client, writer.getCoverallsFile());
         } catch (MojoFailureException ex) {
@@ -119,6 +120,24 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
         return new CoverallsClient(coverallsUrl);
     }
     
+    private void describeJob(final Job job) {
+        if (job.getServiceName() != null) {
+            String service = job.getServiceName();
+            if (job.getServiceJobId() != null) {
+                service += " (" + job.getServiceJobId() + ")";
+            }
+            getLog().info("Starting Coveralls job for " + service);
+        }
+        if (job.getRepoToken() != null) {
+            getLog().info("Using repository token <secret>");
+        }
+        if (job.getGit() != null) {
+            String commit = job.getGit().getHead().getId();
+            String branch = job.getGit().getBranch();
+            getLog().info("Git commit " + commit.substring(0, 7) + " in " + branch);
+        }
+    }
+    
     private void writeCoveralls(final JsonWriter writer, final CoverageParser parser) throws ProcessingException, IOException {
         try {
             getLog().info("Writing Coveralls data to " + writer.getCoverallsFile().getAbsolutePath() + " from coverage report " + parser.getCoverageFile().getAbsolutePath());
@@ -139,7 +158,8 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
         CoverallsResponse response = client.submit(coverallsFile);
         long duration = System.currentTimeMillis() - timestamp;
         if (!response.isError()) {
-            getLog().info("Successfully submitted Coveralls data in " + duration + "ms");
+            getLog().info("Successfully submitted Coveralls data in " + duration + "ms for " + response.getMessage());
+            getLog().info(response.getUrl());
         } else {
             getLog().error("Failed to submit Coveralls data in " + duration + "ms");
             throw new MojoFailureException("Failed to submit coveralls report: " + response.getMessage());
