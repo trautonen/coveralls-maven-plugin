@@ -13,7 +13,7 @@
 	<packaging>maven-plugin</packaging>
 
 	<name>coveralls-maven-plugin</name>
-	<description>Maven plugin to submit coveralls coverage reports</description>
+	<description>Maven plugin for submitting Java code coverage reports to Coveralls web service.</description>
 	<url>https://github.com/trautonen/coveralls-maven-plugin</url>
 	<inceptionYear>2013</inceptionYear>
 

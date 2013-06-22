@@ -3,18 +3,20 @@ maven-coveralls-plugin
 
 [![Build Status](https://travis-ci.org/trautonen/coveralls-maven-plugin.png?branch=master)](https://travis-ci.org/trautonen/coveralls-maven-plugin)
 
-Maven plugin to submit [Coveralls](https://coveralls.io/) coverage reports.
+Maven plugin for submitting Java code coverage reports to [Coveralls](https://coveralls.io/) web
+service.
 
 
-#### Features
+### Features
 
-* Supports JaCoCo and Cobertura coverage tools
+* Supports [JaCoCo](http://www.eclemma.org/jacoco/trunk/doc/maven.html) and
+  [Cobertura](http://mojo.codehaus.org/cobertura-maven-plugin/) coverage tools
 * Fully streaming implementation for fast report generation and small memory footprint
 * Provides clean interfaces to allow easy extending to different coverage tools
 * Convention over configuration to allow almost zero configuration usage
 
 
-#### Usage
+### Usage
 
 Set up the Coveralls maven plugin in the build section of the project pom.xml:
 
@@ -29,7 +31,7 @@ Set up the Coveralls maven plugin in the build section of the project pom.xml:
 </plugin>
 ```
 
-##### Configuration
+#### Configuration
 
 If used as a standalone maven build or with any continuous integration server other than Travis
 CI, the Coveralls repository token must be provided. This can be achieved by setting the
@@ -41,7 +43,7 @@ system property. The corresponding configuration values are `-DserviceName=travi
 `-DserviceJobId=$TRAVIS_JOB_ID`.
 
 
-##### Cobertura
+#### Cobertura
 
 Set up the Cobertura maven plugin with XML report format in the build section of the project
 pom.xml:
@@ -65,7 +67,7 @@ mvn cobertura:cobertura coveralls:cobertura
 ```
 
 
-##### JaCoCo
+#### JaCoCo
 
 Set up the JaCoCo maven plugin in the build section of the project pom.xml:
 
@@ -92,13 +94,13 @@ mvn test jacoco:report coveralls:jacoco
 ```
 
 
-#### Continuous integration
+### Continuous integration
 
 Travis CI builds the plugin with Oracle JDK 7. All successfully built snapshots are deployed to
 Sonatype OSS repository. Cobertura is used to gather coverage metrics and the report is submitted
 to Coveralls with this plugin.
 
 
-#### License
+### License
 
 The project coveralls-maven-plugin is licensed under the MIT license.
