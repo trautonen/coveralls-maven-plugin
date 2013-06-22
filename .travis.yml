@@ -18,5 +18,5 @@ before_install:
   - git submodule update --init --recursive
 
 after_success:
-  - mvn -Pcobertura -DserviceName=travic-ci -DserviceJobId=$TRAVIS_JOB_ID clean cobertura:cobertura coveralls:cobertura
+  - mvn -Pcobertura -DserviceName=travic-ci -DserviceJobId=$TRAVIS_JOB_ID clean cobertura:cobertura org.eluder.coveralls:coveralls-maven-plugin:cobertura
   - grep '\-SNAPSHOT</version>' pom.xml && python etc/travis-sonatype.py && mvn -Pprepare-deploy clean deploy --settings ~/.m2/sonatype.xml
