@@ -37,7 +37,8 @@ Set up the Coveralls maven plugin in the build section of the project pom.xml:
 If used as a standalone maven build or with any continuous integration server other than Travis
 CI, the Coveralls repository token must be provided. This can be achieved by setting the
 configuration section in the plugin or setting a system property for VM using
-`-DrepoToken=yourcoverallsprojectrepositorytoken` when running the maven command.
+`-DrepoToken=yourcoverallsprojectrepositorytoken` when running the maven command. **Do not publish
+your repository token in public GitHub repositories.**
 
 With Travis CI you need to provide service name and job id either via plugin configuration or
 system property. The corresponding configuration values are `-DserviceName=travis-ci` and
