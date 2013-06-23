@@ -195,6 +195,18 @@
 						</instrumentation>
 					</configuration>
 				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>license-maven-plugin</artifactId>
+					<configuration>
+						<excludes>
+							<exclude>**/cobertura.xml</exclude>
+							<exclude>**/jacoco.xml</exclude>
+							<exclude>**/SimpleCoverage.java</exclude>
+							<exclude>**/InnerClassCoverage.java</exclude>
+						</excludes>
+					</configuration>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
