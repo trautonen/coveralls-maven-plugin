@@ -55,7 +55,7 @@ git commit -m "Updated license information."
 $script_dir/bump-version.sh $release_version
 
 echo "Creating tag for v$release_version"
-git tag -a v$release_version -m "jersey-mustache version $release_version"
+git tag -a v$release_version -m "coveralls-maven-plugin version $release_version"
 git checkout v$release_version
 
 echo ""
