@@ -28,6 +28,7 @@ package org.eluder.coveralls.maven.plugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -40,6 +41,8 @@ import org.eluder.coveralls.maven.plugin.domain.Job;
 import org.eluder.coveralls.maven.plugin.domain.SourceLoader;
 import org.eluder.coveralls.maven.plugin.httpclient.CoverallsClient;
 import org.eluder.coveralls.maven.plugin.json.JsonWriter;
+import org.eluder.coveralls.maven.plugin.service.ServiceSetup;
+import org.eluder.coveralls.maven.plugin.service.Travis;
 
 public abstract class AbstractCoverallsMojo extends AbstractMojo {
 
@@ -94,6 +97,7 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
     @Override
     public final void execute() throws MojoExecutionException, MojoFailureException {
         try {
+            createEnvironment().setup();
             CoverageParser parser = createCoverageParser(createSourceLoader());
             Job job = createJob();
             JsonWriter writer = createJsonWriter(job);
@@ -125,6 +129,13 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
      */
     protected SourceLoader createSourceLoader() {
         return new SourceLoader(sourceDirectory, sourceEncoding);
+    }
+
+    /**
+     * @return environment to setup service specific mojo properties
+     */
+    protected Environment createEnvironment() {
+        return new Environment(this, Arrays.asList((ServiceSetup) new Travis()));
     }
     
     /**

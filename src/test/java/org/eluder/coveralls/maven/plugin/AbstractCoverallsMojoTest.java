@@ -38,6 +38,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -50,6 +51,7 @@ import org.eluder.coveralls.maven.plugin.domain.Source;
 import org.eluder.coveralls.maven.plugin.domain.SourceLoader;
 import org.eluder.coveralls.maven.plugin.httpclient.CoverallsClient;
 import org.eluder.coveralls.maven.plugin.json.JsonWriter;
+import org.eluder.coveralls.maven.plugin.service.ServiceSetup;
 import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
 import org.junit.Before;
 import org.junit.Rule;
@@ -108,6 +110,10 @@ public abstract class AbstractCoverallsMojoTest {
             @Override
             protected SourceLoader createSourceLoader() {
                 return sourceLoaderMock;
+            }
+            @Override
+            protected Environment createEnvironment() {
+                return new Environment(this, Collections.<ServiceSetup>emptyList());
             }
             @Override
             protected Job createJob() throws IOException {
