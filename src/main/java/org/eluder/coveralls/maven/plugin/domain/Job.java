@@ -1,5 +1,7 @@
 package org.eluder.coveralls.maven.plugin.domain;
 
+import java.util.Date;
+
 /*
  * #[license]
  * coveralls-maven-plugin
@@ -28,11 +30,20 @@ package org.eluder.coveralls.maven.plugin.domain;
 
 public class Job {
 
-    private final String repoToken;
-    private final String serviceName;
-    private final String serviceJobId;
-    private final Git git;
+    private String repoToken;
+    private String serviceName;
+    private String serviceJobId;
+    private Date timestamp;
+    private Git git;
     
+    public Job() {
+        // noop
+    }
+    
+    /**
+     * @deprecated Will be removed in 2.0.0, use default constructor and with* methods
+     */
+    @Deprecated
     public Job(final String repoToken, final String serviceName, final String serviceJobId, final Git git) {
         this.repoToken = repoToken;
         this.serviceName = serviceName;
@@ -40,6 +51,31 @@ public class Job {
         this.git = git;
     }
 
+    public Job withRepoToken(final String repoToken) {
+        this.repoToken = repoToken;
+        return this;
+    }
+    
+    public Job withServiceName(final String serviceName) {
+        this.serviceName = serviceName;
+        return this;
+    }
+    
+    public Job withServiceJobId(final String serviceJobId) {
+        this.serviceJobId = serviceJobId;
+        return this;
+    }
+    
+    public Job withTimestamp(final Date timestamp) {
+        this.timestamp = timestamp;
+        return this;
+    }
+    
+    public Job withGit(final Git git) {
+        this.git = git;
+        return this;
+    }
+    
     public String getRepoToken() {
         return repoToken;
     }
@@ -52,9 +88,11 @@ public class Job {
         return serviceJobId;
     }
     
+    public Date getTimestamp() {
+        return timestamp;
+    }
+    
     public Git getGit() {
         return git;
     }
-    
-    
 }

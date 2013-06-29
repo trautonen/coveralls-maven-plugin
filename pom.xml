@@ -42,6 +42,8 @@
 		<jackson.version>2.2.2</jackson.version>
 		<jgit.version>2.3.1.201302201838-r</jgit.version>
 		<maven.version>3.0</maven.version>
+		<maven.build.timestamp.format>yyyy-MM-dd HH:mm:ssa</maven.build.timestamp.format>
+		<timestamp>${maven.build.timestamp}</timestamp>
 	</properties>
 
 	<dependencies>

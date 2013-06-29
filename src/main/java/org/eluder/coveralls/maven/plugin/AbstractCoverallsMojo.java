@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.maven.plugin.AbstractMojo;
@@ -100,6 +101,12 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
     @Parameter(property = "branch")
     protected String branch;
     
+    /**
+     * Build timestamp. Must be in 'yyyy-MM-dd HH:mm:ssa' format.
+     */
+    @Parameter(property = "timestamp", defaultValue = "${timestamp}")
+    protected Date timestamp;
+    
     @Override
     public final void execute() throws MojoExecutionException, MojoFailureException {
         try {
@@ -154,7 +161,12 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
      */
     protected Job createJob() throws IOException {
         Git git = new GitRepository(sourceDirectory, branch).load();
-        return new Job(repoToken, serviceName, serviceJobId, git);
+        return new Job()
+            .withRepoToken(repoToken)
+            .withServiceName(serviceName)
+            .withServiceJobId(serviceJobId)
+            .withTimestamp(timestamp)
+            .withGit(git);
     }
     
     /**

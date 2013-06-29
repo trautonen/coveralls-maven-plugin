@@ -32,6 +32,8 @@ import static org.junit.Assert.assertSame;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -51,6 +53,8 @@ import com.fasterxml.jackson.databind.type.MapType;
 
 public class JsonWriterTest {
 
+    private static final long TEST_TIME = 1357009200000l;
+    
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
     
@@ -87,10 +91,11 @@ public class JsonWriterTest {
         }
         String content = TestIoUtil.readFileContent(file);
         Map<String, Object> jsonMap = stringToJsonMap(content);
-        assertEquals(jsonMap.get("service_name"), "service");
-        assertEquals(jsonMap.get("service_job_id"), "job123");
-        assertEquals(((Collection<?>) jsonMap.get("source_files")).size(), 0);
+        assertEquals("service", jsonMap.get("service_name"));
+        assertEquals("job123", jsonMap.get("service_job_id"));
+        assertEquals(new SimpleDateFormat(JsonWriter.TIMESTAMP_FORMAT).format(new Date(TEST_TIME)), jsonMap.get("run_at"));
         assertNotNull(jsonMap.get("git"));
+        assertEquals(0, ((Collection<?>) jsonMap.get("source_files")).size());
     }
     
     @Test
@@ -103,15 +108,19 @@ public class JsonWriterTest {
         }
         String content = TestIoUtil.readFileContent(file);
         Map<String, Object> jsonMap = stringToJsonMap(content);
-        assertEquals(jsonMap.get("name"), "Foo.java");
-        assertEquals(jsonMap.get("source"), "public class Foo { }");
-        assertEquals(((Collection<?>) jsonMap.get("coverage")).size(), 1);
+        assertEquals("Foo.java", jsonMap.get("name"));
+        assertEquals("public class Foo { }", jsonMap.get("source"));
+        assertEquals(1, ((Collection<?>) jsonMap.get("coverage")).size());
     }
     
     private Job job() {
         Git.Head head = new Git.Head("aefg837fge", "john", "john@mail.com", "john", "john@mail.com", "test commit");
         Git.Remote remote = new Git.Remote("origin", "git@git.com:foo.git");
-        return new Job(null, "service", "job123", new Git(head, "master", Arrays.asList(remote)));
+        return new Job()
+            .withServiceName("service")
+            .withServiceJobId("job123")
+            .withTimestamp(new Date(1357009200000l))
+            .withGit(new Git(head, "master", Arrays.asList(remote)));
     }
     
     private Source source() {
