@@ -54,7 +54,7 @@ public class CoverageTracingLoggerTest {
         assertEquals(3, coverageTracingLogger.getCovered());
         assertEquals(3, coverageTracingLogger.getMissed());
         verify(sourceCallbackMock, times(2)).onSource(any(Source.class));
-        verify(logMock).info("Gathered code coverage metrics for 8 lines of code:");
+        verify(logMock).info("Gathered code coverage metrics for 8 lines of source code:");
         verify(logMock).info("- 6 relevant lines");
         verify(logMock).info("- 3 covered lines");
         verify(logMock).info("- 3 missed lines");
