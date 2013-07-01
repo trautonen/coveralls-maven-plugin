@@ -26,23 +26,23 @@ package org.eluder.coveralls.maven.plugin;
  * %[license]
  */
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
-
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.eluder.coveralls.maven.plugin.domain.CoverallsResponse;
-import org.eluder.coveralls.maven.plugin.domain.Git;
-import org.eluder.coveralls.maven.plugin.domain.GitRepository;
-import org.eluder.coveralls.maven.plugin.domain.Job;
-import org.eluder.coveralls.maven.plugin.domain.SourceLoader;
+import org.apache.maven.project.MavenProject;
+import org.eluder.coveralls.maven.plugin.domain.*;
 import org.eluder.coveralls.maven.plugin.httpclient.CoverallsClient;
 import org.eluder.coveralls.maven.plugin.json.JsonWriter;
 import org.eluder.coveralls.maven.plugin.service.ServiceSetup;
 import org.eluder.coveralls.maven.plugin.service.Travis;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public abstract class AbstractCoverallsMojo extends AbstractMojo {
 
@@ -57,12 +57,12 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
      */
     @Parameter(property = "coverallsUrl", defaultValue = "https://coveralls.io/api/v1/jobs")
     protected String coverallsUrl;
-    
+
     /**
-     * Directory path for project source code.
+     * Directory path for base project.
      */
-    @Parameter(property = "sourceDirectory", defaultValue = "${project.build.sourceDirectory}")
-    protected File sourceDirectory;
+    @Parameter(property = "projectDirectory", defaultValue = "${basedir}")
+    protected File projectDirectory;
     
     /**
      * Source file encoding.
@@ -93,10 +93,32 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
      */
     @Parameter(property = "branch")
     protected String branch;
+
+    /**
+     * For dynamic project source directory resolution.
+     */
+    @Component
+    protected MavenProject project;
+
+    /**
+     *  Holds discovered source directories that get pushed into the SourceLoader.
+     */
+    private List<File> sourceDirs = new ArrayList<File>();
     
     @Override
     public final void execute() throws MojoExecutionException, MojoFailureException {
         try {
+            getLog().debug("Collecting source directories:");
+            for(MavenProject project : this.project.getCollectedProjects()) {
+                List<String> sources = project.getCompileSourceRoots();
+                for(String sourceDir : sources) {
+                    File sourceDirFile = new File(sourceDir);
+                    if(sourceDirFile.exists() && sourceDirFile.isDirectory()) {
+                        getLog().debug("Adding source directory: "+sourceDir);
+                        sourceDirs.add(sourceDirFile.getAbsoluteFile());
+                    }
+                }
+            }
             createEnvironment().setup();
             CoverageParser parser = createCoverageParser(createSourceLoader());
             Job job = createJob();
@@ -104,6 +126,7 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
             CoverallsClient client = createCoverallsClient();
             describeJob(job);
             writeCoveralls(writer, parser);
+            getLog().info(parser.getNumClasses()+" classes covered.");
             submitData(client, writer.getCoverallsFile());
         } catch (MojoFailureException ex) {
             throw ex;
@@ -128,7 +151,7 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
      * @return source loader to create source files
      */
     protected SourceLoader createSourceLoader() {
-        return new SourceLoader(sourceDirectory, sourceEncoding);
+        return new SourceLoader(sourceDirs, sourceEncoding);
     }
 
     /**
@@ -143,7 +166,7 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
      * @throws IOException if an I/O error occurs
      */
     protected Job createJob() throws IOException {
-        Git git = new GitRepository(sourceDirectory, branch).load();
+        Git git = new GitRepository(projectDirectory, branch).load();
         return new Job(repoToken, serviceName, serviceJobId, git);
     }
     
@@ -154,6 +177,12 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
      */
     protected JsonWriter createJsonWriter(final Job job) throws IOException {
         return new JsonWriter(job, coverallsFile);
+    }
+
+    public void addSourceDirectory(File sourceDirectory) {
+      if (sourceDirectory.exists() && sourceDirectory.isDirectory()) {
+        sourceDirs.add(sourceDirectory);
+      }
     }
     
     /**

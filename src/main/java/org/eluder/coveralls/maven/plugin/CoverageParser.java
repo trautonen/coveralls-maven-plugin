@@ -51,4 +51,6 @@ public interface CoverageParser {
      * @return the coverage report file under processing
      */
     public File getCoverageFile();
+
+    public int getNumClasses();
 }
