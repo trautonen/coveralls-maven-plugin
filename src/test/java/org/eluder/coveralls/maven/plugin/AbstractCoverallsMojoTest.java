@@ -26,12 +26,27 @@ package org.eluder.coveralls.maven.plugin;
  * %[license]
  */
 
+import static org.hamcrest.Matchers.containsString;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.when;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Collections;
+
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
-import org.eluder.coveralls.maven.plugin.domain.*;
-import org.eluder.coveralls.maven.plugin.domain.Git.Head;
+import org.eluder.coveralls.maven.plugin.domain.CoverallsResponse;
+import org.eluder.coveralls.maven.plugin.domain.Job;
+import org.eluder.coveralls.maven.plugin.domain.Source;
+import org.eluder.coveralls.maven.plugin.domain.SourceLoader;
 import org.eluder.coveralls.maven.plugin.httpclient.CoverallsClient;
 import org.eluder.coveralls.maven.plugin.json.JsonWriter;
 import org.eluder.coveralls.maven.plugin.service.ServiceSetup;
@@ -103,6 +118,7 @@ public abstract class AbstractCoverallsMojoTest {
                 return new Source(invocation.getArguments()[0].toString(), content.toString());
             }
         });
+        when(logMock.isDebugEnabled()).thenReturn(true);
         
         mojo = new AbstractCoverallsMojo() {
             @Override
@@ -193,22 +209,6 @@ public abstract class AbstractCoverallsMojoTest {
         } catch (MojoExecutionException ex) {
             assertEquals(ex.getCause().getClass(), NullPointerException.class);
         }
-    }
-    
-    @Test
-    public void testDescribeJob() throws Exception {
-        Git git = new Git(new Head("ab679cf2d81ac", null, null, null, null, null), "master", null);
-        when(jobMock.getServiceName()).thenReturn("service");
-        when(jobMock.getServiceJobId()).thenReturn("666");
-        when(jobMock.getRepoToken()).thenReturn("123456789");
-        when(jobMock.getGit()).thenReturn(git);
-        when(coverallsClientMock.submit(any(File.class))).thenReturn(new CoverallsResponse("success", false, null));
-        
-        mojo.execute();
-        
-        verify(logMock).info("Starting Coveralls job for service (666)");
-        verify(logMock).info("Using repository token <secret>");
-        verify(logMock).info("Git commit ab679cf in master");
     }
     
     protected abstract AbstractCoverallsMojo createMojo();

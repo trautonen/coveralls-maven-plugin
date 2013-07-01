@@ -42,7 +42,8 @@ your repository token in public GitHub repositories.**
 
 With Travis CI you need to provide only service name either via plugin configuration or system
 property. The corresponding configuration value is `-DserviceName=travis-ci`. Rest of the
-configuration for Travis CI is handled internally by the plugin.
+configuration for Travis CI is handled internally by the plugin. Set up Cobertura or JaCoCo Maven
+plugin and add the corresponding command to your `travis.yml` as the script.
 
 
 #### Cobertura
@@ -94,6 +95,29 @@ Execute maven to create JaCoCo report and submit Coveralls data:
 ```
 mvn test jacoco:report coveralls:jacoco
 ```
+
+
+### FAQ
+
+> Q: How do I know that my coverage report was submitted successfully to Coveralls?  
+> A: The plugin will end with BUILD SUCCESS and the log contains the reported job id and direct
+> URL to Coveralls.
+
+<!--- -->
+> Q: I get BUILD SUCCESS but why Coveralls shows only question marks in the reports?  
+> A: The data is most likely reported correctly, but Coveralls might take hours, or even a day, to
+> update the actual coverage numbers.
+
+<!--- -->
+> Q: How can I use Scala or some other project which sources reside in other folder than
+> `src/main/java`?  
+> A: The source directory can be changed with `sourceDirectory` parameter in the plugin's
+> configuration section or as a VM property.
+
+<!--- -->
+> Q: How can I set the plugin to use multiple source directories?  
+> A: While Build Helper Maven plugin and some other tools support multiple source directories,
+> this is not supported in coveralls-maven-plugin.
 
 
 ### Continuous integration

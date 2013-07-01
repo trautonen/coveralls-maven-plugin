@@ -26,6 +26,13 @@ package org.eluder.coveralls.maven.plugin;
  * %[license]
  */
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -35,14 +42,12 @@ import org.apache.maven.project.MavenProject;
 import org.eluder.coveralls.maven.plugin.domain.*;
 import org.eluder.coveralls.maven.plugin.httpclient.CoverallsClient;
 import org.eluder.coveralls.maven.plugin.json.JsonWriter;
+import org.eluder.coveralls.maven.plugin.logging.CoverageTracingLogger;
+import org.eluder.coveralls.maven.plugin.logging.JobLogger;
+import org.eluder.coveralls.maven.plugin.logging.Logger;
+import org.eluder.coveralls.maven.plugin.logging.Logger.Position;
 import org.eluder.coveralls.maven.plugin.service.ServiceSetup;
 import org.eluder.coveralls.maven.plugin.service.Travis;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public abstract class AbstractCoverallsMojo extends AbstractMojo {
 
@@ -105,6 +110,12 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
      */
     private List<File> sourceDirs = new ArrayList<File>();
     
+    /**
+     * Build timestamp. Must be in 'yyyy-MM-dd HH:mm:ssa' format.
+     */
+    @Parameter(property = "timestamp", defaultValue = "${timestamp}")
+    protected Date timestamp;
+    
     @Override
     public final void execute() throws MojoExecutionException, MojoFailureException {
         try {
@@ -124,8 +135,12 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
             Job job = createJob();
             JsonWriter writer = createJsonWriter(job);
             CoverallsClient client = createCoverallsClient();
-            describeJob(job);
-            writeCoveralls(writer, parser);
+            List<Logger> reporters = new ArrayList<Logger>();
+            reporters.add(new JobLogger(job));
+            SourceCallback sourceCallback = createSourceCallbackChain(writer, reporters);
+            report(reporters, Position.BEFORE);
+            writeCoveralls(writer, sourceCallback, parser);
+            report(reporters, Position.AFTER);
             getLog().info(parser.getNumClasses()+" classes covered.");
             submitData(client, writer.getCoverallsFile());
         } catch (MojoFailureException ex) {
@@ -167,22 +182,21 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
      */
     protected Job createJob() throws IOException {
         Git git = new GitRepository(projectDirectory, branch).load();
-        return new Job(repoToken, serviceName, serviceJobId, git);
+        return new Job()
+            .withRepoToken(repoToken)
+            .withServiceName(serviceName)
+            .withServiceJobId(serviceJobId)
+            .withTimestamp(timestamp)
+            .withGit(git);
     }
     
     /**
      * @param job the job describing the coveralls report
-     * @return json writer that writes the coveralls data
+     * @return JSON writer that writes the coveralls data
      * @throws IOException if an I/O error occurs
      */
     protected JsonWriter createJsonWriter(final Job job) throws IOException {
         return new JsonWriter(job, coverallsFile);
-    }
-
-    public void addSourceDirectory(File sourceDirectory) {
-      if (sourceDirectory.exists() && sourceDirectory.isDirectory()) {
-        sourceDirs.add(sourceDirectory);
-      }
     }
     
     /**
@@ -192,30 +206,26 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
         return new CoverallsClient(coverallsUrl);
     }
     
-    private void describeJob(final Job job) {
-        if (job.getServiceName() != null) {
-            String service = job.getServiceName();
-            if (job.getServiceJobId() != null) {
-                service += " (" + job.getServiceJobId() + ")";
-            }
-            getLog().info("Starting Coveralls job for " + service);
+    /**
+     * @param writer the JSON writer
+     * @return source callback chain for different source handlers
+     */
+    protected SourceCallback createSourceCallbackChain(final JsonWriter writer, final List<Logger> reporters) {
+        SourceCallback chain = writer;
+        if (getLog().isDebugEnabled()) {
+            CoverageTracingLogger coverageTracingReporter = new CoverageTracingLogger(chain);
+            chain = coverageTracingReporter;
+            reporters.add(coverageTracingReporter);
         }
-        if (job.getRepoToken() != null) {
-            getLog().info("Using repository token <secret>");
-        }
-        if (job.getGit() != null) {
-            String commit = job.getGit().getHead().getId();
-            String branch = job.getGit().getBranch();
-            getLog().info("Git commit " + commit.substring(0, 7) + " in " + branch);
-        }
+        return chain;
     }
     
-    private void writeCoveralls(final JsonWriter writer, final CoverageParser parser) throws ProcessingException, IOException {
+    private void writeCoveralls(final JsonWriter writer, final SourceCallback sourceCallback, final CoverageParser parser) throws ProcessingException, IOException {
         try {
             getLog().info("Writing Coveralls data to " + writer.getCoverallsFile().getAbsolutePath() + " from coverage report " + parser.getCoverageFile().getAbsolutePath());
             long timestamp = System.currentTimeMillis();
             writer.writeStart();
-            parser.parse(writer);
+            parser.parse(sourceCallback);
             writer.writeEnd();
             long duration = System.currentTimeMillis() - timestamp;
             getLog().info("Successfully wrote Coveralls data in " + duration + "ms");
@@ -232,9 +242,19 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
         if (!response.isError()) {
             getLog().info("Successfully submitted Coveralls data in " + duration + "ms for " + response.getMessage());
             getLog().info(response.getUrl());
+            getLog().info("*** It might take hours for Coveralls to update the actual coverage numbers for a job");
+            getLog().info("    If you see question marks in a report, please be patient");
         } else {
             getLog().error("Failed to submit Coveralls data in " + duration + "ms");
             throw new MojoFailureException("Failed to submit coveralls report: " + response.getMessage());
+        }
+    }
+    
+    private void report(final List<Logger> reporters, final Position position) {
+        for (Logger reporter : reporters) {
+            if (position.equals(reporter.getPosition())) {
+                reporter.log(getLog());
+            }
         }
     }
 }

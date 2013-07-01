@@ -26,17 +26,17 @@ package org.eluder.coveralls.maven.plugin.domain;
  * %[license]
  */
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Test;
 
 public class SourceTest {
 
-    
     @Test
-    public void foo() throws Exception {
-        Source source = new Source("sdfds", "sdfsdfdfs");
-        source.setClassifier("$foo");
-        System.out.println(new ObjectMapper().writeValueAsString(source));
+    public void testGetNameWithClassifier() throws Exception {
+        Source source = new Source("src/main/java/Hello.java", "public class Hello {\n    \n}\n");
+        source.setClassifier("$Inner");
+        assertEquals("src/main/java/Hello.java", source.getName());
+        assertEquals("src/main/java/Hello.java$Inner", source.getFullName());
     }
 }
