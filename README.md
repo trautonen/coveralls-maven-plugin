@@ -119,6 +119,20 @@ mvn test jacoco:report coveralls:jacoco
 > A: While Build Helper Maven plugin and some other tools support multiple source directories,
 > this is not supported in coveralls-maven-plugin.
 
+<!--- -->
+> Q: JaCoCo or Cobertura, which one should i choose?  
+> A: The coverage metrics and performance of the two plugins are not much different for a small
+> or medium sized project, but there are 2 notable differences with the tools:
+> - JaCoCo does not track how many times a single line of code is hit by all the tests together,
+> so Coveralls is always reported with 1 as the number of hits if the line is covered. Cobertura
+> tracks the number of hits and the number is reported to Coveralls.
+> - Cobertura tracks all inner classes separately, so a single source file will contain multiple
+> records with same file name in Coveralls if there are any innner classes defined. The
+> coveralls-maven-plugin adds classifier from the inner class to distinguish the files, but if
+> there are lot of inner classes defined this creates some noise to the Coveralls reports. JaCoCo
+> tracks inner classes within same source file so each source file is only reported once to
+> Coveralls.
+
 
 ### Continuous integration
 
