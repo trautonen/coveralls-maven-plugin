@@ -26,13 +26,6 @@ package org.eluder.coveralls.maven.plugin;
  * %[license]
  */
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -48,6 +41,13 @@ import org.eluder.coveralls.maven.plugin.logging.Logger;
 import org.eluder.coveralls.maven.plugin.logging.Logger.Position;
 import org.eluder.coveralls.maven.plugin.service.ServiceSetup;
 import org.eluder.coveralls.maven.plugin.service.Travis;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 public abstract class AbstractCoverallsMojo extends AbstractMojo {
 
@@ -120,15 +120,9 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
     public final void execute() throws MojoExecutionException, MojoFailureException {
         try {
             getLog().debug("Collecting source directories:");
+          addProjectSourceDirectories(this.project);
             for(MavenProject project : this.project.getCollectedProjects()) {
-                List<String> sources = project.getCompileSourceRoots();
-                for(String sourceDir : sources) {
-                    File sourceDirFile = new File(sourceDir);
-                    if(sourceDirFile.exists() && sourceDirFile.isDirectory()) {
-                        getLog().debug("Adding source directory: "+sourceDir);
-                        sourceDirs.add(sourceDirFile.getAbsoluteFile());
-                    }
-                }
+              addProjectSourceDirectories(project);
             }
             createEnvironment().setup();
             CoverageParser parser = createCoverageParser(createSourceLoader());
@@ -154,7 +148,18 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
         }
     }
 
-    /**
+  private void addProjectSourceDirectories(MavenProject project) {
+    List<String> sources = project.getCompileSourceRoots();
+    for(String sourceDir : sources) {
+        File sourceDirFile = new File(sourceDir);
+        if(sourceDirFile.exists() && sourceDirFile.isDirectory()) {
+            getLog().debug("Adding source directory: "+sourceDir);
+            sourceDirs.add(sourceDirFile.getAbsoluteFile());
+        }
+    }
+  }
+
+  /**
      * Creates a coverage parser. Must return new instance on every call.
      * 
      * @param sourceLoader the source loader to be used with parser
