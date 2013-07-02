@@ -26,11 +26,6 @@ package org.eluder.coveralls.maven.plugin.domain;
  * %[license]
  */
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
-
-import java.io.File;
-
 import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
 import org.junit.Rule;
 import org.junit.Test;
@@ -38,6 +33,13 @@ import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import java.io.File;
+import java.util.Arrays;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SourceLoaderTest {
@@ -55,32 +57,32 @@ public class SourceLoaderTest {
     public void testMissingSourceDirectory() throws Exception {
         when(dirMock.exists()).thenReturn(false);
         when(dirMock.isDirectory()).thenReturn(false);
-        new SourceLoader(dirMock, "UTF-8");
+        new SourceLoader(Arrays.asList(dirMock), "UTF-8");
     }
     
     @Test(expected = IllegalArgumentException.class)
     public void testInvalidSourceDirectory() throws Exception {
         when(dirMock.exists()).thenReturn(true);
         when(dirMock.isDirectory()).thenReturn(false);
-        new SourceLoader(dirMock, "UTF-8");
+        new SourceLoader(Arrays.asList(dirMock), "UTF-8");
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testMissingSourceFile() throws Exception {
-        new SourceLoader(folder.getRoot(), "UTF-8").load("Foo.java");
+        assertNull(new SourceLoader(Arrays.asList(folder.getRoot()), "UTF-8").load("Foo.java"));
     }
     
     @Test(expected = IllegalArgumentException.class)
     public void testInvalidSourceFile() throws Exception {
         File subFolder = folder.newFolder();
-        new SourceLoader(folder.getRoot(), "UTF-8").load(subFolder.getName());
+        new SourceLoader(Arrays.asList(folder.getRoot()), "UTF-8").load(subFolder.getName());
     }
     
     @Test
     public void testLoadSource() throws Exception {
         File file = folder.newFile();
         TestIoUtil.writeFileContent("public class Foo {\r\n    \n}\r", file);
-        Source source = new SourceLoader(folder.getRoot(), "UTF-8").load(file.getName());
+        Source source = new SourceLoader(Arrays.asList(folder.getRoot()), "UTF-8").load(file.getName());
         assertEquals(file.getName(), source.getName());
         assertEquals("public class Foo {\n    \n}\n", source.getSource());
         assertEquals(4, source.getCoverage().length);
