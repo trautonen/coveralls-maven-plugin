@@ -95,4 +95,8 @@ public class Job {
     public Git getGit() {
         return git;
     }
+    
+    public void validate() {
+        new JobValidator(this).validate();
+    }
 }

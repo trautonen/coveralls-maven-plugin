@@ -113,6 +113,7 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
             createEnvironment().setup();
             CoverageParser parser = createCoverageParser(createSourceLoader());
             Job job = createJob();
+            job.validate();
             JsonWriter writer = createJsonWriter(job);
             CoverallsClient client = createCoverallsClient();
             List<Logger> reporters = new ArrayList<Logger>();
@@ -222,7 +223,7 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
             getLog().info("Successfully submitted Coveralls data in " + duration + "ms for " + response.getMessage());
             getLog().info(response.getUrl());
             getLog().info("*** It might take hours for Coveralls to update the actual coverage numbers for a job");
-            getLog().info("    If you see question marks in a report, please be patient");
+            getLog().info("    If you see question marks in the report, please be patient");
         } else {
             getLog().error("Failed to submit Coveralls data in " + duration + "ms");
             throw new MojoFailureException("Failed to submit coveralls report: " + response.getMessage());
