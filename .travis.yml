@@ -2,10 +2,6 @@ language: java
 
 jdk:
   - oraclejdk7
-  
-branches:
-  only:
-    - master
 
 env:
   global:
