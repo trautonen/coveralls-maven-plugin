@@ -36,27 +36,31 @@ public class CoverageTracingLoggerTest {
     @Test
     public void testLogForSources() throws Exception {
         Source source1 = new Source("Source1.java", "public class Source1 {\n    \n}\n");
-        source1.addCoverage(1, 1);
-        source1.addCoverage(2, 1);
-        source1.addCoverage(3, 1);
-        Source source2 = new Source("Source2.java", "public class Source2 {\n    \n}\n");
-        source2.addCoverage(1, 0);
-        source2.addCoverage(2, 0);
-        source2.addCoverage(3, 0);
+        source1.addCoverage(1, 0);
+        source1.addCoverage(2, 0);
+        source1.addCoverage(3, 0);
+        Source source2 = new Source("Source2.java", "public class Source2 {\n    new Interface() { public void run() { } };\n}\n");
+        source2.addCoverage(1, 1);
+        source2.addCoverage(2, 1);
+        source2.addCoverage(3, 1);
+        Source source2inner = new Source("Source2.java", "public class Source2 {\n    new Interface() { public void run() { } };\n}\n");
+        source2inner.setClassifier("$1");
+        source2inner.addCoverage(2, 1);
         
         CoverageTracingLogger coverageTracingLogger = new CoverageTracingLogger(sourceCallbackMock);
         coverageTracingLogger.onSource(source1);
         coverageTracingLogger.onSource(source2);
+        coverageTracingLogger.onSource(source2inner);
         coverageTracingLogger.log(logMock);
         
         assertEquals(8, coverageTracingLogger.getLines());
-        assertEquals(6, coverageTracingLogger.getRelevant());
-        assertEquals(3, coverageTracingLogger.getCovered());
+        assertEquals(7, coverageTracingLogger.getRelevant());
+        assertEquals(4, coverageTracingLogger.getCovered());
         assertEquals(3, coverageTracingLogger.getMissed());
-        verify(sourceCallbackMock, times(2)).onSource(any(Source.class));
-        verify(logMock).info("Gathered code coverage metrics for 8 lines of source code:");
-        verify(logMock).info("- 6 relevant lines");
-        verify(logMock).info("- 3 covered lines");
+        verify(sourceCallbackMock, times(3)).onSource(any(Source.class));
+        verify(logMock).info("Gathered code coverage metrics for 2 source files with 8 lines of code:");
+        verify(logMock).info("- 7 relevant lines");
+        verify(logMock).info("- 4 covered lines");
         verify(logMock).info("- 3 missed lines");
     }
     

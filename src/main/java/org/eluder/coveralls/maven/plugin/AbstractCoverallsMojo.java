@@ -192,7 +192,7 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
      */
     protected SourceCallback createSourceCallbackChain(final JsonWriter writer, final List<Logger> reporters) {
         SourceCallback chain = writer;
-        if (getLog().isDebugEnabled()) {
+        if (getLog().isInfoEnabled()) {
             CoverageTracingLogger coverageTracingReporter = new CoverageTracingLogger(chain);
             chain = coverageTracingReporter;
             reporters.add(coverageTracingReporter);

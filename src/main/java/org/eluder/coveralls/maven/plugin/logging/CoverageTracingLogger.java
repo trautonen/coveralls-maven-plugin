@@ -10,12 +10,17 @@ import org.eluder.coveralls.maven.plugin.domain.Source;
 
 public class CoverageTracingLogger extends ChainingSourceCallback implements Logger {
 
+    private long files = 0;
     private long lines = 0;
     private long relevant = 0;
     private long covered = 0;
     
     public CoverageTracingLogger(final SourceCallback chained) {
         super(chained);
+    }
+    
+    public long getFiles() {
+        return files;
     }
     
     public final long getLines() {
@@ -41,7 +46,7 @@ public class CoverageTracingLogger extends ChainingSourceCallback implements Log
 
     @Override
     public void log(final Log log) {
-        log.info("Gathered code coverage metrics for " + getLines() + " lines of source code:");
+        log.info("Gathered code coverage metrics for " + getFiles() + " source files with " + getLines() + " lines of code:");
         log.info("- " + getRelevant() + " relevant lines");
         log.info("- " + getCovered() + " covered lines");
         log.info("- " + getMissed() + " missed lines");
@@ -49,7 +54,10 @@ public class CoverageTracingLogger extends ChainingSourceCallback implements Log
     
     @Override
     protected void onSourceInternal(final Source source) throws ProcessingException, IOException {
-        lines += source.getCoverage().length;
+        if (source.getClassifier() == null) {
+            files++;
+            lines += source.getCoverage().length;
+        }
         for (Integer coverage : source.getCoverage()) {
             if (coverage != null) {
                 relevant++;
