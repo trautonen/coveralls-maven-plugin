@@ -42,6 +42,7 @@ import java.util.Collections;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.project.MavenProject;
 import org.eluder.coveralls.maven.plugin.domain.CoverallsResponse;
 import org.eluder.coveralls.maven.plugin.domain.Job;
 import org.eluder.coveralls.maven.plugin.domain.Source;
@@ -59,6 +60,19 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import static org.hamcrest.Matchers.containsString;
+import static org.junit.Assert.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public abstract class AbstractCoverallsMojoTest {
@@ -82,6 +96,12 @@ public abstract class AbstractCoverallsMojoTest {
     
     @Mock
     private Log logMock;
+
+    @Mock
+    private MavenProject projectMock;
+
+    @Mock
+    private MavenProject collectedProjectMock;
     
     @Before
     public void init() throws Exception {
@@ -130,6 +150,14 @@ public abstract class AbstractCoverallsMojoTest {
                 return logMock;
             }
         };
+
+        mojo.project = projectMock;
+        List<MavenProject> projects = new ArrayList<MavenProject>();
+        projects.add(collectedProjectMock);
+        when(projectMock.getCollectedProjects()).thenReturn(projects);
+        List<String> sourceRoots = new ArrayList<String>();
+        sourceRoots.add(folder.getRoot().getAbsolutePath());
+        when(collectedProjectMock.getCompileSourceRoots()).thenReturn(sourceRoots);
     }
     
     @Test
