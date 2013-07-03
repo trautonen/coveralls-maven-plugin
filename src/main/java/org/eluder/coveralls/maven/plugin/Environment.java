@@ -26,6 +26,11 @@ package org.eluder.coveralls.maven.plugin;
  * %[license]
  */
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
 import org.eluder.coveralls.maven.plugin.service.ServiceSetup;
 
@@ -46,6 +51,36 @@ public final class Environment {
     }
     
     public void setup() {
+        setupSourceDirectories();
+        setupService();
+    }
+    
+    private void setupSourceDirectories() {
+        if (mojo.sourceDirectories == null || mojo.sourceDirectories.isEmpty()) {
+            List<File> directories = new ArrayList<File>();
+            collectSourceDirectories(mojo.project, directories);
+            mojo.sourceDirectories = directories;
+        }
+        if (mojo.sourceDirectories == null || mojo.sourceDirectories.isEmpty()) {
+            throw new IllegalArgumentException("No source directories set up");
+        }
+        mojo.getLog().debug("Using " + mojo.sourceDirectories.size() + " source directories to scan source files:");
+        mojo.getLog().debug(mojo.sourceDirectories.toString());
+    }
+    
+    private void collectSourceDirectories(final MavenProject project, final List<File> directories) {
+        for (String sourceRoot : project.getCompileSourceRoots()) {
+            File directory = new File(sourceRoot);
+            if (directory.exists() && directory.isDirectory()) {
+                directories.add(directory);
+            }
+        }
+        for (MavenProject collectedProject : project.getCollectedProjects()) {
+            collectSourceDirectories(collectedProject, directories);
+        }
+    }
+    
+    private void setupService() {
         for (ServiceSetup service : services) {
             if (service.isSelected(mojo.serviceName)) {
                 setupEnvironment(service);

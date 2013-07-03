@@ -33,11 +33,14 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -61,23 +64,8 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import static org.hamcrest.Matchers.containsString;
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 @RunWith(MockitoJUnitRunner.class)
 public abstract class AbstractCoverallsMojoTest {
-
-    private static final int MAX_NUMBER_OF_LINES = 30;
     
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
@@ -111,14 +99,13 @@ public abstract class AbstractCoverallsMojoTest {
         when(sourceLoaderMock.load(anyString())).then(new Answer<Source>() {
             @Override
             public Source answer(final InvocationOnMock invocation) throws Throwable {
-                StringBuilder content = new StringBuilder();
-                for (int i = 0; i < MAX_NUMBER_OF_LINES; i++) {
-                    content.append("\n");
-                }
-                return new Source(invocation.getArguments()[0].toString(), content.toString());
+                String sourceFile = invocation.getArguments()[0].toString();
+                String content = TestIoUtil.readFileContent(TestIoUtil.getFile("/" + new File(sourceFile).getName()));
+                return new Source(invocation.getArguments()[0].toString(), content);
             }
         });
         when(logMock.isDebugEnabled()).thenReturn(true);
+        when(logMock.isInfoEnabled()).thenReturn(true);
         
         mojo = new AbstractCoverallsMojo() {
             @Override
@@ -170,6 +157,9 @@ public abstract class AbstractCoverallsMojoTest {
         for (String[] coverageFile : CoverageFixture.COVERAGE_FILES) {
             assertThat(json, containsString(coverageFile[0]));
         }
+        
+        verify(logMock).info("Gathered code coverage metrics for 2 source files with 44 lines of code:");
+        verify(logMock).info("*** It might take hours for Coveralls to update the actual coverage numbers for a job");
     }
     
     @Test(expected = MojoFailureException.class)

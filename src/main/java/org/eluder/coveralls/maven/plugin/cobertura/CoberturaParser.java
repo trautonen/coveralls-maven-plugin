@@ -26,22 +26,22 @@ package org.eluder.coveralls.maven.plugin.cobertura;
  * %[license]
  */
 
+import java.io.File;
+import java.io.IOException;
+
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+
 import org.eluder.coveralls.maven.plugin.AbstractXmlEventParser;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.SourceCallback;
 import org.eluder.coveralls.maven.plugin.domain.Source;
 import org.eluder.coveralls.maven.plugin.domain.SourceLoader;
 
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-import java.io.File;
-import java.io.IOException;
-
 public class CoberturaParser extends AbstractXmlEventParser {
 
     private Source source;
     private boolean inMethods;
-
     
     public CoberturaParser(final File coverageFile, final SourceLoader sourceLoader) {
         super(coverageFile, sourceLoader);
@@ -51,12 +51,10 @@ public class CoberturaParser extends AbstractXmlEventParser {
     protected void onEvent(final XMLStreamReader xml, final SourceCallback callback) throws XMLStreamException, ProcessingException, IOException {
         if (isStartElement(xml, "class")) {
             source = loadSource(xml.getAttributeValue(null, "filename"));
-            if(source != null) {
-              String className = xml.getAttributeValue(null, "name");
-              int classifierPosition = className.indexOf('$');
-              if (classifierPosition > 0) {
-                  source.setClassifier(className.substring(classifierPosition));
-              }
+            String className = xml.getAttributeValue(null, "name");
+            int classifierPosition = className.indexOf('$');
+            if (classifierPosition > 0) {
+                source.setClassifier(className.substring(classifierPosition));
             }
         } else
         
@@ -76,7 +74,6 @@ public class CoberturaParser extends AbstractXmlEventParser {
         } else
         
         if (isEndElement(xml, "class") && source != null) {
-            numClasses++;
             callback.onSource(source);
             source = null;
         }

@@ -26,15 +26,15 @@ package org.eluder.coveralls.maven.plugin.cobertura;
  * %[license]
  */
 
+import java.io.File;
+
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.eluder.coveralls.maven.plugin.AbstractCoverallsMojo;
 import org.eluder.coveralls.maven.plugin.CoverageParser;
 import org.eluder.coveralls.maven.plugin.domain.SourceLoader;
 
-import java.io.File;
-
-@Mojo(name = "cobertura", threadSafe = false, aggregator=true)
+@Mojo(name = "cobertura", threadSafe = false, aggregator = true)
 public class CoberturaMojo extends AbstractCoverallsMojo {
 
     /**

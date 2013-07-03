@@ -26,54 +26,59 @@ package org.eluder.coveralls.maven.plugin.domain;
  * %[license]
  */
 
-import org.codehaus.plexus.util.IOUtil;
-
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.nio.charset.Charset;
 import java.util.List;
 
+import org.codehaus.plexus.util.IOUtil;
+
 public class SourceLoader {
 
-    private List<File> sourceDirectories;
+    private final List<File> sourceDirectories;
     private final Charset sourceEncoding;
     
     public SourceLoader(final List<File> sourceDirectories, final String sourceEncoding) {
-        this.sourceDirectories = sourceDirectories;
-        for(File sourceDirectory : sourceDirectories) {
-          if(!sourceDirectory.exists()) {
-            throw new IllegalArgumentException("Source directory " + sourceDirectory.getAbsolutePath() + " does not exist");
-          }
-          if(!sourceDirectory.isDirectory()) {
-            throw new IllegalArgumentException(sourceDirectory.getAbsolutePath() + " is not directory");
-          }
+        if (sourceDirectories == null || sourceDirectories.isEmpty()) {
+            throw new IllegalArgumentException("At least one source directory must be defined");
         }
+        for (File sourceDirectory : sourceDirectories) {
+            if (!sourceDirectory.exists()) {
+                throw new IllegalArgumentException("Source directory " + sourceDirectory.getAbsolutePath() + " does not exist");
+            }
+            if (!sourceDirectory.isDirectory()) {
+                throw new IllegalArgumentException(sourceDirectory.getAbsolutePath() + " is not directory");
+            }
+        }
+        this.sourceDirectories = sourceDirectories;
         this.sourceEncoding = Charset.forName(sourceEncoding);
     }
     
     public Source load(final String sourceFile) throws IOException {
-        File file = null;
-        for(File sourceDirectory : sourceDirectories) {
-          file = new File(sourceDirectory, sourceFile);
-          if(!file.exists()) {
-            file = null;
-          } else {
-            break;
-          }
-        }
-        if(file != null) {
-            if (!file.isFile()) {
-                throw new IllegalArgumentException(file.getAbsolutePath() + " is not file");
-            }
-            Reader reader = new InputStreamReader(new BufferedInputStream(new FileInputStream(file)), sourceEncoding);
-            try {
-                String source = IOUtil.toString(reader);
-                return new Source(sourceFile, source);
-            } finally {
-                IOUtil.close(reader);
-            }
-        } else {
-            return null;
+        File file = locate(sourceFile);
+        Reader reader = new InputStreamReader(new BufferedInputStream(new FileInputStream(file)), sourceEncoding);
+        try {
+            String source = IOUtil.toString(reader);
+            return new Source(sourceFile, source);
+        } finally {
+            IOUtil.close(reader);
         }
     }
     
+    private File locate(final String sourceFile) {
+        for (File sourceDirectory : sourceDirectories) {
+            File file = new File(sourceDirectory, sourceFile);
+            if (file.exists()) {
+                if (!file.isFile()) {
+                    throw new IllegalArgumentException(file.getAbsolutePath() + " is not file");
+                }
+                return file;
+            }
+        }
+        throw new IllegalArgumentException("Could not find source file " + sourceFile + " from any source directory");
+    }
 }

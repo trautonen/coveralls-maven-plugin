@@ -26,16 +26,17 @@ package org.eluder.coveralls.maven.plugin.jacoco;
  * %[license]
  */
 
+import java.io.File;
+import java.io.IOException;
+
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+
 import org.eluder.coveralls.maven.plugin.AbstractXmlEventParser;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.SourceCallback;
 import org.eluder.coveralls.maven.plugin.domain.Source;
 import org.eluder.coveralls.maven.plugin.domain.SourceLoader;
-
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-import java.io.File;
-import java.io.IOException;
 
 public class JaCoCoParser extends AbstractXmlEventParser {
 
@@ -66,7 +67,6 @@ public class JaCoCoParser extends AbstractXmlEventParser {
         } else
         
         if (isEndElement(xml, "sourcefile") && this.source != null) {
-            numClasses++;
             callback.onSource(this.source);
             this.source = null;
         } else

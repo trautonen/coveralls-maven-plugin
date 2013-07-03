@@ -26,17 +26,25 @@ package org.eluder.coveralls.maven.plugin;
  * %[license]
  */
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
+import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.project.MavenProject;
 import org.eluder.coveralls.maven.plugin.domain.SourceLoader;
 import org.eluder.coveralls.maven.plugin.service.ServiceSetup;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -44,21 +52,61 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class EnvironmentTest {
 
+    @Rule
+    public TemporaryFolder folder = new TemporaryFolder();
+    
     private AbstractCoverallsMojo mojo;
+    
+    @Mock
+    private CoverageParser coverageParserMock;
+    
+    @Mock
+    private Log logMock;
     
     @Mock
     private ServiceSetup serviceMock;
     
+    @Mock
+    private MavenProject mavenProjectMock;
+    
+    @Mock
+    private MavenProject mavenProjectMock2;
+    private File folder2;
+
+    @Mock
+    private MavenProject mavenProjectMock3;
+
+    @Mock
+    private MavenProject mavenProjectMock4;
+    private File folder4;
+
+    @Mock
+    private MavenProject mavenProjectMock5;
+    private File folder5;
+    
     @Before
-    public void init() {
+    public void init() throws Exception {
+        folder2 = folder.newFolder();
+        folder4 = folder.newFolder();
+        folder5 = folder.newFolder();
         mojo = new AbstractCoverallsMojo() {
             @Override
             protected CoverageParser createCoverageParser(final SourceLoader sourceLoader) {
-                return mock(CoverageParser.class);
+                return coverageParserMock;
+            }
+            @Override
+            public Log getLog() {
+                return logMock;
             }
         };
         mojo.serviceName = "service";
+        mojo.project = mavenProjectMock;
         when(serviceMock.isSelected("service")).thenReturn(true);
+        when(mavenProjectMock.getCollectedProjects()).thenReturn(Arrays.asList(mavenProjectMock2, mavenProjectMock3));
+        when(mavenProjectMock3.getCollectedProjects()).thenReturn(Arrays.asList(mavenProjectMock4, mavenProjectMock5));
+        when(mavenProjectMock2.getCompileSourceRoots()).thenReturn(Arrays.asList(folder2.getAbsolutePath()));
+        when(mavenProjectMock4.getCompileSourceRoots()).thenReturn(Arrays.asList(folder4.getAbsolutePath()));
+        when(mavenProjectMock5.getCompileSourceRoots()).thenReturn(Arrays.asList(folder5.getAbsolutePath()));
     }
     
     @Test(expected = IllegalArgumentException.class)
@@ -69,6 +117,29 @@ public class EnvironmentTest {
     @Test(expected = IllegalArgumentException.class)
     public void testConstructorWithoutServices() {
         new Environment(mojo, null);
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testSetupWithoutSourceDirectories() {
+        when(mavenProjectMock.getCollectedProjects()).thenReturn(new ArrayList<MavenProject>());
+        create(Collections.<ServiceSetup>emptyList()).setup();
+    }
+    
+    @Test
+    public void testSetupWithoutMojoSourceDirectories() {
+        create(Collections.<ServiceSetup>emptyList()).setup();
+        assertArrayEquals(new File[] { folder2.getAbsoluteFile(), folder4.getAbsoluteFile(), folder5.getAbsoluteFile() },
+                          mojo.sourceDirectories.toArray(new File[0]));
+        verify(logMock).debug("Using 3 source directories to scan source files:");
+    }
+    
+    @Test
+    public void testSetupWithMojoSourceDirectories() {
+        mojo.sourceDirectories = Arrays.asList(folder.getRoot());
+        create(Collections.<ServiceSetup>emptyList()).setup();
+        assertArrayEquals(new File[] { folder.getRoot() },
+                          mojo.sourceDirectories.toArray(new File[0]));
+        verify(logMock).debug("Using 1 source directories to scan source files:");
     }
     
     @Test

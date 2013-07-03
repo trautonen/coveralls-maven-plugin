@@ -26,22 +26,26 @@ package org.eluder.coveralls.maven.plugin;
  * %[license]
  */
 
+import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
+
+import javax.xml.stream.FactoryConfigurationError;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamConstants;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.xml.XmlStreamReader;
 import org.eluder.coveralls.maven.plugin.domain.Source;
 import org.eluder.coveralls.maven.plugin.domain.SourceLoader;
 
-import javax.xml.stream.*;
-import java.io.File;
-import java.io.IOException;
-import java.io.Reader;
-
 public abstract class AbstractXmlEventParser implements CoverageParser {
 
     private final File coverageFile;
     private final SourceLoader sourceLoader;
-    protected int numClasses = 0;
     
     public AbstractXmlEventParser(final File coverageFile, final SourceLoader sourceLoader) {
         this.coverageFile = coverageFile;
@@ -102,9 +106,5 @@ public abstract class AbstractXmlEventParser implements CoverageParser {
     
     protected final boolean isEndElement(final XMLStreamReader xml, final String name) {
         return (XMLStreamConstants.END_ELEMENT == xml.getEventType() && xml.getLocalName().equals(name));
-    }
-
-    public int getNumClasses() {
-      return numClasses;
     }
 }
