@@ -39,17 +39,6 @@ public class Job {
     public Job() {
         // noop
     }
-    
-    /**
-     * @deprecated Will be removed in 2.0.0, use default constructor and with* methods
-     */
-    @Deprecated
-    public Job(final String repoToken, final String serviceName, final String serviceJobId, final Git git) {
-        this.repoToken = repoToken;
-        this.serviceName = serviceName;
-        this.serviceJobId = serviceJobId;
-        this.git = git;
-    }
 
     public Job withRepoToken(final String repoToken) {
         this.repoToken = repoToken;
