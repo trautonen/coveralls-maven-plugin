@@ -64,8 +64,7 @@ public final class Environment {
         if (mojo.sourceDirectories == null || mojo.sourceDirectories.isEmpty()) {
             throw new IllegalArgumentException("No source directories set up");
         }
-        mojo.getLog().debug("Using " + mojo.sourceDirectories.size() + " source directories to scan source files:");
-        mojo.getLog().debug(mojo.sourceDirectories.toString());
+        logSourceDirectories();
     }
     
     private void collectSourceDirectories(final MavenProject project, final List<File> directories) {
@@ -103,6 +102,15 @@ public final class Environment {
         String branch = service.getBranch();
         if (StringUtils.isNotBlank(branch)) {
             mojo.branch = branch;
+        }
+    }
+    
+    private void logSourceDirectories() {
+        if (mojo.getLog().isDebugEnabled()) {
+            mojo.getLog().debug("Using " + mojo.sourceDirectories.size() + " source directories to scan source files:");
+            for (File sourceDirectory : mojo.sourceDirectories) {
+                mojo.getLog().debug("- " + sourceDirectory.getAbsolutePath());
+            }
         }
     }
 }

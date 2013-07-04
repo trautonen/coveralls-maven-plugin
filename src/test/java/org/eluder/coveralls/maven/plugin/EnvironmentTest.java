@@ -101,6 +101,8 @@ public class EnvironmentTest {
         };
         mojo.serviceName = "service";
         mojo.project = mavenProjectMock;
+        when(logMock.isDebugEnabled()).thenReturn(true);
+        when(logMock.isInfoEnabled()).thenReturn(true);
         when(serviceMock.isSelected("service")).thenReturn(true);
         when(mavenProjectMock.getCollectedProjects()).thenReturn(Arrays.asList(mavenProjectMock2, mavenProjectMock3));
         when(mavenProjectMock3.getCollectedProjects()).thenReturn(Arrays.asList(mavenProjectMock4, mavenProjectMock5));
