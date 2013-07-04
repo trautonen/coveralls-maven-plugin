@@ -26,8 +26,9 @@ package org.eluder.coveralls.maven.plugin;
  * %[license]
  */
 
-import static org.junit.Assert.assertArrayEquals;
+import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -130,8 +131,7 @@ public class EnvironmentTest {
     @Test
     public void testSetupWithoutMojoSourceDirectories() {
         create(Collections.<ServiceSetup>emptyList()).setup();
-        assertArrayEquals(new File[] { folder2.getAbsoluteFile(), folder4.getAbsoluteFile(), folder5.getAbsoluteFile() },
-                          mojo.sourceDirectories.toArray(new File[0]));
+        assertThat(mojo.sourceDirectories, contains(folder2.getAbsoluteFile(), folder4.getAbsoluteFile(), folder5.getAbsoluteFile()));
         verify(logMock).debug("Using 3 source directories to scan source files:");
     }
     
@@ -139,8 +139,7 @@ public class EnvironmentTest {
     public void testSetupWithMojoSourceDirectories() {
         mojo.sourceDirectories = Arrays.asList(folder.getRoot());
         create(Collections.<ServiceSetup>emptyList()).setup();
-        assertArrayEquals(new File[] { folder.getRoot() },
-                          mojo.sourceDirectories.toArray(new File[0]));
+        assertThat(mojo.sourceDirectories, contains(folder.getRoot()));
         verify(logMock).debug("Using 1 source directories to scan source files:");
     }
     
