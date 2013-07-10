@@ -25,7 +25,7 @@ public class DryRunLogger implements Logger {
     @Override
     public void log(final Log log) {
         if (dryRun) {
-            log.info("Dry run enabled, Coveralls report will not be submitted to API");
+            log.info("Dry run enabled, Coveralls report will NOT be submitted to API");
             log.info(coverallsFile.length() + " bytes of data was recorded in " + coverallsFile.getAbsolutePath());
         }
     }

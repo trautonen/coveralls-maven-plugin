@@ -66,13 +66,24 @@ public class JobLoggerTest {
         when(jobMock.getServiceName()).thenReturn("service");
         when(jobMock.getServiceJobId()).thenReturn("666");
         when(jobMock.getRepoToken()).thenReturn("123456789");
+        when(jobMock.isDryRun()).thenReturn(true);
         when(jobMock.getGit()).thenReturn(git);
         
         new JobLogger(jobMock).log(logMock);
         
-        verify(logMock).info("Starting Coveralls job for service (666)");
+        verify(logMock).info("Starting Coveralls job for service (666) in dry run mode");
         verify(logMock).info("Using repository token <secret>");
         verify(logMock).info("Git commit ab679cf in master");
         verifyNoMoreInteractions(logMock);
+    }
+    
+    @Test
+    public void testLogDryRun() {
+        when(jobMock.isDryRun()).thenReturn(true);
+        
+        new JobLogger(jobMock).log(logMock);
+        
+        verify(logMock).info("Starting Coveralls job in dry run mode");
+        verifyNoMoreInteractions(logMock);        
     }
 }

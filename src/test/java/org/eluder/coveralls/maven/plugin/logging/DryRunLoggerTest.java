@@ -47,7 +47,7 @@ public class DryRunLoggerTest {
         
         new DryRunLogger(true, coverallsFileMock).log(logMock);
         
-        verify(logMock).info("Dry run enabled, Coveralls report will not be submitted to API");
+        verify(logMock).info("Dry run enabled, Coveralls report will NOT be submitted to API");
         verify(logMock).info("1024 bytes of data was recorded in /target/coveralls.json");
     }
 }

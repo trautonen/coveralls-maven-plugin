@@ -54,6 +54,9 @@ public class JobLogger implements Logger {
                 starting += " (" + job.getServiceJobId() + ")";
             }
         }
+        if (job.isDryRun()) {
+            starting += " in dry run mode";
+        }
         log.info(starting);
         
         if (job.getRepoToken() != null) {
