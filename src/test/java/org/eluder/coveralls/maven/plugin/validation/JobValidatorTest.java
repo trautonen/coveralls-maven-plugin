@@ -1,4 +1,4 @@
-package org.eluder.coveralls.maven.plugin.domain;
+package org.eluder.coveralls.maven.plugin.validation;
 
 /*
  * #[license]
@@ -26,7 +26,15 @@ package org.eluder.coveralls.maven.plugin.domain;
  * %[license]
  */
 
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+
+import org.eluder.coveralls.maven.plugin.domain.Git;
 import org.eluder.coveralls.maven.plugin.domain.Git.Head;
+import org.eluder.coveralls.maven.plugin.domain.Job;
+import org.eluder.coveralls.maven.plugin.validation.ValidationError.Level;
 import org.junit.Test;
 
 public class JobValidatorTest {
@@ -36,41 +44,52 @@ public class JobValidatorTest {
         new JobValidator(null);
     }
     
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testValidateWithoutRepoTokenOrTravis() {
-        new JobValidator(new Job()).validate();
+        ValidationErrors errors = new JobValidator(new Job()).validate();
+        assertThat(errors, hasSize(1));
+        assertThat(errors.get(0).getLevel(), is(Level.ERROR));
     }
     
-    @Test(expected = IllegalArgumentException.class)
+    @Test
+    public void testValidateWithoutRepoTokenOrTravisForDryRun() {
+        ValidationErrors errors = new JobValidator(new Job().withDryRun(true)).validate();
+        assertThat(errors, hasSize(1));
+        assertThat(errors.get(0).getLevel(), is(Level.WARN));
+    }
+    
+    @Test
     public void testValidateWithInvalidTravis() {
-        new JobValidator(new Job().withServiceName("travis-ci")).validate();
+        ValidationErrors errors = new JobValidator(new Job().withServiceName("travis-ci")).validate();
+        assertThat(errors, hasSize(1));
+        assertThat(errors.get(0).getLevel(), is(Level.ERROR));
     }
     
     @Test
     public void testValidateWithRepoToken() {
-        new JobValidator(new Job().withRepoToken("ad3fg5")).validate();
+        ValidationErrors errors = new JobValidator(new Job().withRepoToken("ad3fg5")).validate();
+        assertThat(errors, is(empty()));
     }
     
     @Test
     public void testValidateWithTravis() {
-        new JobValidator(new Job().withServiceName("travis-ci").withServiceJobId("123")).validate();
-    }
-    
-    @Test(expected = IllegalArgumentException.class)
-    public void testValidateWithoutGitCommitId() {
-        Git git = new Git(new Head(null, null, null, null, null, null), null, null);
-        new JobValidator(new Job().withRepoToken("ad3fg5").withGit(git)).validate();
+        ValidationErrors errors = new JobValidator(new Job().withServiceName("travis-ci").withServiceJobId("123")).validate();
+        assertThat(errors, is(empty()));
     }
     
     @Test
-    public void testValidateWithoutGit() {
-        new JobValidator(new Job().withRepoToken("ad3fg5")).validate();
+    public void testValidateWithoutGitCommitId() {
+        Git git = new Git(new Head(null, null, null, null, null, null), null, null);
+        ValidationErrors errors = new JobValidator(new Job().withRepoToken("ad3fg5").withGit(git)).validate();
+        assertThat(errors, hasSize(1));
+        assertThat(errors.get(0).getLevel(), is(Level.ERROR));
     }
     
     @Test
     public void testValidateWithGit() {
         Git git = new Git(new Head("bc23af5", null, null, null, null, null), null, null);
-        new JobValidator(new Job().withRepoToken("ad3fg5").withGit(git)).validate();
+        ValidationErrors errors = new JobValidator(new Job().withRepoToken("ad3fg5").withGit(git)).validate();
+        assertThat(errors, is(empty()));
     }
 
 }

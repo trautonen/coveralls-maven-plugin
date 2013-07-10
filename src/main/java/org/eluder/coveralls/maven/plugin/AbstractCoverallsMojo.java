@@ -47,6 +47,7 @@ import org.eluder.coveralls.maven.plugin.domain.SourceLoader;
 import org.eluder.coveralls.maven.plugin.httpclient.CoverallsClient;
 import org.eluder.coveralls.maven.plugin.json.JsonWriter;
 import org.eluder.coveralls.maven.plugin.logging.CoverageTracingLogger;
+import org.eluder.coveralls.maven.plugin.logging.DryRunLogger;
 import org.eluder.coveralls.maven.plugin.logging.JobLogger;
 import org.eluder.coveralls.maven.plugin.logging.Logger;
 import org.eluder.coveralls.maven.plugin.logging.Logger.Position;
@@ -110,6 +111,12 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
     protected Date timestamp;
     
     /**
+     * Dry run Coveralls report without actually sending it.
+     */
+    @Parameter(property = "dryRun", defaultValue = "false")
+    protected boolean dryRun;
+    
+    /**
      * Maven project for runtime value resolution.
      */
     @Component
@@ -121,16 +128,21 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
             createEnvironment().setup();
             CoverageParser parser = createCoverageParser(createSourceLoader());
             Job job = createJob();
-            job.validate();
+            job.validate().throwOrInform(getLog());
             JsonWriter writer = createJsonWriter(job);
             CoverallsClient client = createCoverallsClient();
             List<Logger> reporters = new ArrayList<Logger>();
             reporters.add(new JobLogger(job));
             SourceCallback sourceCallback = createSourceCallbackChain(writer, reporters);
+            reporters.add(new DryRunLogger(job.isDryRun(), writer.getCoverallsFile()));
+            
             report(reporters, Position.BEFORE);
             writeCoveralls(writer, sourceCallback, parser);
             report(reporters, Position.AFTER);
-            submitData(client, writer.getCoverallsFile());
+            
+            if (!job.isDryRun()) {
+                submitData(client, writer.getCoverallsFile());
+            }
         } catch (MojoFailureException ex) {
             throw ex;
         } catch (ProcessingException ex) {
@@ -175,6 +187,7 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
             .withServiceName(serviceName)
             .withServiceJobId(serviceJobId)
             .withTimestamp(timestamp)
+            .withDryRun(dryRun)
             .withGit(git);
     }
     

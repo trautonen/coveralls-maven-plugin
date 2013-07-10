@@ -1,4 +1,4 @@
-package org.eluder.coveralls.maven.plugin.domain;
+package org.eluder.coveralls.maven.plugin.validation;
 
 /*
  * #[license]
@@ -26,8 +26,14 @@ package org.eluder.coveralls.maven.plugin.domain;
  * %[license]
  */
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import org.codehaus.plexus.util.StringUtils;
+import org.eluder.coveralls.maven.plugin.domain.Job;
 import org.eluder.coveralls.maven.plugin.service.Travis;
+import org.eluder.coveralls.maven.plugin.validation.ValidationError.Level;
 
 public class JobValidator {
 
@@ -35,34 +41,38 @@ public class JobValidator {
 
     public JobValidator(final Job job) {
         if (job == null) {
-            throw new IllegalArgumentException("Job must be defined");
+            throw new IllegalArgumentException("job must be defined");
         }
         this.job = job;
     }
     
-    public void validate() {
-        repoTokenOrTravis();
-        git();
+    public ValidationErrors validate() {
+        ValidationErrors errors = new ValidationErrors();
+        errors.addAll(repoTokenOrTravis());
+        errors.addAll(git());
+        return errors;
     }
     
-    private void repoTokenOrTravis() {
+    private List<ValidationError> repoTokenOrTravis() {
         if (hasValue(job.getRepoToken())) {
-            return;
+            return Collections.emptyList();
         }
         if (new Travis().isSelected(job.getServiceName()) && hasValue(job.getServiceJobId())) {
-            return;
+            return Collections.emptyList();
         }
-        throw new IllegalArgumentException("Either repository token or travis service with job id must be defined");
+        Level level = (job.isDryRun() ? Level.WARN : Level.ERROR);
+        String message = "Either repository token or travis service with job id must be defined";
+        return Arrays.asList(new ValidationError(level, message));
     }
     
-    private void git() {
+    private List<ValidationError> git() {
         if (job.getGit() == null) {
-            return;
+            return Collections.emptyList();
         }
         if (hasValue(job.getGit().getHead().getId())) {
-            return;
+            return Collections.emptyList();
         }
-        throw new IllegalArgumentException("Commit id for HEAD must be defined");
+        return Arrays.asList(new ValidationError(Level.ERROR, "Commit id for HEAD must be defined"));
     }
     
     private boolean hasValue(final String value) {

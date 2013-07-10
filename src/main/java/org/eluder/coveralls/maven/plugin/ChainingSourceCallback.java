@@ -36,7 +36,7 @@ public abstract class ChainingSourceCallback implements SourceCallback {
 
     public ChainingSourceCallback(final SourceCallback chained) {
         if (chained == null) {
-            throw new IllegalArgumentException("Chained source callback must be defined");
+            throw new IllegalArgumentException("chained must be defined");
         }
         this.chained = chained;
     }

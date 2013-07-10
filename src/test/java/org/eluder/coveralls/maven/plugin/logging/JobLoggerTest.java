@@ -51,7 +51,7 @@ public class JobLoggerTest {
     private Log logMock;
     
     @Test(expected = IllegalArgumentException.class)
-    public void testConstructorWithNull() {
+    public void testMissingJob() {
         new JobLogger(null);
     }
     

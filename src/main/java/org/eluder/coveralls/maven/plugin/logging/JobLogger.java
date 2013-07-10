@@ -35,7 +35,7 @@ public class JobLogger implements Logger {
     
     public JobLogger(final Job job) {
         if (job == null) {
-            throw new IllegalArgumentException("Job must be defined");
+            throw new IllegalArgumentException("job must be defined");
         }
         this.job = job;
     }

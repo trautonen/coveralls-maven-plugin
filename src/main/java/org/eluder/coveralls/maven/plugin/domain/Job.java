@@ -2,6 +2,9 @@ package org.eluder.coveralls.maven.plugin.domain;
 
 import java.util.Date;
 
+import org.eluder.coveralls.maven.plugin.validation.JobValidator;
+import org.eluder.coveralls.maven.plugin.validation.ValidationErrors;
+
 /*
  * #[license]
  * coveralls-maven-plugin
@@ -34,6 +37,7 @@ public class Job {
     private String serviceName;
     private String serviceJobId;
     private Date timestamp;
+    private boolean dryRun;
     private Git git;
     
     public Job() {
@@ -60,6 +64,11 @@ public class Job {
         return this;
     }
     
+    public Job withDryRun(final boolean dryRun) {
+        this.dryRun = dryRun;
+        return this;
+    }
+    
     public Job withGit(final Git git) {
         this.git = git;
         return this;
@@ -81,11 +90,16 @@ public class Job {
         return timestamp;
     }
     
+    public boolean isDryRun() {
+        return dryRun;
+    }
+    
     public Git getGit() {
         return git;
     }
     
-    public void validate() {
-        new JobValidator(this).validate();
+    public ValidationErrors validate() {
+        JobValidator validator = new JobValidator(this);
+        return validator.validate();
     }
 }

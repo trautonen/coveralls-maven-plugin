@@ -39,6 +39,7 @@ import static org.mockito.Mockito.when;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -54,6 +55,7 @@ import org.eluder.coveralls.maven.plugin.httpclient.CoverallsClient;
 import org.eluder.coveralls.maven.plugin.json.JsonWriter;
 import org.eluder.coveralls.maven.plugin.service.ServiceSetup;
 import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
+import org.eluder.coveralls.maven.plugin.validation.ValidationErrors;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -93,7 +95,6 @@ public abstract class AbstractCoverallsMojoTest {
     
     @Before
     public void init() throws Exception {
-        final AbstractCoverallsMojo delegate = createMojo();
         coverallsFile = folder.newFile();
         
         when(sourceLoaderMock.load(anyString())).then(new Answer<Source>() {
@@ -106,11 +107,12 @@ public abstract class AbstractCoverallsMojoTest {
         });
         when(logMock.isDebugEnabled()).thenReturn(true);
         when(logMock.isInfoEnabled()).thenReturn(true);
+        when(jobMock.validate()).thenReturn(new ValidationErrors());
         
         mojo = new AbstractCoverallsMojo() {
             @Override
             protected CoverageParser createCoverageParser(final SourceLoader sourceLoader) {
-                return delegate.createCoverageParser(sourceLoader);
+                return createMojo().createCoverageParser(sourceLoader);
             }
             @Override
             protected SourceLoader createSourceLoader() {
@@ -137,14 +139,34 @@ public abstract class AbstractCoverallsMojoTest {
                 return logMock;
             }
         };
-
         mojo.project = projectMock;
+        
         List<MavenProject> projects = new ArrayList<MavenProject>();
         projects.add(collectedProjectMock);
         when(projectMock.getCollectedProjects()).thenReturn(projects);
         List<String> sourceRoots = new ArrayList<String>();
         sourceRoots.add(folder.getRoot().getAbsolutePath());
         when(collectedProjectMock.getCompileSourceRoots()).thenReturn(sourceRoots);
+    }
+    
+    @Test
+    public void testDefaultBehavior() throws Exception {
+        mojo = new AbstractCoverallsMojo() {
+            @Override
+            protected CoverageParser createCoverageParser(final SourceLoader sourceLoader) {
+                return createMojo().createCoverageParser(sourceLoaderMock);
+            }
+        };
+        mojo.sourceDirectories = Arrays.asList(TestIoUtil.getFile("/"));
+        mojo.sourceEncoding = "UTF-8";
+        mojo.project = projectMock;
+        mojo.repoToken = "asdfg";
+        mojo.coverallsFile = folder.newFile();
+        mojo.dryRun = true;
+        
+        when(projectMock.getBasedir()).thenReturn(TestIoUtil.getFile("/"));
+        
+        mojo.execute();
     }
     
     @Test
