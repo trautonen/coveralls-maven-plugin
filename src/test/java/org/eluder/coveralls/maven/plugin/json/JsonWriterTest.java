@@ -27,7 +27,6 @@ package org.eluder.coveralls.maven.plugin.json;
  */
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
 import java.io.File;
@@ -38,6 +37,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import org.eluder.coveralls.maven.plugin.domain.Git;
 import org.eluder.coveralls.maven.plugin.domain.Job;
@@ -80,6 +80,7 @@ public class JsonWriterTest {
         
     }
     
+    @SuppressWarnings("rawtypes")
     @Test
     public void testWriteStartAndEnd() throws Exception {
         JsonWriter writer = new JsonWriter(job(), file);
@@ -93,8 +94,14 @@ public class JsonWriterTest {
         Map<String, Object> jsonMap = stringToJsonMap(content);
         assertEquals("service", jsonMap.get("service_name"));
         assertEquals("job123", jsonMap.get("service_job_id"));
+        assertEquals("build5", jsonMap.get("service_number"));
+        assertEquals("http://ci.com/build5", jsonMap.get("service_build_url"));
+        assertEquals("foobar", ((Map) jsonMap.get("environment")).get("custom_property"));
+        assertEquals("master", jsonMap.get("service_branch"));
+        assertEquals("pull10", jsonMap.get("service_pull_request"));
         assertEquals(new SimpleDateFormat(JsonWriter.TIMESTAMP_FORMAT).format(new Date(TEST_TIME)), jsonMap.get("run_at"));
-        assertNotNull(jsonMap.get("git"));
+        assertEquals("af456fge34acd", ((Map) jsonMap.get("git")).get("branch"));
+        assertEquals("aefg837fge", ((Map) ((Map) jsonMap.get("git")).get("head")).get("id"));
         assertEquals(0, ((Collection<?>) jsonMap.get("source_files")).size());
     }
     
@@ -116,11 +123,18 @@ public class JsonWriterTest {
     private Job job() {
         Git.Head head = new Git.Head("aefg837fge", "john", "john@mail.com", "john", "john@mail.com", "test commit");
         Git.Remote remote = new Git.Remote("origin", "git@git.com:foo.git");
+        Properties environment = new Properties();
+        environment.setProperty("custom_property", "foobar");
         return new Job()
             .withServiceName("service")
             .withServiceJobId("job123")
-            .withTimestamp(new Date(1357009200000l))
-            .withGit(new Git(head, "master", Arrays.asList(remote)));
+            .withServiceBuildNumber("build5")
+            .withServiceBuildUrl("http://ci.com/build5")
+            .withServiceEnvironment(environment)
+            .withBranch("master")
+            .withPullRequest("pull10")
+            .withTimestamp(new Date(TEST_TIME))
+            .withGit(new Git(head, "af456fge34acd", Arrays.asList(remote)));
     }
     
     private Source source() {

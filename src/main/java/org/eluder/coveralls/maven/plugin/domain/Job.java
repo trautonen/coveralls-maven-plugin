@@ -1,6 +1,7 @@
 package org.eluder.coveralls.maven.plugin.domain;
 
 import java.util.Date;
+import java.util.Properties;
 
 import org.eluder.coveralls.maven.plugin.validation.JobValidator;
 import org.eluder.coveralls.maven.plugin.validation.ValidationErrors;
@@ -36,8 +37,13 @@ public class Job {
     private String repoToken;
     private String serviceName;
     private String serviceJobId;
+    private String serviceBuildNumber;
+    private String serviceBuildUrl;
+    private Properties serviceEnvironment;
     private Date timestamp;
     private boolean dryRun;
+    private String branch;
+    private String pullRequest;
     private Git git;
     
     public Job() {
@@ -59,6 +65,21 @@ public class Job {
         return this;
     }
     
+    public Job withServiceBuildNumber(final String serviceBuildNumber) {
+        this.serviceBuildNumber = serviceBuildNumber;
+        return this;
+    }
+    
+    public Job withServiceBuildUrl(final String serviceBuildUrl) {
+        this.serviceBuildUrl = serviceBuildUrl;
+        return this;
+    }
+    
+    public Job withServiceEnvironment(final Properties serviceEnvironment) {
+        this.serviceEnvironment = serviceEnvironment;
+        return this;
+    }
+    
     public Job withTimestamp(final Date timestamp) {
         this.timestamp = timestamp;
         return this;
@@ -66,6 +87,16 @@ public class Job {
     
     public Job withDryRun(final boolean dryRun) {
         this.dryRun = dryRun;
+        return this;
+    }
+    
+    public Job withBranch(final String branch) {
+        this.branch = branch;
+        return this;
+    }
+    
+    public Job withPullRequest(final String pullRequest) {
+        this.pullRequest = pullRequest;
         return this;
     }
     
@@ -86,12 +117,32 @@ public class Job {
         return serviceJobId;
     }
     
+    public String getServiceBuildNumber() {
+        return serviceBuildNumber;
+    }
+    
+    public String getServiceBuildUrl() {
+        return serviceBuildUrl;
+    }
+    
+    public Properties getServiceEnvironment() {
+        return serviceEnvironment;
+    }
+    
     public Date getTimestamp() {
         return timestamp;
     }
     
     public boolean isDryRun() {
         return dryRun;
+    }
+    
+    public String getBranch() {
+        return branch;
+    }
+    
+    public String getPullRequest() {
+        return pullRequest;
     }
     
     public Git getGit() {

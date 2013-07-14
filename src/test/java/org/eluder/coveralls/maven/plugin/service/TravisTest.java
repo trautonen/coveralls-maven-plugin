@@ -26,43 +26,79 @@ package org.eluder.coveralls.maven.plugin.service;
  * %[license]
  */
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Before;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+
 import org.junit.Test;
 
 public class TravisTest {
+    
+    @Test
+    public void testIsSelectedForTravisCi() {
+        assertTrue(new Travis("travis-ci", new HashMap<String, String>()).isSelected());
+    }
+    
+    @Test
+    public void testIsSelectedForTravisPro() {
+        assertTrue(new Travis("travis-pro", new HashMap<String, String>()).isSelected());
+    }
+    
+    @Test
+    public void testIsSelectedForEnvironment() {
+        Map<String, String> env = new HashMap<String, String>();
+        env.put("TRAVIS", "true");
+        assertTrue(new Travis(null, env).isSelected());
+    }
+    
+    @Test
+    public void testIsSelectedForNothing() {
+        assertFalse(new Travis(null, new HashMap<String, String>()).isSelected());
+    }
+    
+    @Test
+    public void testGetNameForServiceName() {
+        assertEquals("travis-pro", new Travis("travis-pro", new HashMap<String, String>()).getName());
+    }
+    
+    @Test
+    public void testGetNameForDefault() {
+        assertEquals("travis-ci", new Travis(null, new HashMap<String, String>()).getName());
+    }
+    
+    @Test
+    public void testGetJobId() {
+        Map<String, String> env = new HashMap<String, String>();
+        env.put("TRAVIS_JOB_ID", "job123");
+        assertEquals("job123", new Travis(null, env).getJobId());
+    }
 
-    private boolean travis;
-    
-    @Before
-    public void init() {
-        travis = Boolean.valueOf(System.getenv("TRAVIS")).booleanValue();
+    @Test
+    public void testGetBranch() {
+        Map<String, String> env = new HashMap<String, String>();
+        env.put("TRAVIS_BRANCH", "master");
+        assertEquals("master", new Travis(null, env).getBranch());
     }
     
     @Test
-    public void testIsSelected() {
-        Travis service = new Travis();
-        assertTrue(service.isSelected("travis-ci"));
-        assertTrue(service.isSelected("travis-pro"));
-        assertFalse(service.isSelected("travis"));
-        assertFalse(service.isSelected(""));
-        assertFalse(service.isSelected(null));
+    public void testGetPullRequest() {
+        Map<String, String> env = new HashMap<String, String>();
+        env.put("TRAVIS_PULL_REQUEST", "pull10");
+        assertEquals("pull10", new Travis(null, env).getPullRequest());
     }
     
     @Test
-    public void testValues() {
-        Travis service = new Travis();
-        if (travis) {
-            assertNotNull(service.getServiceJobId());
-            assertNotNull(service.getBranch());
-        } else {
-            assertNull(service.getServiceJobId());
-            assertNull(service.getBranch());
-        }
-        assertNull(service.getRepoToken());
+    public void testGetCustomProperties() {
+        Map<String, String> env = new HashMap<String, String>();
+        env.put("TRAVIS_JOB_ID", "123");
+        env.put("TRAVIS_PULL_REQUEST", "999");
+        Properties properties = new Travis(null, env).getEnvironment();
+        assertEquals(2, properties.size());
+        assertEquals("123", properties.getProperty("travis_job_id"));
+        assertEquals("999", properties.getProperty("travis_pull_request"));
     }
 }

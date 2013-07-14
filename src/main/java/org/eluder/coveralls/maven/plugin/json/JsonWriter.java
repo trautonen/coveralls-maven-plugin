@@ -31,6 +31,8 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map.Entry;
+import java.util.Properties;
 
 import org.codehaus.plexus.util.StringUtils;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
@@ -68,10 +70,15 @@ public class JsonWriter implements SourceCallback, Closeable {
     public void writeStart() throws ProcessingException, IOException {
         try {
             generator.writeStartObject();
+            writeOptionalString("repo_token", job.getRepoToken());
             writeOptionalString("service_name", job.getServiceName());
             writeOptionalString("service_job_id", job.getServiceJobId());
-            writeOptionalString("repo_token", job.getRepoToken());
+            writeOptionalString("service_number", job.getServiceBuildNumber());
+            writeOptionalString("service_build_url", job.getServiceBuildUrl());
+            writeOptionalString("service_branch", job.getBranch());
+            writeOptionalString("service_pull_request", job.getPullRequest());
             writeOptionalTimestamp("run_at", job.getTimestamp());
+            writeOptionalEnvironment("environment", job.getServiceEnvironment());
             writeOptionalObject("git", job.getGit());
             generator.writeArrayFieldStart("source_files");
         } catch (JsonProcessingException ex) {
@@ -118,6 +125,16 @@ public class JsonWriter implements SourceCallback, Closeable {
         if (value != null) {
             SimpleDateFormat format = new SimpleDateFormat(TIMESTAMP_FORMAT);
             writeOptionalString(field, format.format(value));
+        }
+    }
+    
+    private void writeOptionalEnvironment(final String field, final Properties properties) throws ProcessingException, IOException {
+        if (properties != null) {
+            generator.writeObjectFieldStart(field);
+            for (Entry<Object, Object> property : properties.entrySet()) {
+                writeOptionalString(property.getKey().toString(), property.getValue().toString());
+            }
+            generator.writeEndObject();
         }
     }
 }

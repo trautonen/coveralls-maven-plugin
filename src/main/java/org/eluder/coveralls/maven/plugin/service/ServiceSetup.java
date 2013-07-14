@@ -1,5 +1,7 @@
 package org.eluder.coveralls.maven.plugin.service;
 
+import java.util.Properties;
+
 /*
  * #[license]
  * coveralls-maven-plugin
@@ -32,24 +34,42 @@ package org.eluder.coveralls.maven.plugin.service;
 public interface ServiceSetup {
 
     /**
-     * @param name the service name
      * @return <code>true</code> if this service is selected, otherwise <code>false</code>
      */
-    boolean isSelected(String name);
+    boolean isSelected();
     
     /**
-     * @return coveralls service job id, or <code>null</code> if not defined
+     * @return service name
      */
-    String getServiceJobId();
+    String getName();
     
     /**
-     * @return coveralls repository token, or <code>null</code> if not defined
+     * @return service job id, or <code>null</code> if not defined
      */
-    String getRepoToken();
+    String getJobId();
+    
+    /**
+     * @return service build number, or <code>null</code> if not defined
+     */
+    String getBuildNumber();
+    
+    /**
+     * @return service build url, or <code>null</code> if not defined
+     */
+    String getBuildUrl();
     
     /**
      * @return git branch name, or <code>null</code> if not defined
      */
     String getBranch();
     
+    /**
+     * @return pull request identifier, or <code>null</code> if not defined
+     */
+    String getPullRequest();
+    
+    /**
+     * @return environment related to service, or <code>null</code> if not defined
+     */
+    Properties getEnvironment();
 }

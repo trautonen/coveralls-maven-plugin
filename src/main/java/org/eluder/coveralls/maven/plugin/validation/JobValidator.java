@@ -57,7 +57,7 @@ public class JobValidator {
         if (hasValue(job.getRepoToken())) {
             return Collections.emptyList();
         }
-        if (new Travis().isSelected(job.getServiceName()) && hasValue(job.getServiceJobId())) {
+        if (new Travis(job.getServiceName(), System.getenv()).isSelected() && hasValue(job.getServiceJobId())) {
             return Collections.emptyList();
         }
         Level level = (job.isDryRun() ? Level.WARN : Level.ERROR);

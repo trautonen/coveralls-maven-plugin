@@ -28,6 +28,7 @@ package org.eluder.coveralls.maven.plugin;
 
 import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -37,6 +38,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Properties;
 
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
@@ -104,7 +106,7 @@ public class EnvironmentTest {
         mojo.project = mavenProjectMock;
         when(logMock.isDebugEnabled()).thenReturn(true);
         when(logMock.isInfoEnabled()).thenReturn(true);
-        when(serviceMock.isSelected("service")).thenReturn(true);
+        when(serviceMock.isSelected()).thenReturn(true);
         when(mavenProjectMock.getCollectedProjects()).thenReturn(Arrays.asList(mavenProjectMock2, mavenProjectMock3));
         when(mavenProjectMock3.getCollectedProjects()).thenReturn(Arrays.asList(mavenProjectMock4, mavenProjectMock5));
         when(mavenProjectMock2.getCompileSourceRoots()).thenReturn(Arrays.asList(folder2.getAbsolutePath()));
@@ -113,12 +115,12 @@ public class EnvironmentTest {
     }
     
     @Test(expected = IllegalArgumentException.class)
-    public void testConstructorWithoutMojo() {
+    public void testMissingMojo() {
         new Environment(null, Arrays.asList(serviceMock));
     }
     
     @Test(expected = IllegalArgumentException.class)
-    public void testConstructorWithoutServices() {
+    public void testMissingServices() {
         new Environment(mojo, null);
     }
     
@@ -129,7 +131,7 @@ public class EnvironmentTest {
     }
     
     @Test
-    public void testSetupWithoutMojoSourceDirectories() {
+    public void testSetupWithProjectSourceDirectories() {
         create(Collections.<ServiceSetup>emptyList()).setup();
         assertThat(mojo.sourceDirectories, contains(folder2.getAbsoluteFile(), folder4.getAbsoluteFile(), folder5.getAbsoluteFile()));
         verify(logMock).debug("Using 3 source directories to scan source files:");
@@ -146,36 +148,79 @@ public class EnvironmentTest {
     @Test
     public void testSetupWithoutServices() {
         create(Collections.<ServiceSetup>emptyList()).setup();
-        assertProperties(null, null, null);
+        assertEquals("service", mojo.serviceName);
     }
     
     @Test
-    public void testSetupWithoutValues() {
-        when(serviceMock.getServiceJobId()).thenReturn("");
-        when(serviceMock.getRepoToken()).thenReturn(null);
-        when(serviceMock.getBranch()).thenReturn(null);
+    public void testSetupWithIncompleteJob() {
+        when(serviceMock.getJobId()).thenReturn("");
+        when(serviceMock.getBuildUrl()).thenReturn("  ");
         
         create(Arrays.asList(serviceMock)).setup();
-        assertProperties(null, null, null);
+        assertEquals("service", mojo.serviceName);
+        assertNull(mojo.serviceJobId);
+        assertNull(mojo.serviceBuildNumber);
+        assertNull(mojo.serviceBuildUrl);
+        assertNull(mojo.branch);
+        assertNull(mojo.pullRequest);
+        assertNull(mojo.serviceEnvironment);
     }
     
     @Test
-    public void testSetupWithValues() {
-        when(serviceMock.getServiceJobId()).thenReturn("123");
-        when(serviceMock.getRepoToken()).thenReturn("abcde");
+    public void testSetupWithCompleteJob() {
+        mojo.serviceName = null;
+        Properties environment = new Properties();
+        environment.setProperty("env", "true");
+        when(serviceMock.getName()).thenReturn("defined service");
+        when(serviceMock.getJobId()).thenReturn("123");
+        when(serviceMock.getBuildNumber()).thenReturn("456");
+        when(serviceMock.getBuildUrl()).thenReturn("http://ci.com/project");
         when(serviceMock.getBranch()).thenReturn("master");
+        when(serviceMock.getPullRequest()).thenReturn("111");
+        when(serviceMock.getEnvironment()).thenReturn(environment);
         
         create(Arrays.asList(mock(ServiceSetup.class), serviceMock)).setup();
-        assertProperties("123", "abcde", "master");
+        assertEquals("defined service", mojo.serviceName);
+        assertEquals("123", mojo.serviceJobId);
+        assertEquals("456", mojo.serviceBuildNumber);
+        assertEquals("http://ci.com/project", mojo.serviceBuildUrl);
+        assertEquals("master", mojo.branch);
+        assertEquals("111", mojo.pullRequest);
+        assertEquals("true", mojo.serviceEnvironment.get("env"));
+    }
+    
+    @Test
+    public void testSetupWithoutJobOverride() {
+        Properties environment = new Properties();
+        environment.setProperty("env", "true");
+        Properties serviceEnvironment = new Properties();
+        serviceEnvironment.setProperty("env", "setProperty");
+        when(serviceMock.getName()).thenReturn("defined service");
+        when(serviceMock.getJobId()).thenReturn("123");
+        when(serviceMock.getBuildNumber()).thenReturn("456");
+        when(serviceMock.getBuildUrl()).thenReturn("http://ci.com/project");
+        when(serviceMock.getBranch()).thenReturn("master");
+        when(serviceMock.getPullRequest()).thenReturn("111");
+        when(serviceMock.getEnvironment()).thenReturn(environment);
+        mojo.serviceJobId = "setJobId";
+        mojo.serviceBuildNumber = "setBuildNumber";
+        mojo.serviceBuildUrl = "setBuildUrl";
+        mojo.serviceEnvironment = serviceEnvironment;
+        mojo.branch = "setBranch";
+        mojo.pullRequest = "setPullRequest";
+        
+        create(Arrays.asList(serviceMock)).setup();
+        
+        assertEquals("service", mojo.serviceName);
+        assertEquals("setJobId", mojo.serviceJobId);
+        assertEquals("setBuildNumber", mojo.serviceBuildNumber);
+        assertEquals("setBuildUrl", mojo.serviceBuildUrl);
+        assertEquals("setBranch", mojo.branch);
+        assertEquals("setPullRequest", mojo.pullRequest);
+        assertEquals("setProperty", mojo.serviceEnvironment.get("env"));        
     }
     
     private Environment create(final Iterable<ServiceSetup> services) {
         return new Environment(mojo, services);
-    }
-    
-    private void assertProperties(final String serviceJobId, final String repoToken, final String branch) {
-        assertEquals(serviceJobId, mojo.serviceJobId);
-        assertEquals(repoToken, mojo.repoToken);
-        assertEquals(branch, mojo.branch);
     }
 }

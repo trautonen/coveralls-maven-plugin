@@ -26,7 +26,6 @@ package org.eluder.coveralls.maven.plugin.domain;
  * %[license]
  */
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
@@ -39,14 +38,7 @@ public class GitRepositoryTest {
      */
     @Test
     public void testLoad() throws Exception {
-        Git git = new GitRepository(TestIoUtil.getFile("/"), null).load();
+        Git git = new GitRepository(TestIoUtil.getFile("/")).load();
         assertNotNull(git.getHead().getId());
-    }
-    
-    @Test
-    public void testLoadWithPredefinedBranch() throws Exception {
-        Git git = new GitRepository(TestIoUtil.getFile("/"), "funnybranch").load();
-        assertNotNull(git.getHead().getId());
-        assertEquals("funnybranch", git.getBranch());
     }
 }

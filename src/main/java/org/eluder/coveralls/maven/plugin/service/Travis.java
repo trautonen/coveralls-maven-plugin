@@ -1,5 +1,10 @@
 package org.eluder.coveralls.maven.plugin.service;
 
+import java.util.Map;
+import java.util.Properties;
+
+import org.codehaus.plexus.util.StringUtils;
+
 /*
  * #[license]
  * coveralls-maven-plugin
@@ -26,27 +31,53 @@ package org.eluder.coveralls.maven.plugin.service;
  * %[license]
  */
 
-public class Travis implements ServiceSetup {
+public class Travis extends AbstractServiceSetup {
 
-    @Override
-    public boolean isSelected(final String name) {
-        return ("travis-ci".equals(name) ||
-                "travis-pro".equals(name));
+    public static final String TRAVIS_CI = "travis-ci";
+    public static final String TRAVIS_PRO = "travis-pro";
+    public static final String TRAVIS = "TRAVIS";
+    public static final String TRAVIS_JOB_ID = "TRAVIS_JOB_ID";
+    public static final String TRAVIS_BRANCH = "TRAVIS_BRANCH";
+    public static final String TRAVIS_PULL_REQUEST = "TRAVIS_PULL_REQUEST";
+    
+    public Travis(final String serviceName, final Map<String, String> env) {
+        super(serviceName, env);
     }
 
     @Override
-    public String getServiceJobId() {
-        return System.getenv("TRAVIS_JOB_ID");
+    public boolean isSelected() {
+        String serviceName = super.getName();
+        return (TRAVIS_CI.equals(serviceName) ||
+                TRAVIS_PRO.equals(serviceName) ||
+                "true".equalsIgnoreCase(getProperty(TRAVIS)));
     }
 
     @Override
-    public String getRepoToken() {
-        return null;
+    public String getName() {
+        String serviceName = super.getName();
+        return (StringUtils.isNotBlank(serviceName) ? serviceName : TRAVIS_CI);
+    }
+    
+    @Override
+    public String getJobId() {
+        return getProperty(TRAVIS_JOB_ID);
     }
 
     @Override
     public String getBranch() {
-        return System.getenv("TRAVIS_BRANCH");
+        return getProperty(TRAVIS_BRANCH);
     }
-
+    
+    @Override
+    public String getPullRequest() {
+        return getProperty(TRAVIS_PULL_REQUEST);
+    }
+    
+    @Override
+    public Properties getEnvironment() {
+        Properties environment = new Properties();
+        addProperty(environment, "travis_job_id", getProperty(TRAVIS_JOB_ID));
+        addProperty(environment, "travis_pull_request", getProperty(TRAVIS_PULL_REQUEST));
+        return environment;
+    }
 }
