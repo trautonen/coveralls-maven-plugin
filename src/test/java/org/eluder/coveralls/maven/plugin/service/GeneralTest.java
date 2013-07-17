@@ -11,50 +11,48 @@ import org.junit.Test;
 
 public class GeneralTest {
 
+    private Map<String, String> env() {
+        Map<String, String> env = new HashMap<String, String>();
+        env.put("CI_NAME", "ci_service");
+        env.put("CI_BUILD_NUMBER", "build123");
+        env.put("CI_BUILD_URL", "http://ci.com/build123");
+        env.put("CI_BRANCH", "master");
+        env.put("CI_PULL_REQUEST", "pull10");
+        return env;
+    }
+    
     @Test
     public void testIsSelectedForNothing() {
-        assertFalse(new General(null, new HashMap<String, String>()).isSelected());
+        assertFalse(new General(new HashMap<String, String>()).isSelected());
     }
     
     @Test
     public void testIsSelectedForCi() {
-        Map<String, String> env = new HashMap<String, String>();
-        env.put("CI_NAME", "bamboo");
-        assertTrue(new General(null, env).isSelected());
+        assertTrue(new General(env()).isSelected());
     }
     
     @Test
     public void testGetName() {
-        Map<String, String> env = new HashMap<String, String>();
-        env.put("CI_NAME", "bamboo");
-        assertEquals("bamboo", new General(null, env).getName());
+        assertEquals("ci_service", new General(env()).getName());
     }
     
     @Test
     public void testGetBuildNumber() {
-        Map<String, String> env = new HashMap<String, String>();
-        env.put("CI_BUILD_NUMBER", "build123");
-        assertEquals("build123", new General(null, env).getBuildNumber());
+        assertEquals("build123", new General(env()).getBuildNumber());
     }
     
     @Test
     public void testGetBuildUrl() {
-        Map<String, String> env = new HashMap<String, String>();
-        env.put("CI_BUILD_URL", "http://bamboo.ci/build123");
-        assertEquals("http://bamboo.ci/build123", new General(null, env).getBuildUrl());
+        assertEquals("http://ci.com/build123", new General(env()).getBuildUrl());
     }
     
     @Test
     public void testGetBranch() {
-        Map<String, String> env = new HashMap<String, String>();
-        env.put("CI_BRANCH", "master");
-        assertEquals("master", new General(null, env).getBranch());
+        assertEquals("master", new General(env()).getBranch());
     }
     
     @Test
     public void testGetPullRequest() {
-        Map<String, String> env = new HashMap<String, String>();
-        env.put("CI_PULL_REQUEST", "pull10");
-        assertEquals("pull10", new General(null, env).getPullRequest());
+        assertEquals("pull10", new General(env()).getPullRequest());
     }
 }

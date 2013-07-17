@@ -13,7 +13,7 @@ public class AbstractServiceSetupTest {
 
     @Test
     public void testGetMissingProperty() {
-        AbstractServiceSetup serviceSetup = create(null, new HashMap<String, String>());
+        AbstractServiceSetup serviceSetup = create(new HashMap<String, String>());
         assertNull(serviceSetup.getProperty("property"));
     }
     
@@ -21,31 +21,31 @@ public class AbstractServiceSetupTest {
     public void testGetProperty() {
         Map<String, String> env = new HashMap<String, String>();
         env.put("CI_NAME", "bamboo");
-        assertEquals("bamboo", create(null, env).getProperty("CI_NAME"));
+        assertEquals("bamboo", create(env).getProperty("CI_NAME"));
     }
     
     @Test(expected = IllegalArgumentException.class)
     public void testAddPropertyWithoutName() {
-        create(null, new HashMap<String, String>()).addProperty(new Properties(), null, "value");
+        create(new HashMap<String, String>()).addProperty(new Properties(), null, "value");
     }
     
     @Test
     public void testAddPropertyWithoutValue() {
         Properties properties = new Properties();
-        create(null, new HashMap<String, String>()).addProperty(properties, "prop", " ");
+        create(new HashMap<String, String>()).addProperty(properties, "prop", " ");
         assertNull(properties.getProperty("prop"));
     }
     
     @Test
     public void testAddPropertyWithValue() {
         Properties properties = new Properties();
-        create(null, new HashMap<String, String>()).addProperty(properties, "prop", "value");
+        create(new HashMap<String, String>()).addProperty(properties, "prop", "value");
         assertEquals("value", properties.getProperty("prop"));
     }
     
     @Test
     public void testGetDefaultValues() {
-        AbstractServiceSetup serviceSetup = create(null, new HashMap<String, String>());
+        AbstractServiceSetup serviceSetup = create(new HashMap<String, String>());
         assertNull(serviceSetup.getName());
         assertNull(serviceSetup.getJobId());
         assertNull(serviceSetup.getBuildNumber());
@@ -55,11 +55,15 @@ public class AbstractServiceSetupTest {
         assertNull(serviceSetup.getEnvironment());
     }
     
-    private AbstractServiceSetup create(final String serviceName, final Map<String, String> env) {
-        return new AbstractServiceSetup(serviceName, env) {
+    private AbstractServiceSetup create(final Map<String, String> env) {
+        return new AbstractServiceSetup(env) {
             @Override
             public boolean isSelected() {
                 return true;
+            }
+            @Override
+            public String getName() {
+                return getProperty("CI_NAME");
             }
         };
     }

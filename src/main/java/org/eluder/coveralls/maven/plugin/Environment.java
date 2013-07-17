@@ -35,6 +35,9 @@ import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
 import org.eluder.coveralls.maven.plugin.service.ServiceSetup;
 
+/**
+ * Constructs and setups the project environment and continuous integration service.
+ */
 public final class Environment {
     
     private final AbstractCoverallsMojo mojo;

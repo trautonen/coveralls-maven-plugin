@@ -2,6 +2,10 @@ package org.eluder.coveralls.maven.plugin.service;
 
 import java.util.Map;
 
+/**
+ * General implementation for any continuous integration service that provides the required
+ * environment properties.
+ */
 public class General extends AbstractServiceSetup {
 
     public static final String CI_NAME = "CI_NAME";
@@ -10,8 +14,8 @@ public class General extends AbstractServiceSetup {
     public static final String CI_BRANCH = "CI_BRANCH";
     public static final String CI_PULL_REQUEST = "CI_PULL_REQUEST";
     
-    public General(final String serviceName, final Map<String, String> env) {
-        super(serviceName, env);
+    public General(final Map<String, String> env) {
+        super(env);
     }
 
     @Override

@@ -32,7 +32,6 @@ import java.util.List;
 
 import org.codehaus.plexus.util.StringUtils;
 import org.eluder.coveralls.maven.plugin.domain.Job;
-import org.eluder.coveralls.maven.plugin.service.Travis;
 import org.eluder.coveralls.maven.plugin.validation.ValidationError.Level;
 
 public class JobValidator {
@@ -57,11 +56,11 @@ public class JobValidator {
         if (hasValue(job.getRepoToken())) {
             return Collections.emptyList();
         }
-        if (new Travis(job.getServiceName(), System.getenv()).isSelected() && hasValue(job.getServiceJobId())) {
+        if (hasValue(job.getServiceName()) && hasValue(job.getServiceJobId())) {
             return Collections.emptyList();
         }
         Level level = (job.isDryRun() ? Level.WARN : Level.ERROR);
-        String message = "Either repository token or travis service with job id must be defined";
+        String message = "Either repository token or service with job id must be defined";
         return Arrays.asList(new ValidationError(level, message));
     }
     

@@ -5,19 +5,15 @@ import java.util.Properties;
 
 import org.codehaus.plexus.util.StringUtils;
 
+/**
+ * Convenient base class for service setups.
+ */
 public abstract class AbstractServiceSetup implements ServiceSetup {
 
-    private final String serviceName;
     private final Map<String, String> env;
     
-    public AbstractServiceSetup(final String serviceName, final Map<String, String> env) {
-        this.serviceName = serviceName;
+    public AbstractServiceSetup(final Map<String, String> env) {
         this.env = env;
-    }
-    
-    @Override
-    public String getName() {
-        return serviceName;
     }
 
     @Override

@@ -38,67 +38,50 @@ import org.junit.Test;
 
 public class TravisTest {
     
-    @Test
-    public void testIsSelectedForTravisCi() {
-        assertTrue(new Travis("travis-ci", new HashMap<String, String>()).isSelected());
-    }
-    
-    @Test
-    public void testIsSelectedForTravisPro() {
-        assertTrue(new Travis("travis-pro", new HashMap<String, String>()).isSelected());
-    }
-    
-    @Test
-    public void testIsSelectedForEnvironment() {
+    private Map<String, String> env() {
         Map<String, String> env = new HashMap<String, String>();
         env.put("TRAVIS", "true");
-        assertTrue(new Travis(null, env).isSelected());
+        env.put("TRAVIS_JOB_ID", "job123");
+        env.put("TRAVIS_BRANCH", "master");
+        env.put("TRAVIS_PULL_REQUEST", "pull10");
+        return env;
     }
     
     @Test
     public void testIsSelectedForNothing() {
-        assertFalse(new Travis(null, new HashMap<String, String>()).isSelected());
+        assertFalse(new Travis(new HashMap<String, String>()).isSelected());
     }
     
     @Test
-    public void testGetNameForServiceName() {
-        assertEquals("travis-pro", new Travis("travis-pro", new HashMap<String, String>()).getName());
+    public void testIsSelectedForTravis() {
+        assertTrue(new Travis(env()).isSelected());
     }
     
     @Test
-    public void testGetNameForDefault() {
-        assertEquals("travis-ci", new Travis(null, new HashMap<String, String>()).getName());
+    public void testGetName() {
+        assertEquals("travis-ci", new Travis(env()).getName());
     }
     
     @Test
     public void testGetJobId() {
-        Map<String, String> env = new HashMap<String, String>();
-        env.put("TRAVIS_JOB_ID", "job123");
-        assertEquals("job123", new Travis(null, env).getJobId());
+        assertEquals("job123", new Travis(env()).getJobId());
     }
 
     @Test
     public void testGetBranch() {
-        Map<String, String> env = new HashMap<String, String>();
-        env.put("TRAVIS_BRANCH", "master");
-        assertEquals("master", new Travis(null, env).getBranch());
+        assertEquals("master", new Travis(env()).getBranch());
     }
     
     @Test
     public void testGetPullRequest() {
-        Map<String, String> env = new HashMap<String, String>();
-        env.put("TRAVIS_PULL_REQUEST", "pull10");
-        assertEquals("pull10", new Travis(null, env).getPullRequest());
+        assertEquals("pull10", new Travis(env()).getPullRequest());
     }
     
     @Test
-    public void testGetCustomProperties() {
-        Map<String, String> env = new HashMap<String, String>();
-        env.put("TRAVIS_JOB_ID", "123");
-        env.put("TRAVIS_PULL_REQUEST", "999");
-        Properties properties = new Travis(null, env).getEnvironment();
+    public void testGetEnvironment() {
+        Properties properties = new Travis(env()).getEnvironment();
         assertEquals(2, properties.size());
-        assertEquals("123", properties.getProperty("travis_job_id"));
-        assertEquals("999", properties.getProperty("travis_pull_request"));
+        assertEquals("job123", properties.getProperty("travis_job_id"));
+        assertEquals("pull10", properties.getProperty("travis_pull_request"));
     }
 }

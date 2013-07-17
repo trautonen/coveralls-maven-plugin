@@ -52,7 +52,10 @@ import org.eluder.coveralls.maven.plugin.logging.DryRunLogger;
 import org.eluder.coveralls.maven.plugin.logging.JobLogger;
 import org.eluder.coveralls.maven.plugin.logging.Logger;
 import org.eluder.coveralls.maven.plugin.logging.Logger.Position;
+import org.eluder.coveralls.maven.plugin.service.Bamboo;
+import org.eluder.coveralls.maven.plugin.service.Circle;
 import org.eluder.coveralls.maven.plugin.service.General;
+import org.eluder.coveralls.maven.plugin.service.Jenkins;
 import org.eluder.coveralls.maven.plugin.service.ServiceSetup;
 import org.eluder.coveralls.maven.plugin.service.Travis;
 
@@ -83,23 +86,32 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
     protected String sourceEncoding;
     
     /**
-     * Coveralls service name.
+     * CI service name.
      */
     @Parameter(property = "serviceName")
     protected String serviceName;
     
     /**
-     * Coveralls service job id.
+     * CI service job id.
      */
     @Parameter(property = "serviceJobId")
     protected String serviceJobId;
     
+    /**
+     * CI service build number.
+     */
     @Parameter(property = "serviceBuildNumber")
     protected String serviceBuildNumber;
     
+    /**
+     * CI service build url.
+     */
     @Parameter(property = "serviceBuildUrl")
     protected String serviceBuildUrl;
     
+    /**
+     * CI service specific environment properties.
+     */
     @Parameter(property = "serviceEnvironment")
     protected Properties serviceEnvironment;
     
@@ -115,6 +127,9 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
     @Parameter(property = "branch")
     protected String branch;
 
+    /**
+     * GitHub pull request identifier.
+     */
     @Parameter(property = "pullRequest")
     protected String pullRequest;
     
@@ -184,17 +199,23 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
     }
 
     /**
-     * @return environment to setup mojo and service specific mojo properties
+     * @return environment to setup mojo and service specific properties
      */
     protected Environment createEnvironment() {
         return new Environment(this, getServices());
     }
     
+    /**
+     * @return list of available continuous integration services
+     */
     protected List<ServiceSetup> getServices() {
         Map<String, String> env = System.getenv();
         List<ServiceSetup> services = new ArrayList<ServiceSetup>();
-        services.add(new Travis(this.serviceName, env));
-        services.add(new General(this.serviceName, env));
+        services.add(new Travis(env));
+        services.add(new Circle(env));
+        services.add(new Jenkins(env));
+        services.add(new Bamboo(env));
+        services.add(new General(env));
         return services;
     }
     

@@ -3,8 +3,6 @@ package org.eluder.coveralls.maven.plugin.service;
 import java.util.Map;
 import java.util.Properties;
 
-import org.codehaus.plexus.util.StringUtils;
-
 /*
  * #[license]
  * coveralls-maven-plugin
@@ -31,31 +29,31 @@ import org.codehaus.plexus.util.StringUtils;
  * %[license]
  */
 
+/**
+ * Service implementation for Travis CI
+ * <p>
+ * https://travis-ci.org/
+ */
 public class Travis extends AbstractServiceSetup {
 
-    public static final String TRAVIS_CI = "travis-ci";
-    public static final String TRAVIS_PRO = "travis-pro";
+    public static final String TRAVIS_NAME = "travis-ci";
     public static final String TRAVIS = "TRAVIS";
     public static final String TRAVIS_JOB_ID = "TRAVIS_JOB_ID";
     public static final String TRAVIS_BRANCH = "TRAVIS_BRANCH";
     public static final String TRAVIS_PULL_REQUEST = "TRAVIS_PULL_REQUEST";
     
-    public Travis(final String serviceName, final Map<String, String> env) {
-        super(serviceName, env);
+    public Travis(final Map<String, String> env) {
+        super(env);
     }
 
     @Override
     public boolean isSelected() {
-        String serviceName = super.getName();
-        return (TRAVIS_CI.equals(serviceName) ||
-                TRAVIS_PRO.equals(serviceName) ||
-                "true".equalsIgnoreCase(getProperty(TRAVIS)));
+        return ("true".equalsIgnoreCase(getProperty(TRAVIS)));
     }
 
     @Override
     public String getName() {
-        String serviceName = super.getName();
-        return (StringUtils.isNotBlank(serviceName) ? serviceName : TRAVIS_CI);
+        return TRAVIS_NAME;
     }
     
     @Override

@@ -105,7 +105,6 @@ public abstract class AbstractCoverallsMojoTest {
                 return new Source(invocation.getArguments()[0].toString(), content);
             }
         });
-        when(logMock.isDebugEnabled()).thenReturn(true);
         when(logMock.isInfoEnabled()).thenReturn(true);
         when(jobMock.validate()).thenReturn(new ValidationErrors());
         

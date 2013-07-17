@@ -30,6 +30,10 @@ import java.io.IOException;
 
 import org.eluder.coveralls.maven.plugin.domain.Source;
 
+/**
+ * Source callback handler that allows chaining multiple callback handlers. Chained callback
+ * handler is executed after this callback.
+ */
 public abstract class ChainingSourceCallback implements SourceCallback {
 
     private final SourceCallback chained;
@@ -47,5 +51,8 @@ public abstract class ChainingSourceCallback implements SourceCallback {
         chained.onSource(source);
     }
     
+    /**
+     * @see #onSource(Source)
+     */
     protected abstract void onSourceInternal(final Source source) throws ProcessingException, IOException;
 }

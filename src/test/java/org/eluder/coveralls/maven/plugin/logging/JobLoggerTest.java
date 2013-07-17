@@ -27,6 +27,7 @@ package org.eluder.coveralls.maven.plugin.logging;
  */
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -41,6 +42,9 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 @RunWith(MockitoJUnitRunner.class)
 public class JobLoggerTest {
 
@@ -49,6 +53,9 @@ public class JobLoggerTest {
     
     @Mock
     private Log logMock;
+    
+    @Mock
+    private ObjectMapper jsonMapperMock;
     
     @Test(expected = IllegalArgumentException.class)
     public void testMissingJob() {
@@ -61,7 +68,7 @@ public class JobLoggerTest {
     }
     
     @Test
-    public void testLogFullJob() {
+    public void testLogJobWithId() {
         Git git = new Git(new Head("ab679cf2d81ac", null, null, null, null, null), "master", null);
         when(jobMock.getServiceName()).thenReturn("service");
         when(jobMock.getServiceJobId()).thenReturn("666");
@@ -74,6 +81,20 @@ public class JobLoggerTest {
         verify(logMock).info("Starting Coveralls job for service (666) in dry run mode");
         verify(logMock).info("Using repository token <secret>");
         verify(logMock).info("Git commit ab679cf in master");
+        verify(logMock).isDebugEnabled();
+        verifyNoMoreInteractions(logMock);
+    }
+    
+    @Test
+    public void testLogWithBuildNumberAndUrl() {
+        when(jobMock.getServiceName()).thenReturn("service");
+        when(jobMock.getServiceBuildNumber()).thenReturn("10");
+        when(jobMock.getServiceBuildUrl()).thenReturn("http://ci.com/build/10");
+        
+        new JobLogger(jobMock).log(logMock);
+        
+        verify(logMock).info("Starting Coveralls job for service (10 / http://ci.com/build/10)");
+        verify(logMock).isDebugEnabled();
         verifyNoMoreInteractions(logMock);
     }
     
@@ -84,6 +105,31 @@ public class JobLoggerTest {
         new JobLogger(jobMock).log(logMock);
         
         verify(logMock).info("Starting Coveralls job in dry run mode");
-        verifyNoMoreInteractions(logMock);        
+        verify(logMock).isDebugEnabled();
+        verifyNoMoreInteractions(logMock);
+    }
+    
+    @Test
+    public void testLogJobWithDebug() throws Exception {
+        when(logMock.isDebugEnabled()).thenReturn(true);
+        when(jobMock.getServiceName()).thenReturn("service");
+        when(jsonMapperMock.writeValueAsString(same(jobMock))).thenReturn("{\"serviceName\":\"service\"}");
+        
+        new JobLogger(jobMock, jsonMapperMock).log(logMock);
+        
+        verify(logMock).info("Starting Coveralls job for service");
+        verify(logMock).isDebugEnabled();
+        verify(logMock).debug("Complete Job description:\n{\"serviceName\":\"service\"}");
+        verifyNoMoreInteractions(logMock);
+    }
+    
+    @Test(expected = RuntimeException.class)
+    @SuppressWarnings("unchecked")
+    public void testLogJobWithErrorInDebug() throws Exception {
+        when(logMock.isDebugEnabled()).thenReturn(true);
+        when(jobMock.getServiceName()).thenReturn("service");
+        when(jsonMapperMock.writeValueAsString(same(jobMock))).thenThrow(JsonProcessingException.class);
+        
+        new JobLogger(jobMock, jsonMapperMock).log(logMock);
     }
 }
