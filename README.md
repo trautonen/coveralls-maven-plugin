@@ -5,13 +5,17 @@ maven-coveralls-plugin
 [![Coverage Status](https://coveralls.io/repos/trautonen/coveralls-maven-plugin/badge.png?branch=master)](https://coveralls.io/r/trautonen/coveralls-maven-plugin?branch=master)
 
 Maven plugin for submitting Java code coverage reports to [Coveralls](https://coveralls.io/) web
-service.
+service. The project uses [semantic versioning](http://semver.org/).
 
 
 ### Features
 
-* Supports [JaCoCo](http://www.eclemma.org/jacoco/trunk/doc/maven.html) and
-  [Cobertura](http://mojo.codehaus.org/cobertura-maven-plugin/) coverage tools
+* Supports [Cobertura](http://mojo.codehaus.org/cobertura-maven-plugin/) and
+  [JaCoCo](http://www.eclemma.org/jacoco/trunk/doc/maven.html) coverage tools
+* Multi-module report aggregation with Cobertura
+* Built-in support for [Travis](https://travis-ci.org/), [Circle](https://circleci.com/),
+  [Codeship](https://www.codeship.io/), [Jenkins](http://jenkins-ci.org/) and
+  [Bamboo](https://www.atlassian.com/software/bamboo/) continuous integration services
 * Fully streaming implementation for fast report generation and small memory footprint
 * Provides clean interfaces to allow easy extending to different coverage tools
 * Convention over configuration for almost zero configuration usage
@@ -34,21 +38,26 @@ Set up the Coveralls maven plugin in the build section of the project pom.xml:
 
 #### Configuration
 
-If used as a standalone maven build or with any continuous integration server other than Travis
+If used as a standalone Maven build or with any continuous integration server other than Travis
 CI, the Coveralls repository token must be provided. This can be achieved by setting the
 configuration section in the plugin or setting a system property for VM using
 `-DrepoToken=yourcoverallsprojectrepositorytoken` when running the maven command. **Do not publish
 your repository token in public GitHub repositories.**
 
-With Travis CI you need to provide only service name either via plugin configuration or system
-property. The corresponding configuration value is `-DserviceName=travis-ci`. Rest of the
-configuration for Travis CI is handled internally by the plugin. Set up Cobertura or JaCoCo Maven
-plugin and add the corresponding command to your `travis.yml` as the script.
+If you are using Travis, Circle, Codeship, Jenkins or Bamboo continuous integration services, no
+other configuration is required. The plugin's built-in service environment support take care of
+the rest. Multi-module projects that require aggregated reports have to set up Cobertura Maven
+plugin for the root project with `aggregate=true`. For other projects you are free to choose
+either [Cobertura](#cobertura) or [JaCoCo](#jacoco) plugin. Finally add the corresponding Maven
+command for the selected plugin to your continuous integration service build job.
+
+See [Complete plugin configuration](#complete-plugin-configuration) for all of the available
+configuration parameters.
 
 
 #### Cobertura
 
-Set up the Cobertura maven plugin with XML report format in the build section of the project
+Set up the Cobertura Maven plugin with XML report format in the build section of the project
 pom.xml:
 
 ```xml
@@ -59,11 +68,13 @@ pom.xml:
     <configuration>
         <format>xml</format>
         <maxmem>256m</maxmem>
+        <!-- aggregated reports for multi-module projects -->
+        <aggregate>true</aggregate>
     </configuration>
 </plugin>
 ```
 
-Execute maven to create Cobertura report and submit Coveralls data:
+Execute Maven to create Cobertura report and submit Coveralls data:
 
 ```
 mvn cobertura:cobertura coveralls:cobertura
@@ -72,7 +83,7 @@ mvn cobertura:cobertura coveralls:cobertura
 
 #### JaCoCo
 
-Set up the JaCoCo maven plugin in the build section of the project pom.xml:
+Set up the JaCoCo Maven plugin in the build section of the project pom.xml:
 
 ```xml
 <plugin>
@@ -90,11 +101,38 @@ Set up the JaCoCo maven plugin in the build section of the project pom.xml:
 </plugin>
 ```
 
-Execute maven to create JaCoCo report and submit Coveralls data:
+Execute Maven to create JaCoCo report and submit Coveralls data:
 
 ```
 mvn test jacoco:report coveralls:jacoco
 ```
+
+
+### Complete plugin configuration
+
+Configuration can be changed by the configuration section of plugin's definition in POM or with
+Java virtual machine system properties using the syntax `-Dparameter=value`. See
+[Maven plugin guide](http://maven.apache.org/guides/plugin/guide-java-plugin-development.html#Configuring_Parameters_in_a_Project)
+how different types are mapped in the configuration XML. Some of the optional parameters are set
+by the built-in service environment setups. Note that if a parameter is explicitly defined, the
+service environment will not override it.
+
+| Parameter | Type | Default | Description |
+| --------- | ---- | ------- | ----------- |
+| `coverallsFile` | `File` | ${project.build.directory}/coveralls.json | File path to write and submit Coveralls data. |
+| `coverallsUrl` | `String` | https://coveralls.io/api/v1/jobs | Url for the Coveralls API. |
+| `sourceDirectories` | `List<File>` | | List of source directories. If not provided, the plugin will scan the project's compiled source roots. |
+| `sourceEncoding` | `String` | ${project.build.sourceEncoding} | Source file encoding. |
+| `serviceName` | `String` | | CI service name. If not provided the supported service environments are used. |
+| `serviceJobId` | `String` | | CI service job id. Currently supported only with Travis. If this property is set, `repoToken` is not required. If not provided the supported service environments are used. | 
+| `serviceBuildNumber` | `String` | | CI service build number. If not provided the supported service environments are used. |
+| `serviceBuildUrl` | `String` | | CI service build url. If not provided the supported service environments are used. |
+| `serviceEnvironment` | `Properties` | | CI service specific environment properties. If not provided the supported service environments are used. |
+| `repoToken` | `String` | | Coveralls repository token. **Do not publish this paramater unencrypted in public GitHub repositories.** |
+| `branch` | `String` | | Git branch name. If not provided the supported service environments are used. |
+| `pullRequest` | `String` | | GitHub pull request identifier. If not provided the supported service environments are used. |
+| `timestamp` | `Date` | ${timestamp} | Build timestamp. Must be in Maven supported 'yyyy-MM-dd HH:mm:ssa' format. |
+| `dryRun` | `boolean` | false | Dry run Coveralls report without actually sending it. |
 
 
 ### FAQ
@@ -111,18 +149,23 @@ mvn test jacoco:report coveralls:jacoco
 <!--- -->
 > Q: How can I use Scala or some other project which sources reside in other folder than
 > `src/main/java`?  
-> A: The source directory can be changed with `sourceDirectory` parameter in the plugin's
-> configuration section or as a VM property.
+> A: The plugin uses all compiled source roots available for the project at runtime. If the
+> source directories are available, everything is fine. Otherwise the used source directories can
+> be changed with `sourceDirectories` configuration parameter that takes a Maven configuration
+> style list of source directories.
 
 <!--- -->
 > Q: How can I set the plugin to use multiple source directories?  
-> A: While Build Helper Maven plugin and some other tools support multiple source directories,
-> this is not supported in coveralls-maven-plugin.
+> A: For multi-module projects, the plugin automatically scans the project hierarchy and adds all
+> required source directories. You can also customize the used source directories with
+> `sourceDirectories` configuration parameter that takes a Maven configuration style list of
+> source directories.
 
 <!--- -->
 > Q: JaCoCo or Cobertura, which one should i choose?  
-> A: The coverage metrics and performance of the two plugins are not much different for a small
-> or medium sized project, but there are 2 notable differences with the tools:
+> A: For multi-module projects, only Cobertura supports report aggregation out of the box. The
+> coverage metrics and performance of the two plugins are not much different for a small or medium
+> sized project, but there are 2 notable differences with the tools:
 > - JaCoCo does not track how many times a single line of code is hit by all the tests together,
 > so Coveralls is always reported with 1 as the number of hits if the line is covered. Cobertura
 > tracks the number of hits and the number is reported to Coveralls.
@@ -132,6 +175,60 @@ mvn test jacoco:report coveralls:jacoco
 > there are lot of inner classes defined this creates some noise to the Coveralls reports. JaCoCo
 > tracks inner classes within same source file so each source file is only reported once to
 > Coveralls.
+
+
+### Changelog
+
+#### 2.0.0
+
+- #13: Dry run property for test builds
+- #12: Use ServiceSetup as secondary configuration source and Maven/VM properties as primary
+- #11: Support multiple source directories
+- #9: Support for other CI tools and platforms
+- #8: Aggregated reports for multi-module projects
+
+
+#### 1.2.0
+
+- #10: Validation of the Coveralls job
+- #4: Report build timestamp to Coveralls
+- #3: Log code lines from generated report to Maven console
+
+
+#### 1.1.0
+
+- #1: Easier configuration for Travis CI
+
+
+#### 1.0.0
+
+- Initial release
+
+
+### Migration guide
+
+Changes marked with bold affect the plugin usage. Other changes are only related to development
+and codebase.
+
+
+#### 1.x to 2.x
+
+- **`sourceDirectory` parameter removed and replaced with a list parameter `sourceDirectories`**
+- **service environment parameters do not override configuration parameters**
+- `org.eluder.coveralls.maven.plugin.service.ServiceSetup` interface completely changed to reflect
+  the service specific configuration properly
+- `org.eluder.coveralls.maven.plugin.service.Travis` changed to reflect the new service setup
+  interface
+- `org.eluder.coveralls.maven.plugin.domain.JobValidator` and all validation related code is
+  now located in `org.eluder.coveralls.maven.plugin.validation` package
+- `org.eluder.coveralls.maven.plugin.domain.GitRepository` does not take custom branch parameter
+  as constructor argument anymore, the same behavior is handled with the new service environment
+  setup
+- `org.eluder.coveralls.maven.plugin.domain.Job` has only default constructor and initialization
+  is done with _with*_ methods, _validate()_ method returns list of validation errors instead of
+  throwing exception
+- `org.eluder.coveralls.maven.plugin.domain.SourceLoader` constructor takes a list of source
+  directories instead of a single source directory
 
 
 ### Continuous integration
