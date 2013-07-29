@@ -36,6 +36,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 public class JobLogger implements Logger {
 
+    private static final int ABBREV = 7;
+    
     private final Job job;
     private final ObjectMapper jsonMapper;
     
@@ -83,7 +85,7 @@ public class JobLogger implements Logger {
         if (job.getGit() != null) {
             String commit = job.getGit().getHead().getId();
             String branch = (job.getBranch() != null ? job.getBranch() : job.getGit().getBranch());
-            log.info("Git commit " + commit.substring(0, 7) + " in " + branch);
+            log.info("Git commit " + commit.substring(0, ABBREV) + " in " + branch);
         }
         
         if (log.isDebugEnabled()) {
@@ -96,11 +98,11 @@ public class JobLogger implements Logger {
     }
     
     private ObjectMapper createDefaultJsonMapper() {
-        ObjectMapper jsonMapper = new ObjectMapper();
-        jsonMapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
-        jsonMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
-        jsonMapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
-        return jsonMapper;
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
+        mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
+        mapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
+        return mapper;
     }
     
 }

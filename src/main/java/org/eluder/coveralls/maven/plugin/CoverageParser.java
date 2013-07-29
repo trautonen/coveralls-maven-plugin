@@ -45,10 +45,10 @@ public interface CoverageParser {
      * @throws ProcessingException if processing of the coverage report fails
      * @throws IOException if an I/O error occurs
      */
-    public void parse(SourceCallback callback) throws ProcessingException, IOException;
+    void parse(SourceCallback callback) throws ProcessingException, IOException;
     
     /**
      * @return the coverage report file under processing
      */
-    public File getCoverageFile();
+    File getCoverageFile();
 }

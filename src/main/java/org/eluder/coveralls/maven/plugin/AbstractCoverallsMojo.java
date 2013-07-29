@@ -272,11 +272,11 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
     private void writeCoveralls(final JsonWriter writer, final SourceCallback sourceCallback, final CoverageParser parser) throws ProcessingException, IOException {
         try {
             getLog().info("Writing Coveralls data to " + writer.getCoverallsFile().getAbsolutePath() + " from coverage report " + parser.getCoverageFile().getAbsolutePath());
-            long timestamp = System.currentTimeMillis();
+            long now = System.currentTimeMillis();
             writer.writeStart();
             parser.parse(sourceCallback);
             writer.writeEnd();
-            long duration = System.currentTimeMillis() - timestamp;
+            long duration = System.currentTimeMillis() - now;
             getLog().info("Successfully wrote Coveralls data in " + duration + "ms");
         } finally {
             writer.close();
@@ -285,9 +285,9 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
     
     private void submitData(final CoverallsClient client, final File coverallsFile) throws MojoFailureException, ProcessingException, IOException {
         getLog().info("Submitting Coveralls data to API");
-        long timestamp = System.currentTimeMillis();
+        long now = System.currentTimeMillis();
         CoverallsResponse response = client.submit(coverallsFile);
-        long duration = System.currentTimeMillis() - timestamp;
+        long duration = System.currentTimeMillis() - now;
         if (!response.isError()) {
             getLog().info("Successfully submitted Coveralls data in " + duration + "ms for " + response.getMessage());
             getLog().info(response.getUrl());

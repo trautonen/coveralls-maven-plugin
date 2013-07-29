@@ -38,7 +38,7 @@ public final class Source implements JsonObject {
     
     private final String name;
     private final String source;
-    private final Integer[] coverage;    
+    private final Integer[] coverage;
     private String classifier;
     
     public Source(final String name, final String source) {

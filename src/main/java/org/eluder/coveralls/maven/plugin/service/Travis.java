@@ -30,7 +30,7 @@ import java.util.Properties;
  */
 
 /**
- * Service implementation for Travis CI
+ * Service implementation for Travis CI.
  * <p>
  * https://travis-ci.org/
  */
