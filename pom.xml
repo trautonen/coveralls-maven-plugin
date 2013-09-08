@@ -39,7 +39,7 @@
 
 	<properties>
 		<httpclient.version>4.2.5</httpclient.version>
-		<jackson.version>2.2.2</jackson.version>
+		<jackson.version>2.2.3</jackson.version>
 		<jgit.version>3.0.0.201306101825-r</jgit.version>
 		<maven.version>3.0</maven.version>
 		<maven.build.timestamp.format>yyyy-MM-dd HH:mm:ssa</maven.build.timestamp.format>
@@ -207,6 +207,10 @@
 				</executions>
 			</plugin>
 			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>cobertura-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
 				<groupId>org.eluder.coveralls</groupId>
 				<artifactId>coveralls-maven-plugin</artifactId>
 				<version>${project.version}</version>
@@ -257,7 +261,6 @@
 						</excludes>
 					</configuration>
 				</plugin>
-
 			</plugins>
 		</pluginManagement>
 	</build>
