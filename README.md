@@ -117,22 +117,22 @@ how different types are mapped in the configuration XML. Some of the optional pa
 by the built-in service environment setups. Note that if a parameter is explicitly defined, the
 service environment will not override it.
 
-| Parameter | Type | Default | Description |
-| --------- | ---- | ------- | ----------- |
-| `coverallsFile` | `File` | ${project.build.directory}/coveralls.json | File path to write and submit Coveralls data. |
-| `coverallsUrl` | `String` | https://coveralls.io/api/v1/jobs | Url for the Coveralls API. |
-| `sourceDirectories` | `List<File>` | | List of source directories. If not provided, the plugin will scan the project's compiled source roots. |
-| `sourceEncoding` | `String` | ${project.build.sourceEncoding} | Source file encoding. |
-| `serviceName` | `String` | | CI service name. If not provided the supported service environments are used. |
-| `serviceJobId` | `String` | | CI service job id. Currently supported only with Travis. If this property is set, `repoToken` is not required. If not provided the supported service environments are used. | 
-| `serviceBuildNumber` | `String` | | CI service build number. If not provided the supported service environments are used. |
-| `serviceBuildUrl` | `String` | | CI service build url. If not provided the supported service environments are used. |
-| `serviceEnvironment` | `Properties` | | CI service specific environment properties. If not provided the supported service environments are used. |
-| `repoToken` | `String` | | Coveralls repository token. **Do not publish this paramater unencrypted in public GitHub repositories.** |
-| `branch` | `String` | | Git branch name. If not provided the supported service environments are used. |
-| `pullRequest` | `String` | | GitHub pull request identifier. If not provided the supported service environments are used. |
-| `timestamp` | `Date` | ${timestamp} | Build timestamp. Must be in Maven supported 'yyyy-MM-dd HH:mm:ssa' format. |
-| `dryRun` | `boolean` | false | Dry run Coveralls report without actually sending it. |
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| `coverallsFile` | `File` | **Default: ${project.build.directory}/coveralls.json**<br>File path to write and submit Coveralls data. |
+| `coverallsUrl` | `String` | **Default: https://coveralls.io/api/v1/jobs**<br>Url for the Coveralls API. |
+| `sourceDirectories` | `List<File>` | List of source directories. If not provided, the plugin will scan the project's compiled source roots. |
+| `sourceEncoding` | `String` | **Default: ${project.build.sourceEncoding}**<br>Source file encoding. |
+| `serviceName` | `String` | CI service name. If not provided the supported service environments are used. |
+| `serviceJobId` | `String` | CI service job id. Currently supported only with Travis. If this property is set, `repoToken` is not required. If not provided the supported service environments are used. | 
+| `serviceBuildNumber` | `String` | CI service build number. If not provided the supported service environments are used. |
+| `serviceBuildUrl` | `String` | CI service build url. If not provided the supported service environments are used. |
+| `serviceEnvironment` | `Properties` | CI service specific environment properties. If not provided the supported service environments are used. |
+| `repoToken` | `String` | Coveralls repository token. **Do not publish this paramater unencrypted in public GitHub repositories.** |
+| `branch` | `String` | Git branch name. If not provided the supported service environments are used. |
+| `pullRequest` | `String` | GitHub pull request identifier. If not provided the supported service environments are used. |
+| `timestamp` | `Date` | **Default: ${timestamp}**<br>Build timestamp. Must be in Maven supported 'yyyy-MM-dd HH:mm:ssa' format. |
+| `dryRun` | `boolean` | **Default: false**<br> Dry run Coveralls report without actually sending it. |
 
 
 ### FAQ
