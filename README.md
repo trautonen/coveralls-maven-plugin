@@ -137,33 +137,46 @@ service environment will not override it.
 
 ### FAQ
 
-> Q: How do I know that my coverage report was submitted successfully to Coveralls?  
-> A: The plugin will end with BUILD SUCCESS and the log contains the reported job id and direct
-> URL to Coveralls.
+> **Q:** How do I know that my coverage report was submitted successfully to Coveralls?  
+> **A:** The plugin will end with BUILD SUCCESS and the log contains the reported job id and
+> direct URL to Coveralls.
 
-<!--- -->
-> Q: I get BUILD SUCCESS but why Coveralls shows only question marks in the reports?  
-> A: The data is most likely reported correctly, but Coveralls might take hours, or even a day, to
-> update the actual coverage numbers.
+<!-- -->
+> **Q:** I get BUILD SUCCESS but why Coveralls shows only question marks in the reports?  
+> **A:** The data is most likely reported correctly, but Coveralls might take hours, or even a
+> day, to update the actual coverage numbers.
 
-<!--- -->
-> Q: How can I use Scala or some other project which sources reside in other folder than
+<!-- -->
+> **Q:** Build fails with 'javax.net.ssl.SSLPeerUnverifiedException: peer not authenticated'
+> exception, what to do?  
+> **A:** If the build is run with OpenJDK, you probably hit an issue with the Cryptography Package
+> Providers not supporting all Elliptic Curves. The [issue](https://bugs.launchpad.net/ubuntu/+source/openjdk-6/+bug/1006776)
+> is described in the Ubuntu issue tracker. A workaround is to disable the PKCS provider from the
+> `java.security` options file.
+> ```
+> sudo sed -i 's/security.provider.9/#security.provider.9/g' $JAVA_HOME/jre/lib/security/java.security
+> ```
+> In Travis CI the above command can be added to before_install phase. See complete example from
+> this project's `.travis.yml`.
+
+<!-- -->
+> **Q:** How can I use Scala or some other project which sources reside in other folder than
 > `src/main/java`?  
-> A: The plugin uses all compiled source roots available for the project at runtime. If the
+> **A:** The plugin uses all compiled source roots available for the project at runtime. If the
 > source directories are available, everything is fine. Otherwise the used source directories can
 > be changed with `sourceDirectories` configuration parameter that takes a Maven configuration
 > style list of source directories.
 
-<!--- -->
-> Q: How can I set the plugin to use multiple source directories?  
-> A: For multi-module projects, the plugin automatically scans the project hierarchy and adds all
-> required source directories. You can also customize the used source directories with
+<!-- -->
+> **Q:** How can I set the plugin to use multiple source directories?  
+> **A:** For multi-module projects, the plugin automatically scans the project hierarchy and adds
+> all required source directories. You can also customize the used source directories with
 > `sourceDirectories` configuration parameter that takes a Maven configuration style list of
 > source directories.
 
-<!--- -->
-> Q: JaCoCo or Cobertura, which one should i choose?  
-> A: For multi-module projects, only Cobertura supports report aggregation out of the box. The
+<!-- -->
+> **Q:** JaCoCo or Cobertura, which one should i choose?  
+> **A:** For multi-module projects, only Cobertura supports report aggregation out of the box. The
 > coverage metrics and performance of the two plugins are not much different for a small or medium
 > sized project, but there are 2 notable differences with the tools:
 > - JaCoCo does not track how many times a single line of code is hit by all the tests together,
