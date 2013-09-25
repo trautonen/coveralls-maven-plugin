@@ -2,8 +2,8 @@ language: java
 
 jdk:
   - oraclejdk7
-  - openjdk7
-  - openjdk6
+#  - openjdk7
+#  - openjdk6
 
 env:
   global:
@@ -11,7 +11,6 @@ env:
     - secure: "CZ9mejMLJdrh+a5TFXsNSiYyK9K/zNYOtubv2sPq1OEGhuohdUfLtdsk7bK9\nQcIlhZjrE5Q/wVgjZcFsnVpKhnUSRLC7sTOh6tu08EwpNtnNLl5AeUztOMCs\nxhG5H7jDu9uEH81WDZnIuK4Zq4qxXx523rnqQfk4DsTCKLVh9jI="
 
 before_install:
-#  - sudo sed -i 's/security.provider.9/#security.provider.9/g' $JAVA_HOME/jre/lib/security/java.security
   - git submodule update --init --recursive
 
 script: mvn clean install
