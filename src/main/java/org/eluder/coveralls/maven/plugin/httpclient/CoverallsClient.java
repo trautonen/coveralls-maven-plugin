@@ -35,12 +35,14 @@ import java.security.Security;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.config.SocketConfig;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntity;
-import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParamBean;
 import org.apache.http.params.HttpParams;
@@ -61,9 +63,8 @@ public class CoverallsClient {
         }
     }
     
-    private static final String CHARSET = "utf-8";
     private static final String FILE_NAME = "coveralls.json";
-    private static final String MIME_TYPE = "application/octet-stream";
+    private static final ContentType MIME_TYPE = ContentType.create("application/octet-stream", "utf-8");
     
     private static final int DEFAULT_CONNECTION_TIMEOUT = 10000;
     private static final int DEFAULT_SOCKET_TIMEOUT = 60000;
@@ -73,7 +74,7 @@ public class CoverallsClient {
     private final ObjectMapper objectMapper;
     
     public CoverallsClient(final String coverallsUrl) {
-        this(coverallsUrl, new DefaultHttpClient(defaultParams()), new ObjectMapper());
+        this(coverallsUrl, createDefaultClient(), new ObjectMapper());
     }
     
     public CoverallsClient(final String coverallsUrl, final HttpClient httpClient, final ObjectMapper objectMapper) {
@@ -83,8 +84,10 @@ public class CoverallsClient {
     }
     
     public CoverallsResponse submit(final File file) throws ProcessingException, IOException {
-        MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
-        entity.addPart("json_file", new FileBody(file, FILE_NAME, MIME_TYPE, CHARSET));
+        HttpEntity entity = MultipartEntityBuilder.create()
+                .setMode(HttpMultipartMode.BROWSER_COMPATIBLE)
+                .addBinaryBody("json_file", file, MIME_TYPE, FILE_NAME)
+                .build();
         HttpPost post = new HttpPost(coverallsUrl);
         post.setEntity(entity);
         HttpResponse response = httpClient.execute(post);
@@ -104,11 +107,13 @@ public class CoverallsClient {
         }
     }
     
-    private static HttpParams defaultParams() {
-        HttpParams params = new BasicHttpParams();
-        HttpConnectionParamBean connectionParams = new HttpConnectionParamBean(params);
-        connectionParams.setConnectionTimeout(DEFAULT_CONNECTION_TIMEOUT);
-        connectionParams.setSoTimeout(DEFAULT_SOCKET_TIMEOUT);
-        return params;
+    private static HttpClient createDefaultClient() {
+        RequestConfig requestConfig = RequestConfig.custom()
+                .setConnectTimeout(DEFAULT_CONNECTION_TIMEOUT)
+                .setSocketTimeout(DEFAULT_SOCKET_TIMEOUT)
+                .build();
+        return HttpClientBuilder.create()
+                .setDefaultRequestConfig(requestConfig)
+                .build();
     }
 }

@@ -38,7 +38,7 @@
 	</scm>
 
 	<properties>
-		<httpclient.version>4.2.5</httpclient.version>
+		<httpclient.version>4.3</httpclient.version>
 		<jackson.version>2.2.3</jackson.version>
 		<jgit.version>3.0.0.201306101825-r</jgit.version>
 		<maven.version>3.0</maven.version>
