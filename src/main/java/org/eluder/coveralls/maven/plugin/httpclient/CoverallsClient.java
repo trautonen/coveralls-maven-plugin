@@ -29,6 +29,8 @@ package org.eluder.coveralls.maven.plugin.httpclient;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.security.Provider;
+import java.security.Security;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -51,6 +53,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class CoverallsClient {
 
+    static {
+        for (Provider provider : Security.getProviders()) {
+            if ("SunPKCS11".equals(provider.getName())) {
+                Security.removeProvider("SunPKCS11");
+            }
+        }
+    }
+    
     private static final String CHARSET = "utf-8";
     private static final String FILE_NAME = "coveralls.json";
     private static final String MIME_TYPE = "application/octet-stream";
