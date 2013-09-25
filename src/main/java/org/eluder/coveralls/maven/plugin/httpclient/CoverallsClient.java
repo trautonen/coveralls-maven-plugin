@@ -55,8 +55,8 @@ public class CoverallsClient {
 
     static {
         for (Provider provider : Security.getProviders()) {
-            if ("SunPKCS11".equals(provider.getName())) {
-                Security.removeProvider("SunPKCS11");
+            if (provider.getName().startsWith("SunPKCS11")) {
+                Security.removeProvider(provider.getName());
             }
         }
     }
