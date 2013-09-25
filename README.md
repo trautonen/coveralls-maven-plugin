@@ -192,6 +192,12 @@ service environment will not override it.
 
 ### Changelog
 
+#### 2.0.1
+
+- #18: Update to HttpComponents HttpClient 4.3
+- #15, #16, #17: Disable PKCS cryptography provider at runtime to work around OpenJDK SSL issue
+
+
 #### 2.0.0
 
 - #13: Dry run property for test builds
