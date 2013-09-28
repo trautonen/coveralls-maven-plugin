@@ -34,6 +34,7 @@ import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
@@ -162,6 +163,7 @@ public abstract class AbstractCoverallsMojoTest {
         mojo.repoToken = "asdfg";
         mojo.coverallsFile = folder.newFile();
         mojo.dryRun = true;
+        mojo.skip = false;
         
         when(projectMock.getBasedir()).thenReturn(TestIoUtil.getFile("/"));
         
@@ -220,6 +222,14 @@ public abstract class AbstractCoverallsMojoTest {
         } catch (MojoExecutionException ex) {
             assertEquals(ex.getCause().getClass(), NullPointerException.class);
         }
+    }
+    
+    @Test
+    public void testSkipExecution() throws Exception {
+        mojo.skip = true;
+        mojo.execute();
+        
+        verifyZeroInteractions(jobMock);
     }
     
     protected abstract AbstractCoverallsMojo createMojo();

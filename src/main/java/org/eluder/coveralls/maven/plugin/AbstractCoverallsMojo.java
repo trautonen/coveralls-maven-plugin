@@ -64,12 +64,6 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
     /**
      * File path to write and submit Coveralls data.
      */
-    @Parameter(property = "skipCoveralls", defaultValue = "false")
-    protected boolean skipCoveralls;
-    
-    /**
-     * File path to write and submit Coveralls data.
-     */
     @Parameter(property = "coverallsFile", defaultValue = "${project.build.directory}/coveralls.json")
     protected File coverallsFile;
     
@@ -150,6 +144,12 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
      */
     @Parameter(property = "dryRun", defaultValue = "false")
     protected boolean dryRun;
+
+    /**
+     * Skip the plugin execution.
+     */
+    @Parameter(property = "skip", defaultValue = "false")
+    protected boolean skip;
     
     /**
      * Maven project for runtime value resolution.
@@ -159,10 +159,12 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
     
     @Override
     public final void execute() throws MojoExecutionException, MojoFailureException {
+        if (skip) {
+            getLog().info("Skip property set, skipping plugin execution");
+            return;
+        }
+        
         try {
-            if(job.isSkipCoveralls()) {
-                return;
-            }
             createEnvironment().setup();
             CoverageParser parser = createCoverageParser(createSourceLoader());
             Job job = createJob();
@@ -236,7 +238,6 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
         Git git = new GitRepository(project.getBasedir()).load();
         return new Job()
             .withRepoToken(repoToken)
-            .withSkipCoveralls(skipCoveralls)
             .withServiceName(serviceName)
             .withServiceJobId(serviceJobId)
             .withServiceBuildNumber(serviceBuildNumber)
