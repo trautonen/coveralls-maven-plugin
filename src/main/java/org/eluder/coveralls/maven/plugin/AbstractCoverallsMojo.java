@@ -148,7 +148,7 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
     /**
      * Skip the plugin execution.
      */
-    @Parameter(property = "skip", defaultValue = "false")
+    @Parameter(property = "coveralls.skip", defaultValue = "false")
     protected boolean skip;
     
     /**
