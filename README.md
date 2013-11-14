@@ -80,6 +80,11 @@ Execute Maven to create Cobertura report and submit Coveralls data:
 mvn cobertura:cobertura coveralls:cobertura
 ```
 
+For example if you are using Travis-CI this means you need to add to your `.travis.yml` the lines:
+```
+after_success:
+  - mvn clean cobertura:cobertura coveralls:cobertura
+```
 
 #### JaCoCo
 
@@ -106,7 +111,11 @@ Execute Maven to create JaCoCo report and submit Coveralls data:
 ```
 mvn test jacoco:report coveralls:jacoco
 ```
-
+Again, if you are using Travis-CI this means you need to add to your `.travis.yml` the lines:
+```
+after_success:
+  - mvn test jacoco:report coveralls:jacoco
+```
 
 ### Complete plugin configuration
 
