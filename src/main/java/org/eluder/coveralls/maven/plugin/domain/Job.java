@@ -3,6 +3,7 @@ package org.eluder.coveralls.maven.plugin.domain;
 import java.util.Date;
 import java.util.Properties;
 
+import org.eluder.coveralls.maven.plugin.domain.Git.Remote;
 import org.eluder.coveralls.maven.plugin.validation.JobValidator;
 import org.eluder.coveralls.maven.plugin.validation.ValidationErrors;
 
@@ -138,6 +139,13 @@ public class Job {
     }
     
     public String getBranch() {
+        if (branch != null && getGit() != null && getGit().getRemotes() != null) {
+            for (Remote remote : getGit().getRemotes()) {
+                if (branch.startsWith(remote.getName() + "/")) {
+                    return branch.substring(remote.getName().length() + 1);
+                }
+            }
+        }
         return branch;
     }
     
