@@ -7,5 +7,5 @@ target/*
 .classpath
 
 # Idea
-.iml
+*.iml
 .idea
