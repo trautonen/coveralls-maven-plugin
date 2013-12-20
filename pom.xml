@@ -38,9 +38,9 @@
 	</scm>
 
 	<properties>
-		<httpclient.version>4.3</httpclient.version>
-		<jackson.version>2.2.3</jackson.version>
-		<jgit.version>3.0.0.201306101825-r</jgit.version>
+		<httpclient.version>4.3.1</httpclient.version>
+		<jackson.version>2.3.0</jackson.version>
+		<jgit.version>3.2.0.201312181205-r</jgit.version>
 		<maven.version>3.0</maven.version>
 		<maven.build.timestamp.format>yyyy-MM-dd HH:mm:ssa</maven.build.timestamp.format>
 		<timestamp>${maven.build.timestamp}</timestamp>
