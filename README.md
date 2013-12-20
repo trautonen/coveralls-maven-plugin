@@ -212,6 +212,12 @@ service environment will not override it.
 
 ### Changelog
 
+#### 2.1.0
+
+- #24: Filter out remote names from git branches
+- #19, #20: Skip configuration property to allow skipping of plugin execution
+
+
 #### 2.0.1
 
 - #18: Update to HttpComponents HttpClient 4.3
