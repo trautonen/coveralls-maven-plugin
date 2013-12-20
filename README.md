@@ -184,6 +184,15 @@ service environment will not override it.
 > source directories.
 
 <!-- -->
+> **Q:** Why source files are not found for generated sources?  
+> **A:** Generated source directories under target are not added to the sources list
+> automatically. It is often not good practice to test generated code, because the code is not
+> managed by the project under test, unless you are testing a source generator. Cobertura and
+> JaCoCo both have `<excludes>` configuration directive that provides ignoring of class files. If
+> the generated sources still must be tested, all source directories can be explicitly defined
+> with `sourceDirectories` configuration parameter.
+
+<!-- -->
 > **Q:** JaCoCo or Cobertura, which one should i choose?  
 > **A:** For multi-module projects, only Cobertura supports report aggregation out of the box. The
 > coverage metrics and performance of the two plugins are not much different for a small or medium
