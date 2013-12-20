@@ -1,11 +1,11 @@
-maven-coveralls-plugin
+coveralls-maven-plugin
 ======================
 
 [![Build Status](https://travis-ci.org/trautonen/coveralls-maven-plugin.png?branch=master)](https://travis-ci.org/trautonen/coveralls-maven-plugin)
 [![Coverage Status](https://coveralls.io/repos/trautonen/coveralls-maven-plugin/badge.png?branch=master)](https://coveralls.io/r/trautonen/coveralls-maven-plugin?branch=master)
 
 Maven plugin for submitting Java code coverage reports to [Coveralls](https://coveralls.io/) web
-service. The project uses [semantic versioning](http://semver.org/).
+service.
 
 
 ### Features
@@ -19,6 +19,7 @@ service. The project uses [semantic versioning](http://semver.org/).
 * Fully streaming implementation for fast report generation and small memory footprint
 * Provides clean interfaces to allow easy extending to different coverage tools
 * Convention over configuration for almost zero configuration usage
+* Applies [semantic versioning](http://semver.org/)
 
 
 ### Usage
@@ -64,7 +65,7 @@ pom.xml:
 <plugin>
     <groupId>org.codehaus.mojo</groupId>
     <artifactId>cobertura-maven-plugin</artifactId>
-    <version>2.5.2</version>
+    <version>2.6</version>
     <configuration>
         <format>xml</format>
         <maxmem>256m</maxmem>
@@ -94,7 +95,7 @@ Set up the JaCoCo Maven plugin in the build section of the project pom.xml:
 <plugin>
     <groupId>org.jacoco</groupId>
     <artifactId>jacoco-maven-plugin</artifactId>
-    <version>0.6.3.201306030806</version>
+    <version>0.6.4.201312101107</version>
     <executions>
         <execution>
             <id>prepare-agent</id>
@@ -141,7 +142,8 @@ service environment will not override it.
 | `branch` | `String` | Git branch name. If not provided the supported service environments are used. |
 | `pullRequest` | `String` | GitHub pull request identifier. If not provided the supported service environments are used. |
 | `timestamp` | `Date` | **Default: ${timestamp}**<br>Build timestamp. Must be in Maven supported 'yyyy-MM-dd HH:mm:ssa' format. |
-| `dryRun` | `boolean` | **Default: false**<br> Dry run Coveralls report without actually sending it. |
+| `dryRun` | `boolean` | **Default: false**<br>Dry run Coveralls report without actually sending it. |
+| `coveralls.skip` | `boolean` | **Default: false**<br>Skip the plugin execution. |
 
 
 ### FAQ
