@@ -19,7 +19,7 @@ public class SagaMojo extends AbstractCoverallsMojo
     /**
      * File path to Saga coverage file.
      */
-    @Parameter(property = "coverageFile", defaultValue = "${project.build.directory}/saga-coverage/total-coverage.dat")
+    @Parameter(property = "coverageFile", defaultValue = "${project.build.directory}/saga-coverage/total-coverage.xml")
     protected File coverageFile;
 
     @Override
