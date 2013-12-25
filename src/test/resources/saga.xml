@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<!DOCTYPE coverage SYSTEM 'http://cobertura.sourceforge.net/xml/coverage-04.dtd'>
+<!-- Generated using saga-core (http://timurstrekalov.github.com/saga/saga-core/) version 1.5.2 -->
+<coverage branch-rate="0.0" branches-covered="0" branches-valid="0" complexity="0" line-rate="1.0" lines-valid="2" lines-covered="2" timestamp="1376875707" version="1.9">
+	<sources>
+		<source>/Users/bednar/Developer/bednar/components</source>
+	</sources>
+	<packages>
+		<package name="default" line-rate="0.0" branch-rate="0.0" complexity="0">
+			<classes>
+				<class name="Components.js" filename="Components.js" line-rate="1.0" branch-rate="0.0" complexity="0">
+					<methods />
+					<lines>
+						<line number="1" hits="1" branch="false"/>
+						<line number="2" hits="1" branch="false"/>
+					</lines>
+				</class>
+			</classes>
+		</package>
+	</packages>
+</coverage>

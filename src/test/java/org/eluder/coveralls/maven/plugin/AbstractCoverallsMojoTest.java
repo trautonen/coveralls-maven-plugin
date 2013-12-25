@@ -177,14 +177,13 @@ public abstract class AbstractCoverallsMojoTest {
         String json = TestIoUtil.readFileContent(coverallsFile);
         
         assertNotNull(json);
-        for (String[] coverageFile : CoverageFixture.COVERAGE_FILES) {
+        for (String[] coverageFile : getCoverageFiles()) {
             assertThat(json, containsString(coverageFile[0]));
         }
-        
-        verify(logMock).info("Gathered code coverage metrics for 2 source files with 44 lines of code:");
-        verify(logMock).info("*** It might take hours for Coveralls to update the actual coverage numbers for a job");
+
+        verifySuccesfull(logMock);
     }
-    
+
     @Test(expected = MojoFailureException.class)
     public void testFailedSubmission() throws Exception {
         when(coverallsClientMock.submit(any(File.class))).thenReturn(new CoverallsResponse("failure", true, null));
@@ -233,4 +232,15 @@ public abstract class AbstractCoverallsMojoTest {
     }
     
     protected abstract AbstractCoverallsMojo createMojo();
+
+    protected void verifySuccesfull(final Log logMock)
+    {
+        verify(logMock).info("Gathered code coverage metrics for 2 source files with 44 lines of code:");
+        verify(logMock).info("*** It might take hours for Coveralls to update the actual coverage numbers for a job");
+    }
+
+    protected String[][] getCoverageFiles()
+    {
+        return CoverageFixture.COVERAGE_FILES;
+    }
 }

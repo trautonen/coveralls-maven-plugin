@@ -65,28 +65,28 @@ public abstract class AbstractCoverageParserTest {
     
     @Before
     public void init() throws IOException {
-        for (String[] coverageFile : CoverageFixture.COVERAGE_FILES) {
+        for (String[] coverageFile : getCoverageFiles()) {
             final String name = coverageFile[0];
             final String content = TestIoUtil.readFileContent(TestIoUtil.getFile("/" + name));
-            when(sourceLoaderMock.load("org/eluder/coverage/sample/" + name)).then(new Answer<Source>() {
+            when(sourceLoaderMock.load(getSourceFileName(name))).then(new Answer<Source>() {
                 @Override
                 public Source answer(final InvocationOnMock invocation) throws Throwable {
-                    return new Source("org/eluder/coverage/sample/" + name, content);
+                    return new Source(getSourceFileName(name), content);
                 }
             });
         }
     }
-    
+
     @Test
     public void testParseCoverage() throws Exception {
         CoverageParser parser = createCoverageParser(TestIoUtil.getFile(getCoverageResource()), sourceLoaderMock);
         parser.parse(sourceCallbackMock);
         
         ArgumentCaptor<Source> captor = ArgumentCaptor.forClass(Source.class);
-        verify(sourceCallbackMock, atLeast(CoverageFixture.COVERAGE_FILES.length)).onSource(captor.capture());
+        verify(sourceCallbackMock, atLeast(getCoverageFiles().length)).onSource(captor.capture());
         
         Collection<Source> combined = combineCoverage(captor.getAllValues());
-        for (String[] coverageFile : CoverageFixture.COVERAGE_FILES) {
+        for (String[] coverageFile : getCoverageFiles()) {
             assertCoverage(combined, coverageFile[0], Integer.parseInt(coverageFile[1]), toSet(coverageFile[2]), toSet(coverageFile[3]));
         }
     }
@@ -113,6 +113,12 @@ public abstract class AbstractCoverageParserTest {
     }
     
     private Set<Integer> toSet(final String commaSeparated) {
+
+        if (commaSeparated.isEmpty())
+        {
+            return new HashSet<Integer>(0);
+        }
+
         String[] split = commaSeparated.split(",");
         Set<Integer> values = new HashSet<Integer>(split.length);
         for (String value : split) {
@@ -146,5 +152,15 @@ public abstract class AbstractCoverageParserTest {
             }
         }
 
+    }
+
+    protected String getSourceFileName(final String name)
+    {
+        return "org/eluder/coverage/sample/" + name;
+    }
+
+    protected String[][] getCoverageFiles()
+    {
+        return CoverageFixture.COVERAGE_FILES;
     }
 }

@@ -11,7 +11,7 @@ import org.eluder.coveralls.maven.plugin.domain.SourceLoader;
 /**
  * <a href="http://timurstrekalov.github.io/saga/">Saga</a> code coverage
  *
- * @author Jakub Bednář (24/12/2013 14:34)
+ * @author Jakub Bednar (24/12/2013 14:34)
  */
 @Mojo(name = "saga", threadSafe = false)
 public class SagaMojo extends AbstractCoverallsMojo
@@ -25,6 +25,6 @@ public class SagaMojo extends AbstractCoverallsMojo
     @Override
     protected CoverageParser createCoverageParser(final SourceLoader sourceLoader)
     {
-        return null;
+        return new SagaParser(coverageFile, sourceLoader);
     }
 }

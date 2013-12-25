@@ -33,5 +33,10 @@ public class CoverageFixture {
         { "SimpleCoverage.java",     "14",  "3,6",                   "10,11" },
         { "InnerClassCoverage.java", "30",  "3,6,9,10,12,15,18,21",  "25,26" }
     };
+
+    public static final String[][] COVERAGE_FILES_SAGA = new String[][] {
+            // file             lines   covered lines   missed lines
+            { "Components.js",  "5",    "1,2",          "" }
+    };
     
 }
