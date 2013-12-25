@@ -114,8 +114,7 @@ public abstract class AbstractCoverageParserTest {
     
     private Set<Integer> toSet(final String commaSeparated) {
 
-        if (commaSeparated.isEmpty())
-        {
+        if (commaSeparated.isEmpty()) {
             return new HashSet<Integer>(0);
         }
 
@@ -154,13 +153,11 @@ public abstract class AbstractCoverageParserTest {
 
     }
 
-    protected String getSourceFileName(final String name)
-    {
+    protected String getSourceFileName(final String name) {
         return "org/eluder/coverage/sample/" + name;
     }
 
-    protected String[][] getCoverageFiles()
-    {
+    protected String[][] getCoverageFiles() {
         return CoverageFixture.COVERAGE_FILES;
     }
 }

@@ -8,14 +8,9 @@ import org.eluder.coveralls.maven.plugin.AbstractCoverallsMojo;
 import org.eluder.coveralls.maven.plugin.CoverageParser;
 import org.eluder.coveralls.maven.plugin.domain.SourceLoader;
 
-/**
- * <a href="http://timurstrekalov.github.io/saga/">Saga</a> code coverage
- *
- * @author Jakub Bednar (24/12/2013 14:34)
- */
 @Mojo(name = "saga", threadSafe = false)
-public class SagaMojo extends AbstractCoverallsMojo
-{
+public class SagaMojo extends AbstractCoverallsMojo {
+
     /**
      * File path to Saga coverage file.
      */
@@ -23,8 +18,7 @@ public class SagaMojo extends AbstractCoverallsMojo
     protected File coverageFile;
 
     @Override
-    protected CoverageParser createCoverageParser(final SourceLoader sourceLoader)
-    {
+    protected CoverageParser createCoverageParser(final SourceLoader sourceLoader) {
         return new SagaParser(coverageFile, sourceLoader);
     }
 }

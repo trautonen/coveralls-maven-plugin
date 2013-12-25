@@ -233,14 +233,12 @@ public abstract class AbstractCoverallsMojoTest {
     
     protected abstract AbstractCoverallsMojo createMojo();
 
-    protected void verifySuccesfull(final Log logMock)
-    {
+    protected void verifySuccesfull(final Log logMock) {
         verify(logMock).info("Gathered code coverage metrics for 2 source files with 44 lines of code:");
         verify(logMock).info("*** It might take hours for Coveralls to update the actual coverage numbers for a job");
     }
 
-    protected String[][] getCoverageFiles()
-    {
+    protected String[][] getCoverageFiles() {
         return CoverageFixture.COVERAGE_FILES;
     }
 }
