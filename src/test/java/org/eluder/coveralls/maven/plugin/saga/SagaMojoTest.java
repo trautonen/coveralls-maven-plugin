@@ -16,7 +16,9 @@ public class SagaMojoTest extends AbstractCoverallsMojoTest {
     @Override
     protected AbstractCoverallsMojo createMojo() {
         SagaMojo mojo = new SagaMojo();
+
         mojo.coverageFile = TestIoUtil.getFile("/saga.xml");
+        mojo.deployedDirectoryName = "";
 
         return mojo;
     }

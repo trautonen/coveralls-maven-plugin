@@ -29,8 +29,8 @@ public class SagaParser extends CoberturaParser {
         if (isStartElement(xml, "class")) {
 
             String filename = xml.getAttributeValue(null, "filename");
-            if (deployedDirectoryName != null) {
-                filename = filename.replace(deployedDirectoryName + "/", "/");
+            if (filename != null && filename.startsWith(deployedDirectoryName)) {
+                filename = filename.replaceFirst(deployedDirectoryName, "");
             }
 
             source = loadSource(filename);

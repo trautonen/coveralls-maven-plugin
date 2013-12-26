@@ -21,8 +21,8 @@ public class SagaMojo extends AbstractCoverallsMojo {
      * <a href="http://searls.github.io/jasmine-maven-plugin/bdd-mojo.html#srcDirectoryName">Deployed directory name</a>
      * on "Jasmine" server. This will be omit from path for load file source.
      */
-    @Parameter(property = "deployedDirectoryName")
-    private String deployedDirectoryName;
+    @Parameter(property = "deployedDirectoryName", required = true, defaultValue = "src/")
+    protected String deployedDirectoryName;
 
     @Override
     protected CoverageParser createCoverageParser(final SourceLoader sourceLoader) {
