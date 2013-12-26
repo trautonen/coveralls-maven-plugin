@@ -10,8 +10,8 @@ service.
 
 ### Features
 
-* Supports [Cobertura](http://mojo.codehaus.org/cobertura-maven-plugin/) and
-  [JaCoCo](http://www.eclemma.org/jacoco/trunk/doc/maven.html) coverage tools
+* Supports [Cobertura](http://mojo.codehaus.org/cobertura-maven-plugin/), 
+  [JaCoCo](http://www.eclemma.org/jacoco/trunk/doc/maven.html) and [Saga](http://timurstrekalov.github.io/saga/) coverage tools
 * Multi-module report aggregation with Cobertura
 * Built-in support for [Travis](https://travis-ci.org/), [Circle](https://circleci.com/),
   [Codeship](https://www.codeship.io/), [Jenkins](http://jenkins-ci.org/) and
