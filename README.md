@@ -118,6 +118,43 @@ after_success:
   - mvn test jacoco:report coveralls:jacoco
 ```
 
+#### Saga
+
+Set up the Saga Maven plugin in the build section of the project pom.xml:
+
+```xml
+<plugin>
+    <groupId>com.github.timurstrekalov</groupId>
+    <artifactId>saga-maven-plugin</artifactId>
+    <version>1.5.2</version>
+    <executions>
+        <execution>
+            <goals>
+                <goal>coverage</goal>
+            </goals>
+        </execution>
+    </executions>
+    <configuration>
+        <baseDir>http://localhost:${jasmine.serverPort}</baseDir>
+        <outputDir>${project.build.directory}/saga-coverage</outputDir>
+        <noInstrumentPatterns>
+            <pattern>.*/spec/.*</pattern>
+        </noInstrumentPatterns>
+    </configuration>
+</plugin>
+```
+
+Execute Maven to create Saga report and submit Coveralls data:
+
+```
+mvn clean test saga:coverage coveralls:saga
+```
+Again, if you are using Travis-CI this means you need to add to your `.travis.yml` the lines:
+```
+after_success:
+  - mvn clean test saga:coverage coveralls:saga
+```
+
 ### Complete plugin configuration
 
 Configuration can be changed by the configuration section of plugin's definition in POM or with
@@ -144,6 +181,7 @@ service environment will not override it.
 | `timestamp` | `Date` | **Default: ${timestamp}**<br>Build timestamp. Must be in Maven supported 'yyyy-MM-dd HH:mm:ssa' format. |
 | `dryRun` | `boolean` | **Default: false**<br>Dry run Coveralls report without actually sending it. |
 | `coveralls.skip` | `boolean` | **Default: false**<br>Skip the plugin execution. |
+| `deployedDirectoryName` `String` | **Default: src/**<br>Only for Saga goal. <a href="http://searls.github.io/jasmine-maven-plugin/bdd-mojo.html#srcDirectoryName">Deployed directory name</a> on 'Jasmine' server. |
 
 
 ### FAQ
