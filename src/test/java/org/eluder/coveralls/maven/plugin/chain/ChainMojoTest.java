@@ -162,7 +162,7 @@ public class ChainMojoTest {
 
         mojo.coberturaFile = TestIoUtil.getFile("/cobertura.xml");
         mojo.sagaFile = TestIoUtil.getFile("/saga.xml");
-        mojo.deployedDirectoryName = "";
+        mojo.deployedDirectoryName = "src/";
 
         when(coverallsClientMock.submit(any(File.class))).thenReturn(new CoverallsResponse("success", false, null));
         mojo.execute();
@@ -173,7 +173,7 @@ public class ChainMojoTest {
             assertThat(json, containsString(coverageFile[0]));
         }
 
-        verify(logMock).info("Gathered code coverage metrics for 3 source files with 49 lines of code:");
+        verify(logMock).info("Gathered code coverage metrics for 4 source files with 66 lines of code:");
         verify(logMock).info("*** It might take hours for Coveralls to update the actual coverage numbers for a job");
     }
 
@@ -181,7 +181,7 @@ public class ChainMojoTest {
     public void testSuccesfullSubmissionJaCoCo() throws Exception {
 
         mojo.jacocoFile = TestIoUtil.getFile("/jacoco.xml");
-        mojo.deployedDirectoryName = "";
+        mojo.deployedDirectoryName = "src/";
 
         when(coverallsClientMock.submit(any(File.class))).thenReturn(new CoverallsResponse("success", false, null));
         mojo.execute();

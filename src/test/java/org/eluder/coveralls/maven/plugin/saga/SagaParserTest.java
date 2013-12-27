@@ -40,7 +40,7 @@ public class SagaParserTest extends AbstractCoverageParserTest {
 
     @Override
     protected CoverageParser createCoverageParser(final File coverageFile, final SourceLoader sourceLoader) {
-        return new SagaParser(coverageFile, "", sourceLoader);
+        return new SagaParser(coverageFile, "src/", sourceLoader);
     }
 
     @Override

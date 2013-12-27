@@ -44,7 +44,7 @@ public class SagaMojoTest extends AbstractCoverallsMojoTest {
         SagaMojo mojo = new SagaMojo();
 
         mojo.coverageFile = TestIoUtil.getFile("/saga.xml");
-        mojo.deployedDirectoryName = "";
+        mojo.deployedDirectoryName = "src/";
 
         return mojo;
     }
@@ -56,7 +56,7 @@ public class SagaMojoTest extends AbstractCoverallsMojoTest {
 
     @Override
     protected void verifySuccesfull(final Log logMock) {
-        verify(logMock).info("Gathered code coverage metrics for 1 source files with 5 lines of code:");
+        verify(logMock).info("Gathered code coverage metrics for 2 source files with 22 lines of code:");
         verify(logMock).info("*** It might take hours for Coveralls to update the actual coverage numbers for a job");
     }
 }
