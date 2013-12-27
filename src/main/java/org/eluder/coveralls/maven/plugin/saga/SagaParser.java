@@ -29,7 +29,7 @@ public class SagaParser extends CoberturaParser {
         if (isStartElement(xml, "class")) {
 
             String filename = xml.getAttributeValue(null, "filename");
-            if (filename != null && filename.startsWith(deployedDirectoryName)) {
+            if (filename.startsWith(deployedDirectoryName)) {
                 filename = filename.replaceFirst(deployedDirectoryName, "");
             }
 

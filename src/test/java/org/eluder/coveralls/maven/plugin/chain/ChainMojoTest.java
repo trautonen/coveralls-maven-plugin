@@ -132,7 +132,7 @@ public class ChainMojoTest {
 
 
     @Test
-    public void testSuccesfullSubmission() throws Exception {
+    public void testSuccesfullSubmissionCoberturaSaga() throws Exception {
 
         mojo.coberturaFile = TestIoUtil.getFile("/cobertura.xml");
         mojo.sagaFile = TestIoUtil.getFile("/saga.xml");
@@ -148,6 +148,25 @@ public class ChainMojoTest {
         }
 
         verify(logMock).info("Gathered code coverage metrics for 3 source files with 49 lines of code:");
+        verify(logMock).info("*** It might take hours for Coveralls to update the actual coverage numbers for a job");
+    }
+
+    @Test
+    public void testSuccesfullSubmissionJaCoCo() throws Exception {
+
+        mojo.jacocoFile = TestIoUtil.getFile("/jacoco.xml");
+        mojo.deployedDirectoryName = "";
+
+        when(coverallsClientMock.submit(any(File.class))).thenReturn(new CoverallsResponse("success", false, null));
+        mojo.execute();
+        String json = TestIoUtil.readFileContent(coverallsFile);
+
+        assertNotNull(json);
+        for (String[] coverageFile : CoverageFixture.COVERAGE_FILES) {
+            assertThat(json, containsString(coverageFile[0]));
+        }
+
+        verify(logMock).info("Gathered code coverage metrics for 2 source files with 44 lines of code:");
         verify(logMock).info("*** It might take hours for Coveralls to update the actual coverage numbers for a job");
     }
 }
