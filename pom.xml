@@ -248,7 +248,6 @@
 								<exclude>**/HelpMojo.class</exclude>
 							</excludes>
 						</instrumentation>
-                        <format>html</format>
 					</configuration>
 				</plugin>
 				<plugin>
