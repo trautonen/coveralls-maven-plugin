@@ -155,6 +155,32 @@ after_success:
   - mvn clean test saga:coverage coveralls:saga
 ```
 
+#### Chain
+
+Create Coveralls data from multiple coverage tools.
+
+```xml
+<plugin>
+    <groupId>org.eluder.coveralls</groupId>
+    <artifactId>coveralls-maven-plugin</artifactId>
+    <version>${coveralls.maven.version}</version>
+    <configuration>
+        <coberturaFile>${project.reporting.outputDirectory}/cobertura/coverage.xml</coberturaFile>
+        <sagaFile>${project.build.directory}/saga-coverage/total-coverage.xml</sagaFile>
+    </configuration>
+</plugin>
+```
+
+Execute Maven to create Cobertura and Saga report and submit Coveralls data:
+```
+mvn clean test saga:coverage cobertura:cobertura coveralls:chain
+```
+Again, if you are using Travis-CI this means you need to add to your `.travis.yml` the lines:
+```
+after_success:
+  - mvn clean test saga:coverage cobertura:cobertura coveralls:chain
+```
+
 ### Complete plugin configuration
 
 Configuration can be changed by the configuration section of plugin's definition in POM or with
@@ -182,6 +208,9 @@ service environment will not override it.
 | `dryRun` | `boolean` | **Default: false**<br>Dry run Coveralls report without actually sending it. |
 | `coveralls.skip` | `boolean` | **Default: false**<br>Skip the plugin execution. |
 | `deployedDirectoryName` | `String` | **Default: src/**<br>Only for Saga goal. <a href="http://searls.github.io/jasmine-maven-plugin/bdd-mojo.html#srcDirectoryName">Deployed directory name</a> on 'Jasmine' server. |
+| `coberturaFile` | `File` | **Default: null<br>Only for Chain goal. Cobertura report file. |
+| `jacocoFile` | `File` | **Default: null<br>Only for Chain goal. JaCoCo report file. |
+| `sagaFile` | `File` | **Default: null<br>Only for Chain goal. Saga report file. |
 
 
 ### FAQ
