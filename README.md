@@ -181,7 +181,7 @@ service environment will not override it.
 | `timestamp` | `Date` | **Default: ${timestamp}**<br>Build timestamp. Must be in Maven supported 'yyyy-MM-dd HH:mm:ssa' format. |
 | `dryRun` | `boolean` | **Default: false**<br>Dry run Coveralls report without actually sending it. |
 | `coveralls.skip` | `boolean` | **Default: false**<br>Skip the plugin execution. |
-| `deployedDirectoryName` `String` | **Default: src/**<br>Only for Saga goal. <a href="http://searls.github.io/jasmine-maven-plugin/bdd-mojo.html#srcDirectoryName">Deployed directory name</a> on 'Jasmine' server. |
+| `deployedDirectoryName` | `String` | **Default: src/**<br>Only for Saga goal. <a href="http://searls.github.io/jasmine-maven-plugin/bdd-mojo.html#srcDirectoryName">Deployed directory name</a> on 'Jasmine' server. |
 
 
 ### FAQ
