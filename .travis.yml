@@ -13,8 +13,10 @@ env:
 before_install:
   - git submodule update --init --recursive
 
-script: mvn clean install
+before_script:
+  - python etc/travis-sonatype.py
+
+script: python etc/travis-build.py --settings ~/.m2/sonatype.xml
 
 after_success:
   - mvn clean cobertura:cobertura org.eluder.coveralls:coveralls-maven-plugin:cobertura
-  - grep '\-SNAPSHOT</version>' pom.xml && python etc/travis-sonatype.py && mvn -Pprepare-deploy clean deploy --settings ~/.m2/sonatype.xml
