@@ -260,6 +260,9 @@
 							<exclude>**/jacoco.xml</exclude>
 							<exclude>**/SimpleCoverage.java</exclude>
 							<exclude>**/InnerClassCoverage.java</exclude>
+							<exclude>**/saga.xml</exclude>
+							<exclude>**/Components.js</exclude>
+							<exclude>**/Localization.js</exclude>
 						</excludes>
 					</configuration>
 				</plugin>

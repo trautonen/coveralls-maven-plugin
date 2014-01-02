@@ -40,8 +40,8 @@ import org.eluder.coveralls.maven.plugin.domain.SourceLoader;
 
 public class CoberturaParser extends AbstractXmlEventParser {
 
-    private Source source;
-    private boolean inMethods;
+    protected Source source;
+    protected boolean inMethods;
     
     public CoberturaParser(final File coverageFile, final SourceLoader sourceLoader) {
         super(coverageFile, sourceLoader);
