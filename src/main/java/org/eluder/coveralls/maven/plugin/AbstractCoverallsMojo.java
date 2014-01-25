@@ -166,7 +166,8 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
         
         try {
             createEnvironment().setup();
-            CoverageParser parser = createCoverageParser(createSourceLoader());
+            SourceLoader sourceLoader = createSourceLoader();
+            CoverageParser parser = createCoverageParser(sourceLoader);
             Job job = createJob();
             job.validate().throwOrInform(getLog());
             JsonWriter writer = createJsonWriter(job);
@@ -177,7 +178,7 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
             reporters.add(new DryRunLogger(job.isDryRun(), writer.getCoverallsFile()));
             
             report(reporters, Position.BEFORE);
-            writeCoveralls(writer, sourceCallback, parser);
+            writeCoveralls(writer, sourceLoader, sourceCallback, parser);
             report(reporters, Position.AFTER);
             
             if (!job.isDryRun()) {
@@ -280,7 +281,7 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
         return chain;
     }
     
-    private void writeCoveralls(final JsonWriter writer, final SourceCallback sourceCallback, final CoverageParser parser) throws ProcessingException, IOException {
+    protected void writeCoveralls(final JsonWriter writer, final SourceLoader sourceLoader, final SourceCallback sourceCallback, final CoverageParser parser) throws ProcessingException, IOException {
         try {
             getLog().info("Writing Coveralls data to " + writer.getCoverallsFile().getAbsolutePath() + " from coverage report " + parser.getCoverageFile().getAbsolutePath());
             long now = System.currentTimeMillis();
