@@ -6,6 +6,7 @@ import org.eluder.coveralls.maven.plugin.AbstractCoverageParserTest;
 import org.eluder.coveralls.maven.plugin.CoverageFixture;
 import org.eluder.coveralls.maven.plugin.CoverageParser;
 import org.eluder.coveralls.maven.plugin.domain.SourceLoader;
+import org.junit.Test;
 
 /**
  * @author Jakub Bednář (25/12/2013 10:17)
@@ -25,5 +26,10 @@ public class SagaParserTest extends AbstractCoverageParserTest {
     @Override
     protected String[][] getCoverageFixture() {
         return CoverageFixture.JAVASCRIPT_FILES;
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testParserWithoutDeployDirectoryName() {
+        new SagaParser(new File("/"), null, sourceLoaderMock);
     }
 }

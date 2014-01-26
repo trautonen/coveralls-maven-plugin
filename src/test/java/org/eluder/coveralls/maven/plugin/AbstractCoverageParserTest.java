@@ -58,10 +58,10 @@ import org.mockito.stubbing.Answer;
 public abstract class AbstractCoverageParserTest {
     
     @Mock
-    private SourceLoader sourceLoaderMock;
+    protected SourceLoader sourceLoaderMock;
     
     @Mock
-    private SourceCallback sourceCallbackMock;
+    protected SourceCallback sourceCallbackMock;
     
     @Before
     public void init() throws IOException {
