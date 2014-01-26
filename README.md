@@ -10,8 +10,9 @@ service.
 
 ### Features
 
-* Supports [Cobertura](http://mojo.codehaus.org/cobertura-maven-plugin/), 
-  [JaCoCo](http://www.eclemma.org/jacoco/trunk/doc/maven.html) and [Saga](http://timurstrekalov.github.io/saga/) coverage tools
+* Supports [Cobertura](http://mojo.codehaus.org/cobertura-maven-plugin/),
+  [JaCoCo](http://www.eclemma.org/jacoco/trunk/doc/maven.html) and
+  [Saga](http://timurstrekalov.github.io/saga/) coverage tools
 * Multi-module report aggregation with Cobertura
 * Built-in support for [Travis](https://travis-ci.org/), [Circle](https://circleci.com/),
   [Codeship](https://www.codeship.io/), [Jenkins](http://jenkins-ci.org/) and
@@ -82,10 +83,12 @@ mvn cobertura:cobertura coveralls:cobertura
 ```
 
 For example if you are using Travis-CI this means you need to add to your `.travis.yml` the lines:
+
 ```
 after_success:
   - mvn clean cobertura:cobertura coveralls:cobertura
 ```
+
 
 #### JaCoCo
 
@@ -110,13 +113,16 @@ Set up the JaCoCo Maven plugin in the build section of the project pom.xml:
 Execute Maven to create JaCoCo report and submit Coveralls data:
 
 ```
-mvn test jacoco:report coveralls:jacoco
+mvn clean test jacoco:report coveralls:jacoco
 ```
+
 Again, if you are using Travis-CI this means you need to add to your `.travis.yml` the lines:
+
 ```
 after_success:
-  - mvn test jacoco:report coveralls:jacoco
+  - mvn clean test jacoco:report coveralls:jacoco
 ```
+
 
 #### Saga
 
@@ -149,37 +155,36 @@ Execute Maven to create Saga report and submit Coveralls data:
 ```
 mvn clean test saga:coverage coveralls:saga
 ```
-Again, if you are using Travis-CI this means you need to add to your `.travis.yml` the lines:
+
+And if you are using Travis-CI this means you need to add to your `.travis.yml` the lines:
 ```
 after_success:
   - mvn clean test saga:coverage coveralls:saga
 ```
 
+
 #### Chain
 
 Create Coveralls data from multiple coverage tools.
+*Note: The chaining approach will be the default approach for future versions of coveralls maven
+plugin usage. Probably with the difference that the goal is changed from `chain` to `report`.*
 
-```xml
-<plugin>
-    <groupId>org.eluder.coveralls</groupId>
-    <artifactId>coveralls-maven-plugin</artifactId>
-    <version>${coveralls.maven.version}</version>
-    <configuration>
-        <coberturaFile>${project.reporting.outputDirectory}/cobertura/coverage.xml</coberturaFile>
-        <sagaFile>${project.build.directory}/saga-coverage/total-coverage.xml</sagaFile>
-    </configuration>
-</plugin>
-```
+Configure the coverage plugins as described earlier and instead of single coverage tool goal
+use the `chain` goal to aggregate all coverage sources.
 
 Execute Maven to create Cobertura and Saga report and submit Coveralls data:
+
 ```
 mvn clean test saga:coverage cobertura:cobertura coveralls:chain
 ```
-Again, if you are using Travis-CI this means you need to add to your `.travis.yml` the lines:
+
+And if you are using Travis-CI this means you need to add to your `.travis.yml` the lines:
+
 ```
 after_success:
   - mvn clean test saga:coverage cobertura:cobertura coveralls:chain
 ```
+
 
 ### Complete plugin configuration
 
@@ -207,10 +212,10 @@ service environment will not override it.
 | `timestamp` | `Date` | **Default: ${timestamp}**<br>Build timestamp. Must be in Maven supported 'yyyy-MM-dd HH:mm:ssa' format. |
 | `dryRun` | `boolean` | **Default: false**<br>Dry run Coveralls report without actually sending it. |
 | `coveralls.skip` | `boolean` | **Default: false**<br>Skip the plugin execution. |
-| `deployedDirectoryName` | `String` | **Default: src/**<br>Only for Saga goal. <a href="http://searls.github.io/jasmine-maven-plugin/bdd-mojo.html#srcDirectoryName">Deployed directory name</a> on 'Jasmine' server. |
-| `coberturaFile` | `File` | **Default: null<br>Only for Chain goal. Cobertura report file. |
-| `jacocoFile` | `File` | **Default: null<br>Only for Chain goal. JaCoCo report file. |
-| `sagaFile` | `File` | **Default: null<br>Only for Chain goal. Saga report file. |
+| `deployDirectoryName` | `String` | **Default: src**<br>Only for `saga` goal. <a href="http://searls.github.io/jasmine-maven-plugin/bdd-mojo.html#srcDirectoryName">Deploy directory name</a> on 'Jasmine' server. |
+| `coberturaFile` | `File` | **Default: ${project.reporting.outputDirectory}/cobertura/coverage.xml**<br>Only for `chain` goal. Cobertura report file. |
+| `jacocoFile` | `File` | **Default: ${project.reporting.outputDirectory}/jacoco/jacoco.xml**<br>Only for `chain` goal. JaCoCo report file. |
+| `sagaFile` | `File` | **Default: ${project.build.directory}/saga-coverage/total-coverage.xml**<br>Only for `chain` goal. Saga report file. |
 
 
 ### FAQ
