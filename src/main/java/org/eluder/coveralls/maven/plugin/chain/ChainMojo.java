@@ -24,26 +24,26 @@ public class ChainMojo extends AbstractCoverallsMojo {
     /**
      * File path to Cobertura coverage file.
      */
-    @Parameter(property = "coberturaFile")
+    @Parameter(property = "coberturaFile", defaultValue = "${project.reporting.outputDirectory}/cobertura/coverage.xml")
     protected File coberturaFile;
 
     /**
      * File path to JaCoCo coverage file.
      */
-    @Parameter(property = "jacocoFile")
+    @Parameter(property = "jacocoFile", defaultValue = "${project.reporting.outputDirectory}/jacoco/jacoco.xml")
     protected File jacocoFile;
 
     /**
      * File path to Saga coverage file.
      */
-    @Parameter(property = "sagaFile")
+    @Parameter(property = "sagaFile", defaultValue = "${project.build.directory}/saga-coverage/total-coverage.xml")
     protected File sagaFile;
 
     /**
-     * @see org.eluder.coveralls.maven.plugin.saga.SagaMojo#deployedDirectoryName
+     * @see org.eluder.coveralls.maven.plugin.saga.SagaMojo#deployDirectoryName
      */
-    @Parameter(property = "deployedDirectoryName", required = true, defaultValue = "src/")
-    protected String deployedDirectoryName;
+    @Parameter(property = "deployDirectoryName", defaultValue = "src")
+    protected String deployDirectoryName;
 
     @Override
     protected CoverageParser createCoverageParser(final SourceLoader sourceLoader) {
@@ -52,30 +52,33 @@ public class ChainMojo extends AbstractCoverallsMojo {
 
     @Override
     protected void writeCoveralls(final JsonWriter writer, final SourceLoader sourceLoader, final SourceCallback sourceCallback, final CoverageParser parser) throws ProcessingException, IOException {
-
         try {
             getLog().info("Writing Coveralls data to " + writer.getCoverallsFile().getAbsolutePath());
             long now = System.currentTimeMillis();
             writer.writeStart();
+            int sources = 0;
 
-            if (coberturaFile != null) {
-                getLog().info("Writing from Cobertura report: " + coberturaFile.getAbsolutePath());
+            if (coberturaFile != null && coberturaFile.exists()) {
+                sources++;
+                getLog().info("  .. from Cobertura report: " + coberturaFile.getAbsolutePath());
                 new CoberturaParser(coberturaFile, sourceLoader).parse(sourceCallback);
             }
 
-            if (jacocoFile != null) {
-                getLog().info("Writing from JaCoCo report: " + jacocoFile.getAbsolutePath());
+            if (jacocoFile != null && jacocoFile.exists()) {
+                sources++;
+                getLog().info("  .. from JaCoCo report: " + jacocoFile.getAbsolutePath());
                 new JaCoCoParser(jacocoFile, sourceLoader).parse(sourceCallback);
             }
 
-            if (sagaFile != null) {
-                getLog().info("Writing from Saga report: " + sagaFile.getAbsolutePath());
-                new SagaParser(sagaFile, deployedDirectoryName, sourceLoader).parse(sourceCallback);
+            if (sagaFile != null && sagaFile.exists()) {
+                sources++;
+                getLog().info("  .. from Saga report: " + sagaFile.getAbsolutePath());
+                new SagaParser(sagaFile, deployDirectoryName, sourceLoader).parse(sourceCallback);
             }
 
             writer.writeEnd();
             long duration = System.currentTimeMillis() - now;
-            getLog().info("Successfully wrote Coveralls data in " + duration + "ms");
+            getLog().info("Successfully wrote Coveralls data in " + duration + "ms from " + sources + " coverage sources");
         } finally {
             writer.close();
         }

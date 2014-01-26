@@ -1,115 +1,115 @@
 <?xml version="1.0"?>
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
 
-<coverage line-rate="0.75" branch-rate="1.0" lines-covered="12" lines-valid="16" branches-covered="0" branches-valid="0" complexity="1.0" version="1.9.4.1" timestamp="1371582617338">
-	<sources>
-		<source>--source</source>
-		<source>/home/tapio/projects/trautonen/coveralls-maven-plugin/sample/src/main/java</source>
-	</sources>
-	<packages>
-		<package name="org.eluder.coverage.sample" line-rate="0.75" branch-rate="1.0" complexity="1.0">
-			<classes>
-				<class name="org.eluder.coverage.sample.InnerClassCoverage" filename="org/eluder/coverage/sample/InnerClassCoverage.java" line-rate="1.0" branch-rate="1.0" complexity="1.0">
-					<methods>
-						<method name="&lt;init&gt;" signature="()V" line-rate="1.0" branch-rate="1.0">
-							<lines>
-								<line number="3" hits="2" branch="false"/>
-								<line number="18" hits="2" branch="false"/>
-							</lines>
-						</method>
-						<method name="anonymous" signature="()V" line-rate="1.0" branch-rate="1.0">
-							<lines>
-								<line number="6" hits="1" branch="false"/>
-								<line number="12" hits="1" branch="false"/>
-							</lines>
-						</method>
-						<method name="delegate" signature="()Z" line-rate="1.0" branch-rate="1.0">
-							<lines>
-								<line number="15" hits="1" branch="false"/>
-							</lines>
-						</method>
-					</methods>
-					<lines>
-						<line number="3" hits="2" branch="false"/>
-						<line number="6" hits="1" branch="false"/>
-						<line number="12" hits="1" branch="false"/>
-						<line number="15" hits="1" branch="false"/>
-						<line number="18" hits="2" branch="false"/>
-					</lines>
-				</class>
-				<class name="org.eluder.coverage.sample.InnerClassCoverage$1" filename="org/eluder/coverage/sample/InnerClassCoverage.java" line-rate="1.0" branch-rate="1.0" complexity="1.0">
-					<methods>
-						<method name="&lt;init&gt;" signature="(Lorg/eluder/coverage/sample/InnerClassCoverage;)V" line-rate="1.0" branch-rate="1.0">
-							<lines>
-								<line number="6" hits="1" branch="false"/>
-							</lines>
-						</method>
-						<method name="run" signature="()V" line-rate="1.0" branch-rate="1.0">
-							<lines>
-								<line number="9" hits="1" branch="false"/>
-								<line number="10" hits="1" branch="false"/>
-							</lines>
-						</method>
-					</methods>
-					<lines>
-						<line number="6" hits="1" branch="false"/>
-						<line number="9" hits="1" branch="false"/>
-						<line number="10" hits="1" branch="false"/>
-					</lines>
-				</class>
-				<class name="org.eluder.coverage.sample.InnerClassCoverage$InnerClass" filename="org/eluder/coverage/sample/InnerClassCoverage.java" line-rate="0.5" branch-rate="1.0" complexity="1.0">
-					<methods>
-						<method name="&lt;init&gt;" signature="()V" line-rate="1.0" branch-rate="1.0">
-							<lines>
-								<line number="18" hits="2" branch="false"/>
-							</lines>
-						</method>
-						<method name="isInner" signature="()Z" line-rate="1.0" branch-rate="1.0">
-							<lines>
-								<line number="21" hits="1" branch="false"/>
-							</lines>
-						</method>
-						<method name="run" signature="()V" line-rate="0.0" branch-rate="1.0">
-							<lines>
-								<line number="25" hits="0" branch="false"/>
-								<line number="26" hits="0" branch="false"/>
-							</lines>
-						</method>
-					</methods>
-					<lines>
-						<line number="18" hits="2" branch="false"/>
-						<line number="21" hits="1" branch="false"/>
-						<line number="25" hits="0" branch="false"/>
-						<line number="26" hits="0" branch="false"/>
-					</lines>
-				</class>
-				<class name="org.eluder.coverage.sample.SimpleCoverage" filename="org/eluder/coverage/sample/SimpleCoverage.java" line-rate="0.5" branch-rate="1.0" complexity="1.0">
-					<methods>
-						<method name="&lt;init&gt;" signature="()V" line-rate="1.0" branch-rate="1.0">
-							<lines>
-								<line number="3" hits="1" branch="false"/>
-							</lines>
-						</method>
-						<method name="isTested" signature="()Z" line-rate="1.0" branch-rate="1.0">
-							<lines>
-								<line number="6" hits="1" branch="false"/>
-							</lines>
-						</method>
-						<method name="neverRun" signature="()V" line-rate="0.0" branch-rate="1.0">
-							<lines>
-								<line number="10" hits="0" branch="false"/>
-								<line number="11" hits="0" branch="false"/>
-							</lines>
-						</method>
-					</methods>
-					<lines>
-						<line number="3" hits="1" branch="false"/>
-						<line number="6" hits="1" branch="false"/>
-						<line number="10" hits="0" branch="false"/>
-						<line number="11" hits="0" branch="false"/>
-					</lines>
-				</class>
-			</classes>
-		</package>
-	</packages>
+<coverage line-rate="0.75" branch-rate="1.0" lines-covered="12" lines-valid="16" branches-covered="0" branches-valid="0" complexity="1.0" version="2.0.3" timestamp="1390683348646">
+    <sources>
+        <source>/home/tapio/idea-projects/trautonen/coveralls-maven-plugin/sample/src/main/java</source>
+        <source>--source</source>
+    </sources>
+    <packages>
+        <package name="org.eluder.coverage.sample" line-rate="0.75" branch-rate="1.0" complexity="1.0">
+            <classes>
+                <class name="org.eluder.coverage.sample.InnerClassCoverage" filename="org/eluder/coverage/sample/InnerClassCoverage.java" line-rate="1.0" branch-rate="1.0" complexity="1.0">
+                    <methods>
+                        <method name="&lt;init&gt;" signature="()V" line-rate="1.0" branch-rate="1.0">
+                            <lines>
+                                <line number="3" hits="2" branch="false"/>
+                                <line number="18" hits="2" branch="false"/>
+                            </lines>
+                        </method>
+                        <method name="anonymous" signature="()V" line-rate="1.0" branch-rate="1.0">
+                            <lines>
+                                <line number="6" hits="1" branch="false"/>
+                                <line number="12" hits="1" branch="false"/>
+                            </lines>
+                        </method>
+                        <method name="delegate" signature="()Z" line-rate="1.0" branch-rate="1.0">
+                            <lines>
+                                <line number="15" hits="1" branch="false"/>
+                            </lines>
+                        </method>
+                    </methods>
+                    <lines>
+                        <line number="3" hits="2" branch="false"/>
+                        <line number="6" hits="1" branch="false"/>
+                        <line number="12" hits="1" branch="false"/>
+                        <line number="15" hits="1" branch="false"/>
+                        <line number="18" hits="2" branch="false"/>
+                    </lines>
+                </class>
+                <class name="org.eluder.coverage.sample.InnerClassCoverage$1" filename="org/eluder/coverage/sample/InnerClassCoverage.java" line-rate="1.0" branch-rate="1.0" complexity="1.0">
+                    <methods>
+                        <method name="&lt;init&gt;" signature="(Lorg/eluder/coverage/sample/InnerClassCoverage;)V" line-rate="1.0" branch-rate="1.0">
+                            <lines>
+                                <line number="6" hits="1" branch="false"/>
+                            </lines>
+                        </method>
+                        <method name="run" signature="()V" line-rate="1.0" branch-rate="1.0">
+                            <lines>
+                                <line number="9" hits="1" branch="false"/>
+                                <line number="10" hits="1" branch="false"/>
+                            </lines>
+                        </method>
+                    </methods>
+                    <lines>
+                        <line number="6" hits="1" branch="false"/>
+                        <line number="9" hits="1" branch="false"/>
+                        <line number="10" hits="1" branch="false"/>
+                    </lines>
+                </class>
+                <class name="org.eluder.coverage.sample.InnerClassCoverage$InnerClass" filename="org/eluder/coverage/sample/InnerClassCoverage.java" line-rate="0.5" branch-rate="1.0" complexity="1.0">
+                    <methods>
+                        <method name="&lt;init&gt;" signature="()V" line-rate="1.0" branch-rate="1.0">
+                            <lines>
+                                <line number="18" hits="2" branch="false"/>
+                            </lines>
+                        </method>
+                        <method name="isInner" signature="()Z" line-rate="1.0" branch-rate="1.0">
+                            <lines>
+                                <line number="21" hits="1" branch="false"/>
+                            </lines>
+                        </method>
+                        <method name="run" signature="()V" line-rate="0.0" branch-rate="1.0">
+                            <lines>
+                                <line number="25" hits="0" branch="false"/>
+                                <line number="26" hits="0" branch="false"/>
+                            </lines>
+                        </method>
+                    </methods>
+                    <lines>
+                        <line number="18" hits="2" branch="false"/>
+                        <line number="21" hits="1" branch="false"/>
+                        <line number="25" hits="0" branch="false"/>
+                        <line number="26" hits="0" branch="false"/>
+                    </lines>
+                </class>
+                <class name="org.eluder.coverage.sample.SimpleCoverage" filename="org/eluder/coverage/sample/SimpleCoverage.java" line-rate="0.5" branch-rate="1.0" complexity="1.0">
+                    <methods>
+                        <method name="&lt;init&gt;" signature="()V" line-rate="1.0" branch-rate="1.0">
+                            <lines>
+                                <line number="3" hits="1" branch="false"/>
+                            </lines>
+                        </method>
+                        <method name="isTested" signature="()Z" line-rate="1.0" branch-rate="1.0">
+                            <lines>
+                                <line number="6" hits="1" branch="false"/>
+                            </lines>
+                        </method>
+                        <method name="neverRun" signature="()V" line-rate="0.0" branch-rate="1.0">
+                            <lines>
+                                <line number="10" hits="0" branch="false"/>
+                                <line number="11" hits="0" branch="false"/>
+                            </lines>
+                        </method>
+                    </methods>
+                    <lines>
+                        <line number="3" hits="1" branch="false"/>
+                        <line number="6" hits="1" branch="false"/>
+                        <line number="10" hits="0" branch="false"/>
+                        <line number="11" hits="0" branch="false"/>
+                    </lines>
+                </class>
+            </classes>
+        </package>
+    </packages>
 </coverage>

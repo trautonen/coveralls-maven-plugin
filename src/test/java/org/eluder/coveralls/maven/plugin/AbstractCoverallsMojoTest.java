@@ -102,8 +102,8 @@ public abstract class AbstractCoverallsMojoTest {
             @Override
             public Source answer(final InvocationOnMock invocation) throws Throwable {
                 String sourceFile = invocation.getArguments()[0].toString();
-                String content = TestIoUtil.readFileContent(TestIoUtil.getFile("/" + new File(sourceFile).getName()));
-                return new Source(invocation.getArguments()[0].toString(), content);
+                String content = TestIoUtil.readFileContent(TestIoUtil.getFile(sourceFile));
+                return new Source(sourceFile, content);
             }
         });
         when(logMock.isInfoEnabled()).thenReturn(true);
@@ -175,13 +175,14 @@ public abstract class AbstractCoverallsMojoTest {
         when(coverallsClientMock.submit(any(File.class))).thenReturn(new CoverallsResponse("success", false, null));
         mojo.execute();
         String json = TestIoUtil.readFileContent(coverallsFile);
-        
         assertNotNull(json);
-        for (String[] coverageFile : getCoverageFiles()) {
+        
+        String[][] fixture = getCoverageFixture();
+        for (String[] coverageFile : fixture) {
             assertThat(json, containsString(coverageFile[0]));
         }
 
-        verifySuccesfull(logMock);
+        verifySuccessfullSubmit(logMock, fixture);
     }
 
     @Test(expected = MojoFailureException.class)
@@ -233,12 +234,10 @@ public abstract class AbstractCoverallsMojoTest {
     
     protected abstract AbstractCoverallsMojo createMojo();
 
-    protected void verifySuccesfull(final Log logMock) {
-        verify(logMock).info("Gathered code coverage metrics for 2 source files with 44 lines of code:");
+    protected abstract String[][] getCoverageFixture();
+    
+    public static void verifySuccessfullSubmit(Log logMock, String[][] fixture) {
+        verify(logMock).info("Gathered code coverage metrics for " + CoverageFixture.getTotalFiles(fixture) + " source files with " + CoverageFixture.getTotalLines(fixture) + " lines of code:");
         verify(logMock).info("*** It might take hours for Coveralls to update the actual coverage numbers for a job");
-    }
-
-    protected String[][] getCoverageFiles() {
-        return CoverageFixture.COVERAGE_FILES;
     }
 }

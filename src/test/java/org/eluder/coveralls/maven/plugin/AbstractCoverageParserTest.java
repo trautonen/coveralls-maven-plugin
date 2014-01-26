@@ -65,13 +65,13 @@ public abstract class AbstractCoverageParserTest {
     
     @Before
     public void init() throws IOException {
-        for (String[] coverageFile : getCoverageFiles()) {
+        for (String[] coverageFile : getCoverageFixture()) {
             final String name = coverageFile[0];
-            final String content = TestIoUtil.readFileContent(TestIoUtil.getFile("/" + name));
-            when(sourceLoaderMock.load(getSourceFileName(name))).then(new Answer<Source>() {
+            final String content = TestIoUtil.readFileContent(TestIoUtil.getFile(name));
+            when(sourceLoaderMock.load(name)).then(new Answer<Source>() {
                 @Override
                 public Source answer(final InvocationOnMock invocation) throws Throwable {
-                    return new Source(getSourceFileName(name), content);
+                    return new Source(name, content);
                 }
             });
         }
@@ -82,11 +82,13 @@ public abstract class AbstractCoverageParserTest {
         CoverageParser parser = createCoverageParser(TestIoUtil.getFile(getCoverageResource()), sourceLoaderMock);
         parser.parse(sourceCallbackMock);
         
+        String[][] fixture = getCoverageFixture();
+        
         ArgumentCaptor<Source> captor = ArgumentCaptor.forClass(Source.class);
-        verify(sourceCallbackMock, atLeast(getCoverageFiles().length)).onSource(captor.capture());
+        verify(sourceCallbackMock, atLeast(CoverageFixture.getTotalFiles(fixture))).onSource(captor.capture());
         
         Collection<Source> combined = combineCoverage(captor.getAllValues());
-        for (String[] coverageFile : getCoverageFiles()) {
+        for (String[] coverageFile : fixture) {
             assertCoverage(combined, coverageFile[0], Integer.parseInt(coverageFile[1]), toSet(coverageFile[2]), toSet(coverageFile[3]));
         }
     }
@@ -94,6 +96,8 @@ public abstract class AbstractCoverageParserTest {
     protected abstract CoverageParser createCoverageParser(File coverageFile, SourceLoader sourceLoader);
     
     protected abstract String getCoverageResource();
+
+    protected abstract String[][] getCoverageFixture();
     
     private Collection<Source> combineCoverage(final List<Source> sources) {
         Map<String, Source> combined = new HashMap<String, Source>();
@@ -113,7 +117,6 @@ public abstract class AbstractCoverageParserTest {
     }
     
     private Set<Integer> toSet(final String commaSeparated) {
-
         if (commaSeparated.isEmpty()) {
             return new HashSet<Integer>(0);
         }
@@ -151,13 +154,5 @@ public abstract class AbstractCoverageParserTest {
             }
         }
 
-    }
-
-    protected String getSourceFileName(final String name) {
-        return "org/eluder/coverage/sample/" + name;
-    }
-
-    protected String[][] getCoverageFiles() {
-        return CoverageFixture.COVERAGE_FILES;
     }
 }

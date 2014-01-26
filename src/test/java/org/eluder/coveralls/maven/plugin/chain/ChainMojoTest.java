@@ -1,5 +1,12 @@
 package org.eluder.coveralls.maven.plugin.chain;
 
+import static org.eluder.coveralls.maven.plugin.AbstractCoverallsMojoTest.verifySuccessfullSubmit;
+import static org.hamcrest.Matchers.containsString;
+import static org.junit.Assert.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.when;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -30,14 +37,6 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
-
-import static org.hamcrest.Matchers.containsString;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 /**
  * @author Jakub Bednář (27/12/2013 10:38)
@@ -77,15 +76,15 @@ public class ChainMojoTest {
             @Override
             public Source answer(final InvocationOnMock invocation) throws Throwable {
                 String sourceFile = invocation.getArguments()[0].toString();
-                String content = TestIoUtil.readFileContent(TestIoUtil.getFile("/" + new File(sourceFile).getName()));
-                return new Source(invocation.getArguments()[0].toString(), content);
+                String content = TestIoUtil.readFileContent(TestIoUtil.getFile(sourceFile));
+                return new Source(sourceFile, content);
             }
         });
         when(logMock.isInfoEnabled()).thenReturn(true);
+        
         when(jobMock.validate()).thenReturn(new ValidationErrors());
 
         mojo = new ChainMojo() {
-
             @Override
             protected SourceLoader createSourceLoader() {
                 return sourceLoaderMock;
@@ -132,41 +131,38 @@ public class ChainMojoTest {
 
 
     @Test
-    public void testSuccesfullSubmissionCoberturaSaga() throws Exception {
-
-        mojo.coberturaFile = TestIoUtil.getFile("/cobertura.xml");
-        mojo.sagaFile = TestIoUtil.getFile("/saga.xml");
-        mojo.deployedDirectoryName = "src/";
+    public void testSuccesfullSubmissionForCoberturaAnsSaga() throws Exception {
+        mojo.coberturaFile = TestIoUtil.getFile("cobertura.xml");
+        mojo.sagaFile = TestIoUtil.getFile("saga.xml");
+        mojo.deployDirectoryName = "src";
 
         when(coverallsClientMock.submit(any(File.class))).thenReturn(new CoverallsResponse("success", false, null));
         mojo.execute();
         String json = TestIoUtil.readFileContent(coverallsFile);
-
         assertNotNull(json);
-        for (String[] coverageFile : CoverageFixture.COVERAGE_FILES_SAGA_COBERTURA) {
+        
+        String[][] fixture = CoverageFixture.JAVA_AND_JAVASCRIPT_FILES;
+        for (String[] coverageFile : fixture) {
             assertThat(json, containsString(coverageFile[0]));
         }
 
-        verify(logMock).info("Gathered code coverage metrics for 4 source files with 66 lines of code:");
-        verify(logMock).info("*** It might take hours for Coveralls to update the actual coverage numbers for a job");
+        verifySuccessfullSubmit(logMock, fixture);
     }
 
     @Test
-    public void testSuccesfullSubmissionJaCoCo() throws Exception {
-
-        mojo.jacocoFile = TestIoUtil.getFile("/jacoco.xml");
-        mojo.deployedDirectoryName = "src/";
+    public void testSuccesfullSubmissionForJaCoCo() throws Exception {
+        mojo.jacocoFile = TestIoUtil.getFile("jacoco.xml");
 
         when(coverallsClientMock.submit(any(File.class))).thenReturn(new CoverallsResponse("success", false, null));
         mojo.execute();
         String json = TestIoUtil.readFileContent(coverallsFile);
-
         assertNotNull(json);
-        for (String[] coverageFile : CoverageFixture.COVERAGE_FILES) {
+        
+        String[][] fixture = CoverageFixture.JAVA_FILES;
+        for (String[] coverageFile : fixture) {
             assertThat(json, containsString(coverageFile[0]));
         }
 
-        verify(logMock).info("Gathered code coverage metrics for 2 source files with 44 lines of code:");
-        verify(logMock).info("*** It might take hours for Coveralls to update the actual coverage numbers for a job");
+        verifySuccessfullSubmit(logMock, fixture);
     }
 }

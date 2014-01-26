@@ -60,7 +60,14 @@ public class TestIoUtil {
     
     public static File getFile(final String resource) {
         try {
-            return new File(getResourceUrl(resource).toURI());
+            String local = resource;
+            if (local.lastIndexOf("/") > 0) {
+                local = local.substring(local.lastIndexOf('/'));
+            }
+            if (!local.startsWith("/")) {
+                local = "/" + local;
+            }
+            return new File(getResourceUrl(local).toURI());
         } catch (URISyntaxException ex) {
             throw new IllegalArgumentException(ex);
         }

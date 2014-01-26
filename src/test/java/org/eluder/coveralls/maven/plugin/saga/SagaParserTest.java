@@ -14,21 +14,16 @@ public class SagaParserTest extends AbstractCoverageParserTest {
 
     @Override
     protected CoverageParser createCoverageParser(final File coverageFile, final SourceLoader sourceLoader) {
-        return new SagaParser(coverageFile, "src/", sourceLoader);
+        return new SagaParser(coverageFile, "src", sourceLoader);
     }
 
     @Override
     protected String getCoverageResource() {
-        return "/saga.xml";
+        return "saga.xml";
     }
 
     @Override
-    protected String getSourceFileName(final String name) {
-        return name;
-    }
-
-    @Override
-    protected String[][] getCoverageFiles() {
-        return CoverageFixture.COVERAGE_FILES_SAGA;
+    protected String[][] getCoverageFixture() {
+        return CoverageFixture.JAVASCRIPT_FILES;
     }
 }
