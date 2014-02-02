@@ -29,7 +29,6 @@ package org.eluder.coveralls.maven.plugin;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
-
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -76,7 +75,11 @@ public abstract class AbstractXmlEventParser implements CoverageParser {
     
     protected XMLStreamReader createEventReader(final Reader reader) throws ProcessingException {
         try {
-            return XMLInputFactory.newInstance().createXMLStreamReader(reader);
+            XMLInputFactory xmlif = XMLInputFactory.newInstance();
+            xmlif.setProperty(XMLInputFactory.SUPPORT_DTD, false);
+            xmlif.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, false);
+            xmlif.setProperty(XMLInputFactory.IS_VALIDATING, false);
+            return xmlif.createXMLStreamReader(reader);
         } catch (FactoryConfigurationError ex) {
             throw new IllegalArgumentException(ex);
         } catch (XMLStreamException ex) {
