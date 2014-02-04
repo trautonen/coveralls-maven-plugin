@@ -46,6 +46,9 @@ public class SourceLoader {
         if (sourceDirectories == null || sourceDirectories.isEmpty()) {
             throw new IllegalArgumentException("At least one source directory must be defined");
         }
+        if (sourceEncoding == null) {
+            throw new IllegalArgumentException("Source encoding must be defined");
+        }
         for (File sourceDirectory : sourceDirectories) {
             if (!sourceDirectory.exists()) {
                 throw new IllegalArgumentException("Source directory " + sourceDirectory.getAbsolutePath() + " does not exist");

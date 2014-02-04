@@ -73,6 +73,11 @@ public class SourceLoaderTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
+    public void testMissingSourceEncoding() throws Exception {
+        new SourceLoader(Arrays.asList(folder.getRoot()), null);
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
     public void testMissingSourceFile() throws Exception {
         new SourceLoader(Arrays.asList(folder.getRoot()), "UTF-8").load("Foo.java");
     }
