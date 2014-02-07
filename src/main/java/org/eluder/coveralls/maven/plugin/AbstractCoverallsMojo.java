@@ -28,6 +28,7 @@ package org.eluder.coveralls.maven.plugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -78,6 +79,12 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
      */
     @Parameter(property = "sourceDirectories")
     protected List<File> sourceDirectories;
+
+    /**
+     * Source urls.
+     */
+    @Parameter(property = "sourceUrls")
+    protected List<URL> sourceUrls;
     
     /**
      * Source file encoding.
@@ -207,7 +214,7 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
      * @return source loader to create source files
      */
     protected SourceLoader createSourceLoader() {
-        return new SourceLoader(sourceDirectories, sourceEncoding);
+        return new SourceLoader(sourceDirectories, sourceUrls, sourceEncoding);
     }
 
     /**

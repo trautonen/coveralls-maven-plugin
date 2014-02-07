@@ -13,6 +13,12 @@ import org.eluder.coveralls.maven.plugin.domain.SourceLoader;
 public class SagaParserTest extends AbstractCoverageParserTest {
 
     @Override
+    protected String sourceName(final String coverageFile) {
+        // emulate jasmine server
+        return "src/" + coverageFile;
+    }
+
+    @Override
     protected CoverageParser createCoverageParser(final File coverageFile, final SourceLoader sourceLoader) {
         return new SagaParser(coverageFile, sourceLoader);
     }

@@ -150,6 +150,15 @@ Set up the Saga Maven plugin in the build section of the project pom.xml:
 </plugin>
 ```
 
+You should also set the `sourceUrls` parameter for the plugin to load the sources from Jaasmine
+server. This allows creating coverage reports also for example CoffeeScript sources:
+
+```xml
+<sourceUrls>
+    <sourceUrl>http://localhost:${jasmine.serverPort}</sourceUrl>
+</sourceUrls>
+```
+
 Execute Maven to create Saga report and submit Coveralls data:
 
 ```
@@ -200,6 +209,7 @@ service environment will not override it.
 | `coverallsFile` | `File` | **Default: ${project.build.directory}/coveralls.json**<br>File path to write and submit Coveralls data. |
 | `coverallsUrl` | `String` | **Default: https://coveralls.io/api/v1/jobs**<br>Url for the Coveralls API. |
 | `sourceDirectories` | `List<File>` | List of source directories. If not provided, the plugin will scan the project's compiled source roots. |
+| `sourceUrls` | `List<URL>` | List of source urls. Can be used to load sources from external service, e.g. Jasmine server. |
 | `sourceEncoding` | `String` | **Default: ${project.build.sourceEncoding}**<br>Source file encoding. |
 | `serviceName` | `String` | CI service name. If not provided the supported service environments are used. |
 | `serviceJobId` | `String` | CI service job id. Currently supported only with Travis. If this property is set, `repoToken` is not required. If not provided the supported service environments are used. | 
@@ -212,7 +222,6 @@ service environment will not override it.
 | `timestamp` | `Date` | **Default: ${timestamp}**<br>Build timestamp. Must be in Maven supported 'yyyy-MM-dd HH:mm:ssa' format. |
 | `dryRun` | `boolean` | **Default: false**<br>Dry run Coveralls report without actually sending it. |
 | `coveralls.skip` | `boolean` | **Default: false**<br>Skip the plugin execution. |
-| `jasmineURL` | `String` | **Default: http://localhost:${jasmine.serverPort}**<br>Only for `saga` goal. URL to <a href="http://searls.github.io/jasmine-maven-plugin/">Jasmine server.</a> |
 | `coberturaFile` | `File` | **Default: ${project.reporting.outputDirectory}/cobertura/coverage.xml**<br>Only for `chain` goal. Cobertura report file. |
 | `jacocoFile` | `File` | **Default: ${project.reporting.outputDirectory}/jacoco/jacoco.xml**<br>Only for `chain` goal. JaCoCo report file. |
 | `sagaFile` | `File` | **Default: ${project.build.directory}/saga-coverage/total-coverage.xml**<br>Only for `chain` goal. Saga report file. |

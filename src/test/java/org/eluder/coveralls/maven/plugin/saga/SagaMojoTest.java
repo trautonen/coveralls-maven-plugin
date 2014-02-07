@@ -1,7 +1,5 @@
 package org.eluder.coveralls.maven.plugin.saga;
 
-import java.io.IOException;
-
 import org.eluder.coveralls.maven.plugin.AbstractCoverallsMojo;
 import org.eluder.coveralls.maven.plugin.AbstractCoverallsMojoTest;
 import org.eluder.coveralls.maven.plugin.CoverageFixture;
@@ -16,7 +14,6 @@ public class SagaMojoTest extends AbstractCoverallsMojoTest {
     protected AbstractCoverallsMojo createMojo() {
         SagaMojo mojo = new SagaMojo();
         mojo.coverageFile = TestIoUtil.getFile("saga.xml");
-        mojo.jasmineURL = "";
         return mojo;
     }
 
@@ -25,7 +22,4 @@ public class SagaMojoTest extends AbstractCoverallsMojoTest {
         return CoverageFixture.JAVASCRIPT_FILES;
     }
 
-    protected String readFileContent(final String sourceFile) throws IOException {
-        return TestIoUtil.readFileContent(TestIoUtil.getFile("/" + sourceFile));
-    }
 }

@@ -39,12 +39,6 @@ public class ChainMojo extends AbstractCoverallsMojo {
     @Parameter(property = "sagaFile", defaultValue = "${project.build.directory}/saga-coverage/total-coverage.xml")
     protected File sagaFile;
 
-    /**
-     * @see org.eluder.coveralls.maven.plugin.saga.SagaMojo#jasmineURL
-     */
-    @Parameter(property = "jasmineURL", required = true, defaultValue = "http://localhost:${jasmine.serverPort}")
-    protected String jasmineURL;
-
     @Override
     protected CoverageParser createCoverageParser(final SourceLoader sourceLoader) {
         return null;
@@ -82,10 +76,5 @@ public class ChainMojo extends AbstractCoverallsMojo {
         } finally {
             writer.close();
         }
-    }
-
-    @Override
-    protected SourceLoader createSourceLoader() {
-        return new SourceLoader(sourceDirectories, sourceEncoding, jasmineURL);
     }
 }

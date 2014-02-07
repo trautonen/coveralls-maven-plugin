@@ -17,19 +17,8 @@ public class SagaMojo extends AbstractCoverallsMojo {
     @Parameter(property = "coverageFile", defaultValue = "${project.build.directory}/saga-coverage/total-coverage.xml")
     protected File coverageFile;
 
-    /**
-     * URL to <a href="http://searls.github.io/jasmine-maven-plugin/">Jasmine server.</a>
-     */
-    @Parameter(property = "jasmineURL", required = true, defaultValue = "http://localhost:${jasmine.serverPort}")
-    protected String jasmineURL;
-
     @Override
     protected CoverageParser createCoverageParser(final SourceLoader sourceLoader) {
         return new SagaParser(coverageFile, sourceLoader);
-    }
-
-    @Override
-    protected SourceLoader createSourceLoader() {
-        return new SourceLoader(sourceDirectories, sourceEncoding, jasmineURL);
     }
 }

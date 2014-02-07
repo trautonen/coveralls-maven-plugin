@@ -41,32 +41,34 @@ import org.codehaus.plexus.util.IOUtil;
 public class SourceLoader {
 
     private final List<File> sourceDirectories;
+    private final List<URL> sourceUrls;
     private final Charset sourceEncoding;
 
-    private final String baseURL;
-
     public SourceLoader(final List<File> sourceDirectories, final String sourceEncoding) {
-        this(sourceDirectories, sourceEncoding, null);
+        this(sourceDirectories, null, sourceEncoding);
     }
-
-    public SourceLoader(final List<File> sourceDirectories, final String sourceEncoding, final String baseURL) {
-        if (sourceDirectories == null || sourceDirectories.isEmpty()) {
-            throw new IllegalArgumentException("At least one source directory must be defined");
+    
+    public SourceLoader(final List<File> sourceDirectories, final List<URL> sourceUrls, final String sourceEncoding) {
+        if ((sourceDirectories == null || sourceDirectories.isEmpty()) &&
+                (sourceUrls == null || sourceUrls.isEmpty())) {
+            throw new IllegalArgumentException("At least one source directory or source url must be defined");
         }
         if (sourceEncoding == null) {
             throw new IllegalArgumentException("Source encoding must be defined");
         }
-        for (File sourceDirectory : sourceDirectories) {
-            if (!sourceDirectory.exists()) {
-                throw new IllegalArgumentException("Source directory " + sourceDirectory.getAbsolutePath() + " does not exist");
-            }
-            if (!sourceDirectory.isDirectory()) {
-                throw new IllegalArgumentException(sourceDirectory.getAbsolutePath() + " is not directory");
+        if (sourceDirectories != null) {
+            for (File sourceDirectory : sourceDirectories) {
+                if (!sourceDirectory.exists()) {
+                    throw new IllegalArgumentException("Source directory " + sourceDirectory.getAbsolutePath() + " does not exist");
+                }
+                if (!sourceDirectory.isDirectory()) {
+                    throw new IllegalArgumentException(sourceDirectory.getAbsolutePath() + " is not directory");
+                }
             }
         }
         this.sourceDirectories = sourceDirectories;
+        this.sourceUrls = sourceUrls;
         this.sourceEncoding = Charset.forName(sourceEncoding);
-        this.baseURL = baseURL;
     }
     
     public Source load(final String sourceFile) throws IOException {
@@ -80,22 +82,31 @@ public class SourceLoader {
     }
     
     private InputStreamReader locate(final String sourceFile) throws IOException {
-        for (File sourceDirectory : sourceDirectories) {
-            File file = new File(sourceDirectory, sourceFile);
-            if (file.exists()) {
-                if (!file.isFile()) {
-                    throw new IllegalArgumentException(file.getAbsolutePath() + " is not file");
+        if (sourceDirectories != null) {
+            for (File sourceDirectory : sourceDirectories) {
+                File file = new File(sourceDirectory, sourceFile);
+                if (file.exists()) {
+                    if (!file.isFile()) {
+                        throw new IllegalArgumentException(file.getAbsolutePath() + " is not file");
+                    }
+                    return new InputStreamReader(new BufferedInputStream(new FileInputStream(file)), sourceEncoding);
                 }
-                return new InputStreamReader(new BufferedInputStream(new FileInputStream(file)), sourceEncoding);
             }
         }
-
-        if (baseURL != null && !baseURL.isEmpty()) {
-            URL pathToFile = new URL(new URL(baseURL), sourceFile);
-
-            return new InputStreamReader(pathToFile.openStream(), sourceEncoding);
+        
+        if (sourceUrls != null) {
+            for (URL sourceUrl : sourceUrls) {
+                URL url = new URL(sourceUrl, sourceFile);
+                try {
+                    return new InputStreamReader(url.openStream(), sourceEncoding);
+                } catch (IOException ex) {
+                    System.out.println(ex.getMessage());
+                    // not found from url
+                }
+            }
+            
         }
 
-        throw new IllegalArgumentException("Could not find source file " + sourceFile + " from any source directory or base URL.");
+        throw new IllegalArgumentException("Could not find source file " + sourceFile + " from any source directory or source url.");
     }
 }

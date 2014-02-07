@@ -66,15 +66,23 @@ public abstract class AbstractCoverageParserTest {
     @Before
     public void init() throws IOException {
         for (String[] coverageFile : getCoverageFixture()) {
-            final String name = coverageFile[0];
+            final String name = sourceName(coverageFile[0]);
             final String content = TestIoUtil.readFileContent(TestIoUtil.getFile(name));
-            when(sourceLoaderMock.load(name)).then(new Answer<Source>() {
-                @Override
-                public Source answer(final InvocationOnMock invocation) throws Throwable {
-                    return new Source(name, content);
-                }
-            });
+            when(sourceLoaderMock.load(name)).then(sourceAnswer(name, content));
         }
+    }
+    
+    protected String sourceName(final String coverageFile) {
+        return coverageFile;
+    }
+    
+    protected Answer<Source> sourceAnswer(final String name, final String content) {
+        return new Answer<Source>() {
+            @Override
+            public Source answer(final InvocationOnMock invocation) throws Throwable {
+                return new Source(name, content);
+            }
+        };
     }
 
     @Test
