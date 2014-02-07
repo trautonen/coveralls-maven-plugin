@@ -32,6 +32,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.List;
 
@@ -41,8 +42,14 @@ public class SourceLoader {
 
     private final List<File> sourceDirectories;
     private final Charset sourceEncoding;
-    
+
+    private final String baseURL;
+
     public SourceLoader(final List<File> sourceDirectories, final String sourceEncoding) {
+        this(sourceDirectories, sourceEncoding, null);
+    }
+
+    public SourceLoader(final List<File> sourceDirectories, final String sourceEncoding, final String baseURL) {
         if (sourceDirectories == null || sourceDirectories.isEmpty()) {
             throw new IllegalArgumentException("At least one source directory must be defined");
         }
@@ -59,11 +66,11 @@ public class SourceLoader {
         }
         this.sourceDirectories = sourceDirectories;
         this.sourceEncoding = Charset.forName(sourceEncoding);
+        this.baseURL = baseURL;
     }
     
     public Source load(final String sourceFile) throws IOException {
-        File file = locate(sourceFile);
-        Reader reader = new InputStreamReader(new BufferedInputStream(new FileInputStream(file)), sourceEncoding);
+        Reader reader = locate(sourceFile);
         try {
             String source = IOUtil.toString(reader);
             return new Source(sourceFile, source);
@@ -72,16 +79,23 @@ public class SourceLoader {
         }
     }
     
-    private File locate(final String sourceFile) {
+    private InputStreamReader locate(final String sourceFile) throws IOException {
         for (File sourceDirectory : sourceDirectories) {
             File file = new File(sourceDirectory, sourceFile);
             if (file.exists()) {
                 if (!file.isFile()) {
                     throw new IllegalArgumentException(file.getAbsolutePath() + " is not file");
                 }
-                return file;
+                return new InputStreamReader(new BufferedInputStream(new FileInputStream(file)), sourceEncoding);
             }
         }
-        throw new IllegalArgumentException("Could not find source file " + sourceFile + " from any source directory");
+
+        if (baseURL != null && !baseURL.isEmpty()) {
+            URL pathToFile = new URL(new URL(baseURL), sourceFile);
+
+            return new InputStreamReader(pathToFile.openStream(), sourceEncoding);
+        }
+
+        throw new IllegalArgumentException("Could not find source file " + sourceFile + " from any source directory or base URL.");
     }
 }

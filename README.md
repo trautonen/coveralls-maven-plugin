@@ -212,7 +212,7 @@ service environment will not override it.
 | `timestamp` | `Date` | **Default: ${timestamp}**<br>Build timestamp. Must be in Maven supported 'yyyy-MM-dd HH:mm:ssa' format. |
 | `dryRun` | `boolean` | **Default: false**<br>Dry run Coveralls report without actually sending it. |
 | `coveralls.skip` | `boolean` | **Default: false**<br>Skip the plugin execution. |
-| `deployDirectoryName` | `String` | **Default: src**<br>Only for `saga` goal. <a href="http://searls.github.io/jasmine-maven-plugin/bdd-mojo.html#srcDirectoryName">Deploy directory name</a> on 'Jasmine' server. |
+| `jasmineURL` | `String` | **Default: http://localhost:${jasmine.serverPort}**<br>Only for `saga` goal. URL to <a href="http://searls.github.io/jasmine-maven-plugin/">Jasmine server.</a> |
 | `coberturaFile` | `File` | **Default: ${project.reporting.outputDirectory}/cobertura/coverage.xml**<br>Only for `chain` goal. Cobertura report file. |
 | `jacocoFile` | `File` | **Default: ${project.reporting.outputDirectory}/jacoco/jacoco.xml**<br>Only for `chain` goal. JaCoCo report file. |
 | `sagaFile` | `File` | **Default: ${project.build.directory}/saga-coverage/total-coverage.xml**<br>Only for `chain` goal. Saga report file. |

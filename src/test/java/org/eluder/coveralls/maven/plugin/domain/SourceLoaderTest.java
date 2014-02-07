@@ -26,10 +26,8 @@ package org.eluder.coveralls.maven.plugin.domain;
  * %[license]
  */
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
-
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -40,6 +38,9 @@ import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SourceLoaderTest {
@@ -96,5 +97,21 @@ public class SourceLoaderTest {
         assertEquals(file.getName(), source.getName());
         assertEquals("public class Foo {\n    \n}\n", source.getSource());
         assertEquals(4, source.getCoverage().length);
+    }
+
+    @Test
+    public void testLoadSourceFromURL() throws IOException {
+        String fileName = "scripts/file.coffee";
+        String baseURL  = folder.getRoot().toURI().toString();
+
+        folder.newFolder("scripts");
+        File file = folder.newFile(fileName);
+        TestIoUtil.writeFileContent("math =\n  root:   Math.sqrt\n  square: square", file);
+
+        Source source = new SourceLoader(Arrays.asList(folder.newFolder()), "UTF-8", baseURL).load(fileName);
+
+        assertEquals(fileName, source.getName());
+        assertEquals("math =\n  root:   Math.sqrt\n  square: square", source.getSource());
+        assertEquals(3, source.getCoverage().length);
     }
 }

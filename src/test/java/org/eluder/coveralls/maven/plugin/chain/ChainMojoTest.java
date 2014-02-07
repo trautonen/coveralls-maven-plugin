@@ -1,12 +1,5 @@
 package org.eluder.coveralls.maven.plugin.chain;
 
-import static org.eluder.coveralls.maven.plugin.AbstractCoverallsMojoTest.verifySuccessfullSubmit;
-import static org.hamcrest.Matchers.containsString;
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.when;
-
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -37,6 +30,14 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
+
+import static org.eluder.coveralls.maven.plugin.AbstractCoverallsMojoTest.verifySuccessfullSubmit;
+import static org.hamcrest.Matchers.containsString;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Jakub Bednář (27/12/2013 10:38)
@@ -134,7 +135,7 @@ public class ChainMojoTest {
     public void testSuccesfullSubmissionForCoberturaAnsSaga() throws Exception {
         mojo.coberturaFile = TestIoUtil.getFile("cobertura.xml");
         mojo.sagaFile = TestIoUtil.getFile("saga.xml");
-        mojo.deployDirectoryName = "src";
+        mojo.jasmineURL = "";
 
         when(coverallsClientMock.submit(any(File.class))).thenReturn(new CoverallsResponse("success", false, null));
         mojo.execute();
