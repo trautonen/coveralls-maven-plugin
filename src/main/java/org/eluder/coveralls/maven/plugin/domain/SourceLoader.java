@@ -97,12 +97,13 @@ public class SourceLoader {
         if (sourceUrls != null) {
             for (URL sourceUrl : sourceUrls) {
                 URL url = new URL(sourceUrl, sourceFile);
+                // Checkstyle OFF: EmptyBlock
                 try {
                     return new InputStreamReader(url.openStream(), sourceEncoding);
                 } catch (IOException ex) {
-                    System.out.println(ex.getMessage());
                     // not found from url
                 }
+                // Checkstyle ON: EmptyBlock
             }
             
         }

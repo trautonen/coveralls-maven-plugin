@@ -85,8 +85,13 @@ public class SourceLoaderTest {
     }
     
     @Test(expected = IllegalArgumentException.class)
-    public void testMissingSourceFile() throws Exception {
+    public void testMissingSourceFileFromDirectory() throws Exception {
         new SourceLoader(Arrays.asList(folder.getRoot()), new ArrayList<URL>(), "UTF-8").load("Foo.java");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testMissingSourceFileFromUrl() throws Exception {
+        new SourceLoader(new ArrayList<File>(), Arrays.asList(new URL("http://domainthatdoesnotexist.com")), "UTF-8").load("Foo.java");
     }
     
     @Test(expected = IllegalArgumentException.class)
