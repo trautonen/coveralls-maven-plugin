@@ -26,6 +26,7 @@ package org.eluder.coveralls.maven.plugin.domain;
  * %[license]
  */
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -59,7 +60,7 @@ public class Git implements JsonObject {
         return remotes;
     }
 
-    public static class Head {
+    public static class Head implements Serializable {
         @JsonProperty("id")
         private final String id;
         
@@ -112,7 +113,7 @@ public class Git implements JsonObject {
         }
     }
     
-    public static class Remote {
+    public static class Remote implements Serializable {
         @JsonProperty("name")
         private final String name;
         
