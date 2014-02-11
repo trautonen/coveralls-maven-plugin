@@ -191,12 +191,10 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
             if (!job.isDryRun()) {
                 submitData(client, writer.getCoverallsFile());
             }
-        } catch (MojoFailureException ex) {
-            throw ex;
         } catch (ProcessingException ex) {
             throw new MojoFailureException("Processing of input or output data failed", ex);
         } catch (IOException ex) {
-            throw new MojoFailureException("IO operation failed", ex);
+            throw new MojoFailureException("I/O operation failed", ex);
         } catch (Exception ex) {
             throw new MojoExecutionException("Build error", ex);
         }
@@ -302,19 +300,24 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
         }
     }
     
-    private void submitData(final CoverallsClient client, final File coverallsFile) throws MojoFailureException, ProcessingException, IOException {
+    private void submitData(final CoverallsClient client, final File coverallsFile) throws ProcessingException, IOException {
         getLog().info("Submitting Coveralls data to API");
         long now = System.currentTimeMillis();
-        CoverallsResponse response = client.submit(coverallsFile);
-        long duration = System.currentTimeMillis() - now;
-        if (!response.isError()) {
+        try {
+            CoverallsResponse response = client.submit(coverallsFile);
+            long duration = System.currentTimeMillis() - now;
             getLog().info("Successfully submitted Coveralls data in " + duration + "ms for " + response.getMessage());
             getLog().info(response.getUrl());
             getLog().info("*** It might take hours for Coveralls to update the actual coverage numbers for a job");
             getLog().info("    If you see question marks in the report, please be patient");
-        } else {
-            getLog().error("Failed to submit Coveralls data in " + duration + "ms");
-            throw new MojoFailureException("Failed to submit coveralls report: " + response.getMessage());
+        } catch (ProcessingException ex) {
+            long duration = System.currentTimeMillis() - now;
+            getLog().error("Submission failed in " + duration + "ms while processing data");
+            throw ex;
+        } catch (IOException ex) {
+            long duration = System.currentTimeMillis() - now;
+            getLog().error("Submission failed in " + duration + "ms while handling I/O operations");
+            throw ex;
         }
     }
     

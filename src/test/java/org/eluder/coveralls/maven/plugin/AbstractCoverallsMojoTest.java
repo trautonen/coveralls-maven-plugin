@@ -26,6 +26,12 @@ package org.eluder.coveralls.maven.plugin;
  * %[license]
  */
 
+import static org.hamcrest.Matchers.containsString;
+import static org.junit.Assert.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -55,17 +61,6 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
-
-import static org.hamcrest.Matchers.containsString;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public abstract class AbstractCoverallsMojoTest {
@@ -187,7 +182,7 @@ public abstract class AbstractCoverallsMojoTest {
 
     @Test(expected = MojoFailureException.class)
     public void testFailedSubmission() throws Exception {
-        when(coverallsClientMock.submit(any(File.class))).thenReturn(new CoverallsResponse("failure", true, null));
+        when(coverallsClientMock.submit(any(File.class))).thenThrow(ProcessingException.class);
         mojo.execute();
     }
     

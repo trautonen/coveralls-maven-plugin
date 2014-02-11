@@ -26,7 +26,7 @@ package org.eluder.coveralls.maven.plugin.httpclient;
  * %[license]
  */
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
@@ -35,10 +35,14 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpVersion;
+import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.message.BasicStatusLine;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.CoverallsResponse;
 import org.junit.Before;
@@ -48,8 +52,6 @@ import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CoverallsClientTest {
@@ -90,9 +92,33 @@ public class CoverallsClientTest {
     
     @Test(expected = ProcessingException.class)
     public void testParseInvalidResponse() throws Exception {
+        StatusLine statusLine = new BasicStatusLine(HttpVersion.HTTP_1_1, 200, "OK");
         when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);
+        when(httpResponseMock.getStatusLine()).thenReturn(statusLine);
         when(httpResponseMock.getEntity()).thenReturn(httpEntityMock);
         when(httpEntityMock.getContent()).thenReturn(new ByteArrayInputStream("{bogus}".getBytes()));
+        CoverallsClient client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
+        client.submit(file);
+    }
+    
+    @Test(expected = ProcessingException.class)
+    public void testParseErrorousResponse() throws Exception {
+        StatusLine statusLine = new BasicStatusLine(HttpVersion.HTTP_1_1, 400, "Bad Request");
+        when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);
+        when(httpResponseMock.getStatusLine()).thenReturn(statusLine);
+        when(httpResponseMock.getEntity()).thenReturn(httpEntityMock);
+        when(httpEntityMock.getContent()).thenReturn(coverallsResponse(new CoverallsResponse("failure", true, "submission failed")));
+        CoverallsClient client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
+        client.submit(file);
+    }
+    
+    @Test(expected = IOException.class)
+    public void testParseFailingEntity() throws Exception {
+        StatusLine statusLine = new BasicStatusLine(HttpVersion.HTTP_1_1, 200, "OK");
+        when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);
+        when(httpResponseMock.getStatusLine()).thenReturn(statusLine);
+        when(httpResponseMock.getEntity()).thenReturn(httpEntityMock);
+        when(httpEntityMock.getContent()).thenThrow(IOException.class);
         CoverallsClient client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
         client.submit(file);
     }

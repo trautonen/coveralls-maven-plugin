@@ -32,6 +32,8 @@ import java.io.InputStreamReader;
 import java.security.Provider;
 import java.security.Security;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -42,11 +44,9 @@ import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.codehaus.plexus.util.IOUtil;
+import org.codehaus.plexus.util.StringUtils;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.CoverallsResponse;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class CoverallsClient {
 
@@ -92,14 +92,34 @@ public class CoverallsClient {
     private CoverallsResponse parseResponse(final HttpResponse response) throws ProcessingException, IOException {
         HttpEntity entity = response.getEntity();
         ContentType contentType = ContentType.getOrDefault(entity);
-        InputStreamReader reader = new InputStreamReader(entity.getContent(), contentType.getCharset());
+        InputStreamReader reader = null;
         try {
-            return objectMapper.readValue(reader, CoverallsResponse.class);
+            reader = new InputStreamReader(entity.getContent(), contentType.getCharset());
+            CoverallsResponse cr = objectMapper.readValue(reader, CoverallsResponse.class);
+            if (cr.isError()) {
+                throw new ProcessingException(getResponseErrorMessage(response, cr.getMessage()));
+            }
+            return cr;
         } catch (JsonProcessingException ex) {
-            throw new ProcessingException(ex);
+            throw new ProcessingException(getResponseErrorMessage(response, ex.getMessage()), ex);
+        } catch (IOException ex) {
+            throw new IOException(getResponseErrorMessage(response, ex.getMessage()), ex);
         } finally {
             IOUtil.close(reader);
         }
+    }
+    
+    private String getResponseErrorMessage(final HttpResponse response, final String message) {
+        int status = response.getStatusLine().getStatusCode();
+        String reason = response.getStatusLine().getReasonPhrase();
+        String errorMessage = "Report submission to Coveralls API failed with HTTP status " + status + ":";
+        if (StringUtils.isNotBlank(reason)) {
+            errorMessage += " " + reason;
+        }
+        if (StringUtils.isNotBlank(message)) {
+            errorMessage += " (" + message + ")";
+        }
+        return errorMessage;
     }
     
     private static HttpClient createDefaultClient() {
