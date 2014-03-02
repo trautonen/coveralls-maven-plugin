@@ -293,6 +293,14 @@ service environment will not override it.
 
 ### Changelog
 
+#### 2.2.0
+
+- #31: Improved error messages for Coveralls API failures
+- #30: Improved error message for missing charset
+- #28: More lenient XML parsing
+- #26, #29: Support for Saga coverage tool and chain multiple coverage reports
+
+
 #### 2.1.0
 
 - #24: Filter out remote names from git branches
@@ -355,6 +363,12 @@ and codebase.
   throwing exception
 - `org.eluder.coveralls.maven.plugin.domain.SourceLoader` constructor takes a list of source
   directories instead of a single source directory
+
+
+### Credits
+
+- Jakub Bednář (@bednar) for Saga integration and the idea of chaining multiple reports provided
+  by different coverage tools.
 
 
 ### Continuous integration
