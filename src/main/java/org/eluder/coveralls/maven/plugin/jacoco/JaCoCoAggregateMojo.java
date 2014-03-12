@@ -80,8 +80,8 @@ public class JaCoCoAggregateMojo extends AbstractCoverallsMojo {
         private final List<JaCoCoParser> parsers = new ArrayList<JaCoCoParser>();
 
         private MultipleCoverageParser(final SourceLoader sourceLoader) {
-            for (final File coverageFile : coverageFiles) {
-                parsers.add(new JaCoCoParser(coverageFile, sourceLoader));
+            for (final File file : coverageFiles) {
+                parsers.add(new JaCoCoParser(file, sourceLoader));
             }
         }
 
