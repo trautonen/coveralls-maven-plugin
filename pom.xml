@@ -38,9 +38,9 @@
 	</scm>
 
 	<properties>
-		<httpclient.version>4.3.3</httpclient.version>
-		<jackson.version>2.3.2</jackson.version>
-		<jgit.version>3.2.0.201312181205-r</jgit.version>
+		<httpclient.version>4.3.5</httpclient.version>
+		<jackson.version>2.4.2</jackson.version>
+		<jgit.version>3.4.1.201406201815-r</jgit.version>
 		<maven.version>3.0</maven.version>
 		<maven.build.timestamp.format>yyyy-MM-dd HH:mm:ssa</maven.build.timestamp.format>
 		<timestamp>${maven.build.timestamp}</timestamp>
@@ -98,7 +98,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.2.1</version>
+            <version>3.3.2</version>
             <scope>test</scope>
         </dependency>
 	</dependencies>
