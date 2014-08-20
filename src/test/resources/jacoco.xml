@@ -1,1 +1,139 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?><!DOCTYPE report PUBLIC "-//JACOCO//DTD Report 1.0//EN" "report.dtd"><report name="coverage-sample"><sessioninfo id="tapio-E6330-b0b94431" start="1371582705187" dump="1371582705602"/><package name="org/eluder/coverage/sample"><class name="org/eluder/coverage/sample/SimpleCoverage"><method name="&lt;init&gt;" desc="()V" line="3"><counter type="INSTRUCTION" missed="0" covered="3"/><counter type="LINE" missed="0" covered="1"/><counter type="COMPLEXITY" missed="0" covered="1"/><counter type="METHOD" missed="0" covered="1"/></method><method name="isTested" desc="()Z" line="6"><counter type="INSTRUCTION" missed="0" covered="2"/><counter type="LINE" missed="0" covered="1"/><counter type="COMPLEXITY" missed="0" covered="1"/><counter type="METHOD" missed="0" covered="1"/></method><method name="neverRun" desc="()V" line="10"><counter type="INSTRUCTION" missed="4" covered="0"/><counter type="LINE" missed="2" covered="0"/><counter type="COMPLEXITY" missed="1" covered="0"/><counter type="METHOD" missed="1" covered="0"/></method><counter type="INSTRUCTION" missed="4" covered="5"/><counter type="LINE" missed="2" covered="2"/><counter type="COMPLEXITY" missed="1" covered="2"/><counter type="METHOD" missed="1" covered="2"/><counter type="CLASS" missed="0" covered="1"/></class><class name="org/eluder/coverage/sample/InnerClassCoverage$InnerClass"><method name="&lt;init&gt;" desc="()V" line="18"><counter type="INSTRUCTION" missed="0" covered="3"/><counter type="LINE" missed="0" covered="1"/><counter type="COMPLEXITY" missed="0" covered="1"/><counter type="METHOD" missed="0" covered="1"/></method><method name="isInner" desc="()Z" line="21"><counter type="INSTRUCTION" missed="0" covered="2"/><counter type="LINE" missed="0" covered="1"/><counter type="COMPLEXITY" missed="0" covered="1"/><counter type="METHOD" missed="0" covered="1"/></method><method name="run" desc="()V" line="25"><counter type="INSTRUCTION" missed="4" covered="0"/><counter type="LINE" missed="2" covered="0"/><counter type="COMPLEXITY" missed="1" covered="0"/><counter type="METHOD" missed="1" covered="0"/></method><counter type="INSTRUCTION" missed="4" covered="5"/><counter type="LINE" missed="2" covered="2"/><counter type="COMPLEXITY" missed="1" covered="2"/><counter type="METHOD" missed="1" covered="2"/><counter type="CLASS" missed="0" covered="1"/></class><class name="org/eluder/coverage/sample/InnerClassCoverage"><method name="&lt;init&gt;" desc="()V" line="3"><counter type="INSTRUCTION" missed="0" covered="3"/><counter type="LINE" missed="0" covered="2"/><counter type="COMPLEXITY" missed="0" covered="1"/><counter type="METHOD" missed="0" covered="1"/></method><method name="anonymous" desc="()V" line="6"><counter type="INSTRUCTION" missed="0" covered="6"/><counter type="LINE" missed="0" covered="2"/><counter type="COMPLEXITY" missed="0" covered="1"/><counter type="METHOD" missed="0" covered="1"/></method><method name="delegate" desc="()Z" line="15"><counter type="INSTRUCTION" missed="0" covered="5"/><counter type="LINE" missed="0" covered="1"/><counter type="COMPLEXITY" missed="0" covered="1"/><counter type="METHOD" missed="0" covered="1"/></method><counter type="INSTRUCTION" missed="0" covered="14"/><counter type="LINE" missed="0" covered="5"/><counter type="COMPLEXITY" missed="0" covered="3"/><counter type="METHOD" missed="0" covered="3"/><counter type="CLASS" missed="0" covered="1"/></class><class name="org/eluder/coverage/sample/InnerClassCoverage$1"><method name="&lt;init&gt;" desc="(Lorg/eluder/coverage/sample/InnerClassCoverage;)V" line="6"><counter type="INSTRUCTION" missed="0" covered="6"/><counter type="LINE" missed="0" covered="1"/><counter type="COMPLEXITY" missed="0" covered="1"/><counter type="METHOD" missed="0" covered="1"/></method><method name="run" desc="()V" line="9"><counter type="INSTRUCTION" missed="0" covered="4"/><counter type="LINE" missed="0" covered="2"/><counter type="COMPLEXITY" missed="0" covered="1"/><counter type="METHOD" missed="0" covered="1"/></method><counter type="INSTRUCTION" missed="0" covered="10"/><counter type="LINE" missed="0" covered="3"/><counter type="COMPLEXITY" missed="0" covered="2"/><counter type="METHOD" missed="0" covered="2"/><counter type="CLASS" missed="0" covered="1"/></class><sourcefile name="InnerClassCoverage.java"><line nr="3" mi="0" ci="2" mb="0" cb="0"/><line nr="6" mi="0" ci="11" mb="0" cb="0"/><line nr="9" mi="0" ci="3" mb="0" cb="0"/><line nr="10" mi="0" ci="1" mb="0" cb="0"/><line nr="12" mi="0" ci="1" mb="0" cb="0"/><line nr="15" mi="0" ci="5" mb="0" cb="0"/><line nr="18" mi="0" ci="4" mb="0" cb="0"/><line nr="21" mi="0" ci="2" mb="0" cb="0"/><line nr="25" mi="3" ci="0" mb="0" cb="0"/><line nr="26" mi="1" ci="0" mb="0" cb="0"/><counter type="INSTRUCTION" missed="4" covered="29"/><counter type="LINE" missed="2" covered="8"/><counter type="COMPLEXITY" missed="1" covered="7"/><counter type="METHOD" missed="1" covered="7"/><counter type="CLASS" missed="0" covered="3"/></sourcefile><sourcefile name="SimpleCoverage.java"><line nr="3" mi="0" ci="3" mb="0" cb="0"/><line nr="6" mi="0" ci="2" mb="0" cb="0"/><line nr="10" mi="3" ci="0" mb="0" cb="0"/><line nr="11" mi="1" ci="0" mb="0" cb="0"/><counter type="INSTRUCTION" missed="4" covered="5"/><counter type="LINE" missed="2" covered="2"/><counter type="COMPLEXITY" missed="1" covered="2"/><counter type="METHOD" missed="1" covered="2"/><counter type="CLASS" missed="0" covered="1"/></sourcefile><counter type="INSTRUCTION" missed="8" covered="34"/><counter type="LINE" missed="4" covered="10"/><counter type="COMPLEXITY" missed="2" covered="9"/><counter type="METHOD" missed="2" covered="9"/><counter type="CLASS" missed="0" covered="4"/></package><counter type="INSTRUCTION" missed="8" covered="34"/><counter type="LINE" missed="4" covered="10"/><counter type="COMPLEXITY" missed="2" covered="9"/><counter type="METHOD" missed="2" covered="9"/><counter type="CLASS" missed="0" covered="4"/></report>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?><!DOCTYPE report PUBLIC "-//JACOCO//DTD Report 1.0//EN"
+    "report.dtd">
+<report name="coverage-sample">
+  <sessioninfo id="tapio-E6330-b0b94431" start="1371582705187" dump="1371582705602"/>
+  <package name="org/eluder/coverage/sample">
+    <class name="org/eluder/coverage/sample/SimpleCoverage">
+      <method name="&lt;init&gt;" desc="()V" line="3">
+        <counter type="INSTRUCTION" missed="0" covered="3"/>
+        <counter type="LINE" missed="0" covered="1"/>
+        <counter type="COMPLEXITY" missed="0" covered="1"/>
+        <counter type="METHOD" missed="0" covered="1"/>
+      </method>
+      <method name="isTested" desc="()Z" line="6">
+        <counter type="INSTRUCTION" missed="0" covered="2"/>
+        <counter type="LINE" missed="0" covered="1"/>
+        <counter type="COMPLEXITY" missed="0" covered="1"/>
+        <counter type="METHOD" missed="0" covered="1"/>
+      </method>
+      <method name="neverRun" desc="()V" line="10">
+        <counter type="INSTRUCTION" missed="4" covered="0"/>
+        <counter type="LINE" missed="2" covered="0"/>
+        <counter type="COMPLEXITY" missed="1" covered="0"/>
+        <counter type="METHOD" missed="1" covered="0"/>
+      </method>
+      <counter type="INSTRUCTION" missed="4" covered="5"/>
+      <counter type="LINE" missed="2" covered="2"/>
+      <counter type="COMPLEXITY" missed="1" covered="2"/>
+      <counter type="METHOD" missed="1" covered="2"/>
+      <counter type="CLASS" missed="0" covered="1"/>
+    </class>
+    <class name="org/eluder/coverage/sample/InnerClassCoverage$InnerClass">
+      <method name="&lt;init&gt;" desc="()V" line="18">
+        <counter type="INSTRUCTION" missed="0" covered="3"/>
+        <counter type="LINE" missed="0" covered="1"/>
+        <counter type="COMPLEXITY" missed="0" covered="1"/>
+        <counter type="METHOD" missed="0" covered="1"/>
+      </method>
+      <method name="isInner" desc="()Z" line="21">
+        <counter type="INSTRUCTION" missed="0" covered="2"/>
+        <counter type="LINE" missed="0" covered="1"/>
+        <counter type="COMPLEXITY" missed="0" covered="1"/>
+        <counter type="METHOD" missed="0" covered="1"/>
+      </method>
+      <method name="run" desc="()V" line="25">
+        <counter type="INSTRUCTION" missed="4" covered="0"/>
+        <counter type="LINE" missed="2" covered="0"/>
+        <counter type="COMPLEXITY" missed="1" covered="0"/>
+        <counter type="METHOD" missed="1" covered="0"/>
+      </method>
+      <counter type="INSTRUCTION" missed="4" covered="5"/>
+      <counter type="LINE" missed="2" covered="2"/>
+      <counter type="COMPLEXITY" missed="1" covered="2"/>
+      <counter type="METHOD" missed="1" covered="2"/>
+      <counter type="CLASS" missed="0" covered="1"/>
+    </class>
+    <class name="org/eluder/coverage/sample/InnerClassCoverage">
+      <method name="&lt;init&gt;" desc="()V" line="3">
+        <counter type="INSTRUCTION" missed="0" covered="3"/>
+        <counter type="LINE" missed="0" covered="2"/>
+        <counter type="COMPLEXITY" missed="0" covered="1"/>
+        <counter type="METHOD" missed="0" covered="1"/>
+      </method>
+      <method name="anonymous" desc="()V" line="6">
+        <counter type="INSTRUCTION" missed="0" covered="6"/>
+        <counter type="LINE" missed="0" covered="2"/>
+        <counter type="COMPLEXITY" missed="0" covered="1"/>
+        <counter type="METHOD" missed="0" covered="1"/>
+      </method>
+      <method name="delegate" desc="()Z" line="15">
+        <counter type="INSTRUCTION" missed="0" covered="5"/>
+        <counter type="LINE" missed="0" covered="1"/>
+        <counter type="COMPLEXITY" missed="0" covered="1"/>
+        <counter type="METHOD" missed="0" covered="1"/>
+      </method>
+      <counter type="INSTRUCTION" missed="0" covered="14"/>
+      <counter type="LINE" missed="0" covered="5"/>
+      <counter type="COMPLEXITY" missed="0" covered="3"/>
+      <counter type="METHOD" missed="0" covered="3"/>
+      <counter type="CLASS" missed="0" covered="1"/>
+    </class>
+    <class name="org/eluder/coverage/sample/InnerClassCoverage$1">
+      <method name="&lt;init&gt;" desc="(Lorg/eluder/coverage/sample/InnerClassCoverage;)V" line="6">
+        <counter type="INSTRUCTION" missed="0" covered="6"/>
+        <counter type="LINE" missed="0" covered="1"/>
+        <counter type="COMPLEXITY" missed="0" covered="1"/>
+        <counter type="METHOD" missed="0" covered="1"/>
+      </method>
+      <method name="run" desc="()V" line="9">
+        <counter type="INSTRUCTION" missed="0" covered="4"/>
+        <counter type="LINE" missed="0" covered="2"/>
+        <counter type="COMPLEXITY" missed="0" covered="1"/>
+        <counter type="METHOD" missed="0" covered="1"/>
+      </method>
+      <counter type="INSTRUCTION" missed="0" covered="10"/>
+      <counter type="LINE" missed="0" covered="3"/>
+      <counter type="COMPLEXITY" missed="0" covered="2"/>
+      <counter type="METHOD" missed="0" covered="2"/>
+      <counter type="CLASS" missed="0" covered="1"/>
+    </class>
+    <sourcefile name="InnerClassCoverage.java">
+      <line nr="3" mi="0" ci="2" mb="0" cb="0"/>
+      <line nr="6" mi="0" ci="11" mb="0" cb="0"/>
+      <line nr="9" mi="0" ci="3" mb="0" cb="0"/>
+      <line nr="10" mi="0" ci="1" mb="0" cb="0"/>
+      <line nr="12" mi="0" ci="1" mb="0" cb="0"/>
+      <line nr="15" mi="0" ci="5" mb="0" cb="0"/>
+      <line nr="18" mi="0" ci="4" mb="0" cb="0"/>
+      <line nr="21" mi="0" ci="2" mb="0" cb="0"/>
+      <line nr="25" mi="3" ci="0" mb="0" cb="0"/>
+      <line nr="26" mi="1" ci="0" mb="0" cb="0"/>
+      <counter type="INSTRUCTION" missed="4" covered="29"/>
+      <counter type="LINE" missed="2" covered="8"/>
+      <counter type="COMPLEXITY" missed="1" covered="7"/>
+      <counter type="METHOD" missed="1" covered="7"/>
+      <counter type="CLASS" missed="0" covered="3"/>
+    </sourcefile>
+    <sourcefile name="SimpleCoverage.java">
+      <line nr="3" mi="0" ci="3" mb="0" cb="0"/>
+      <line nr="6" mi="0" ci="2" mb="0" cb="0"/>
+      <line nr="10" mi="3" ci="0" mb="0" cb="0"/>
+      <line nr="11" mi="1" ci="0" mb="0" cb="0"/>
+      <counter type="INSTRUCTION" missed="4" covered="5"/>
+      <counter type="LINE" missed="2" covered="2"/>
+      <counter type="COMPLEXITY" missed="1" covered="2"/>
+      <counter type="METHOD" missed="1" covered="2"/>
+      <counter type="CLASS" missed="0" covered="1"/>
+    </sourcefile>
+    <counter type="INSTRUCTION" missed="8" covered="34"/>
+    <counter type="LINE" missed="4" covered="10"/>
+    <counter type="COMPLEXITY" missed="2" covered="9"/>
+    <counter type="METHOD" missed="2" covered="9"/>
+    <counter type="CLASS" missed="0" covered="4"/>
+  </package>
+  <counter type="INSTRUCTION" missed="8" covered="34"/>
+  <counter type="LINE" missed="4" covered="10"/>
+  <counter type="COMPLEXITY" missed="2" covered="9"/>
+  <counter type="METHOD" missed="2" covered="9"/>
+  <counter type="CLASS" missed="0" covered="4"/>
+</report>

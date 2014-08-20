@@ -27,6 +27,8 @@ package org.eluder.coveralls.maven.plugin.saga;
  */
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
 import org.eluder.coveralls.maven.plugin.AbstractCoverageParserTest;
 import org.eluder.coveralls.maven.plugin.CoverageFixture;
@@ -50,8 +52,8 @@ public class SagaParserTest extends AbstractCoverageParserTest {
     }
 
     @Override
-    protected String getCoverageResource() {
-        return "saga.xml";
+    protected List<String> getCoverageResources() {
+        return Arrays.asList("saga.xml");
     }
 
     @Override

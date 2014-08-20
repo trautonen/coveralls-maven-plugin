@@ -27,6 +27,8 @@ package org.eluder.coveralls.maven.plugin.jacoco;
  */
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
 import org.eluder.coveralls.maven.plugin.AbstractCoverageParserTest;
 import org.eluder.coveralls.maven.plugin.CoverageFixture;
@@ -41,8 +43,8 @@ public class JaCoCoParserTest extends AbstractCoverageParserTest {
     }
     
     @Override
-    protected String getCoverageResource() {
-        return "jacoco.xml";
+    protected List<String> getCoverageResources() {
+        return Arrays.asList("jacoco1.xml", "jacoco2.xml");
     }
 
     @Override

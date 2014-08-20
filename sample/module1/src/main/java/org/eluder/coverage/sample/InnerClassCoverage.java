@@ -3,12 +3,13 @@ package org.eluder.coverage.sample;
 public class InnerClassCoverage {
 
     public void anonymous() {
-        new InnerClass() {
+        InnerClass i = new InnerClass() {
             @Override
             public void run() {
                 System.out.println("overridden");
             }
-        }.run();
+        };
+        i.run();
     }
     
     public boolean delegate() {

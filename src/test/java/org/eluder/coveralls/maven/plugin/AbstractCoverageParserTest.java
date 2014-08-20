@@ -87,8 +87,10 @@ public abstract class AbstractCoverageParserTest {
 
     @Test
     public void testParseCoverage() throws Exception {
-        CoverageParser parser = createCoverageParser(TestIoUtil.getFile(getCoverageResource()), sourceLoaderMock);
-        parser.parse(sourceCallbackMock);
+        for (String coverageResource : getCoverageResources()) {
+            CoverageParser parser = createCoverageParser(TestIoUtil.getFile(coverageResource), sourceLoaderMock);
+            parser.parse(sourceCallbackMock);
+        }
         
         String[][] fixture = getCoverageFixture();
         
@@ -103,7 +105,7 @@ public abstract class AbstractCoverageParserTest {
     
     protected abstract CoverageParser createCoverageParser(File coverageFile, SourceLoader sourceLoader);
     
-    protected abstract String getCoverageResource();
+    protected abstract List<String> getCoverageResources();
 
     protected abstract String[][] getCoverageFixture();
     
@@ -153,12 +155,13 @@ public abstract class AbstractCoverageParserTest {
         }
         for (int i = 0; i < tested.getCoverage().length; i++) {
             Integer lineNumber = i + 1;
+            String message = name + " line " + lineNumber + " coverage";
             if (coveredLines.contains(lineNumber)) {
-                assertTrue(tested.getCoverage()[i] > 0);
+                assertTrue(message, tested.getCoverage()[i] > 0);
             } else if (missedLines.contains(lineNumber)) {
-                assertTrue(tested.getCoverage()[i] == 0);
+                assertTrue(message, tested.getCoverage()[i] == 0);
             } else {
-                assertNull(tested.getCoverage()[i]);
+                assertNull(message, tested.getCoverage()[i]);
             }
         }
 

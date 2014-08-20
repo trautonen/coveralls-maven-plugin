@@ -27,6 +27,8 @@ package org.eluder.coveralls.maven.plugin.cobertura;
  */
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
 import org.eluder.coveralls.maven.plugin.AbstractCoverageParserTest;
 import org.eluder.coveralls.maven.plugin.CoverageFixture;
@@ -41,8 +43,8 @@ public class CoberturaParserTest extends AbstractCoverageParserTest {
     }
     
     @Override
-    protected String getCoverageResource() {
-        return "cobertura.xml";
+    protected List<String> getCoverageResources() {
+        return Arrays.asList("cobertura.xml");
     }
 
     @Override
