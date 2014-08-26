@@ -1,4 +1,4 @@
-package org.eluder.coveralls.maven.plugin;
+package org.eluder.coveralls.maven.plugin.source;
 
 /*
  * #[license]
@@ -28,6 +28,7 @@ package org.eluder.coveralls.maven.plugin;
 
 import java.io.IOException;
 
+import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.Source;
 
 /**
@@ -39,7 +40,7 @@ public interface SourceCallback {
      * Handles a parsed source file.
      * 
      * @param source the source file
-     * @throws ProcessingException if further processing of the source fails
+     * @throws org.eluder.coveralls.maven.plugin.ProcessingException if further processing of the source fails
      * @throws IOException if an I/O error occurs
      */
     void onSource(Source source) throws ProcessingException, IOException;

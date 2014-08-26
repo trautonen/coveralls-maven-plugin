@@ -60,6 +60,7 @@ import org.eluder.coveralls.maven.plugin.service.General;
 import org.eluder.coveralls.maven.plugin.service.Jenkins;
 import org.eluder.coveralls.maven.plugin.service.ServiceSetup;
 import org.eluder.coveralls.maven.plugin.service.Travis;
+import org.eluder.coveralls.maven.plugin.source.SourceCallback;
 import org.eluder.coveralls.maven.plugin.util.CoverageParsersFactory;
 
 @Mojo(name = "report", threadSafe = false, aggregator = true)

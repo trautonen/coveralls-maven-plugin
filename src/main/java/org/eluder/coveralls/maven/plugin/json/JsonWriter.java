@@ -36,7 +36,7 @@ import java.util.Properties;
 
 import org.codehaus.plexus.util.StringUtils;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
-import org.eluder.coveralls.maven.plugin.SourceCallback;
+import org.eluder.coveralls.maven.plugin.source.SourceCallback;
 import org.eluder.coveralls.maven.plugin.domain.Job;
 import org.eluder.coveralls.maven.plugin.domain.Source;
 

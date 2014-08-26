@@ -1,4 +1,4 @@
-package org.eluder.coveralls.maven.plugin;
+package org.eluder.coveralls.maven.plugin.source;
 
 /*
  * #[license]
@@ -28,6 +28,7 @@ package org.eluder.coveralls.maven.plugin;
 
 import java.io.IOException;
 
+import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.Source;
 
 /**

@@ -32,7 +32,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import org.apache.maven.plugin.logging.Log;
-import org.eluder.coveralls.maven.plugin.SourceCallback;
+import org.eluder.coveralls.maven.plugin.source.SourceCallback;
 import org.eluder.coveralls.maven.plugin.domain.Source;
 import org.eluder.coveralls.maven.plugin.logging.Logger.Position;
 import org.junit.Test;
