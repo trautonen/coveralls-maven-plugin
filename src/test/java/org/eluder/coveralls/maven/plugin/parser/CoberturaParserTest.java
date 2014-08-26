@@ -1,4 +1,4 @@
-package org.eluder.coveralls.maven.plugin.saga;
+package org.eluder.coveralls.maven.plugin.parser;
 
 /*
  * #[license]
@@ -27,24 +27,27 @@ package org.eluder.coveralls.maven.plugin.saga;
  */
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
-import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
-import org.eluder.coveralls.maven.plugin.AbstractCoverallsMojo;
+import org.eluder.coveralls.maven.plugin.CoverageFixture;
 import org.eluder.coveralls.maven.plugin.CoverageParser;
 import org.eluder.coveralls.maven.plugin.domain.SourceLoader;
 
-@Mojo(name = "saga", threadSafe = false)
-public class SagaMojo extends AbstractCoverallsMojo {
-
-    /**
-     * File path to Saga coverage file.
-     */
-    @Parameter(property = "coverageFile", defaultValue = "${project.build.directory}/saga-coverage/total-coverage.xml")
-    protected File coverageFile;
+public class CoberturaParserTest extends AbstractCoverageParserTest {
 
     @Override
-    protected CoverageParser createCoverageParser(final SourceLoader sourceLoader) {
-        return new SagaParser(coverageFile, sourceLoader);
+    protected CoverageParser createCoverageParser(final File coverageFile, final SourceLoader sourceLoader) {
+        return new CoberturaParser(coverageFile, sourceLoader);
+    }
+    
+    @Override
+    protected List<String> getCoverageResources() {
+        return Arrays.asList("cobertura.xml");
+    }
+
+    @Override
+    protected String[][] getCoverageFixture() {
+        return CoverageFixture.JAVA_FILES;
     }
 }

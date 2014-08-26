@@ -38,6 +38,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.maven.plugin.logging.Log;
@@ -58,7 +59,7 @@ public class EnvironmentTest {
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
     
-    private AbstractCoverallsMojo mojo;
+    private CoverallsReportMojo mojo;
     
     @Mock
     private CoverageParser coverageParserMock;
@@ -92,11 +93,12 @@ public class EnvironmentTest {
         folder2 = folder.newFolder();
         folder4 = folder.newFolder();
         folder5 = folder.newFolder();
-        mojo = new AbstractCoverallsMojo() {
+        mojo = new CoverallsReportMojo() {
             @Override
-            protected CoverageParser createCoverageParser(final SourceLoader sourceLoader) {
-                return coverageParserMock;
+            protected List<CoverageParser> createCoverageParsers(SourceLoader sourceLoader) {
+                return Arrays.asList(coverageParserMock);
             }
+
             @Override
             public Log getLog() {
                 return logMock;

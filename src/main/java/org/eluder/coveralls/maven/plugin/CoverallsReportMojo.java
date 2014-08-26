@@ -39,6 +39,7 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.eluder.coveralls.maven.plugin.domain.CoverallsResponse;
@@ -59,9 +60,20 @@ import org.eluder.coveralls.maven.plugin.service.General;
 import org.eluder.coveralls.maven.plugin.service.Jenkins;
 import org.eluder.coveralls.maven.plugin.service.ServiceSetup;
 import org.eluder.coveralls.maven.plugin.service.Travis;
+import org.eluder.coveralls.maven.plugin.util.CoverageParsersFactory;
 
-public abstract class AbstractCoverallsMojo extends AbstractMojo {
+@Mojo(name = "report", threadSafe = false, aggregator = true)
+public class CoverallsReportMojo extends AbstractMojo {
 
+    @Parameter(property = "jacocoReports")
+    protected List<File> jacocoReports;
+    
+    @Parameter(property = "coberturaReports")
+    protected List<File> coberturaReports;
+    
+    @Parameter(property = "sagaReports")
+    protected List<File> sagaReports;
+    
     /**
      * File path to write and submit Coveralls data.
      */
@@ -174,7 +186,7 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
         try {
             createEnvironment().setup();
             SourceLoader sourceLoader = createSourceLoader();
-            CoverageParser parser = createCoverageParser(sourceLoader);
+            List<CoverageParser> parsers = createCoverageParsers(sourceLoader);
             Job job = createJob();
             job.validate().throwOrInform(getLog());
             JsonWriter writer = createJsonWriter(job);
@@ -185,7 +197,7 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
             reporters.add(new DryRunLogger(job.isDryRun(), writer.getCoverallsFile()));
             
             report(reporters, Position.BEFORE);
-            writeCoveralls(writer, sourceLoader, sourceCallback, parser);
+            writeCoveralls(writer, sourceLoader, sourceCallback, parsers);
             report(reporters, Position.AFTER);
             
             if (!job.isDryRun()) {
@@ -199,14 +211,14 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
             throw new MojoExecutionException("Build error", ex);
         }
     }
-
-    /**
-     * Creates a coverage parser. Must return new instance on every call.
-     * 
-     * @param sourceLoader the source loader to be used with parser
-     * @return new instance of a coverage parser
-     */
-    protected abstract CoverageParser createCoverageParser(SourceLoader sourceLoader);
+    
+    protected List<CoverageParser> createCoverageParsers(final SourceLoader sourceLoader) {
+        return new CoverageParsersFactory(project, sourceLoader)
+                .withJacocoReports(jacocoReports)
+                .withCoberturaReports(coberturaReports)
+                .withSagaReports(sagaReports)
+                .createParsers();
+    }
     
     /**
      * @return source loader to create source files
@@ -286,12 +298,15 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
         return chain;
     }
     
-    protected void writeCoveralls(final JsonWriter writer, final SourceLoader sourceLoader, final SourceCallback sourceCallback, final CoverageParser parser) throws ProcessingException, IOException {
+    protected void writeCoveralls(final JsonWriter writer, final SourceLoader sourceLoader, final SourceCallback sourceCallback, final List<CoverageParser> parsers) throws ProcessingException, IOException {
         try {
-            getLog().info("Writing Coveralls data to " + writer.getCoverallsFile().getAbsolutePath() + " from coverage report " + parser.getCoverageFile().getAbsolutePath());
+            getLog().info("Writing Coveralls data to " + writer.getCoverallsFile().getAbsolutePath() + "...");
             long now = System.currentTimeMillis();
             writer.writeStart();
-            parser.parse(sourceCallback);
+            for (CoverageParser parser : parsers) {
+                getLog().info("Processing coverage report from " + parser.getCoverageFile().getAbsolutePath());
+                parser.parse(sourceCallback);
+            }
             writer.writeEnd();
             long duration = System.currentTimeMillis() - now;
             getLog().info("Successfully wrote Coveralls data in " + duration + "ms");

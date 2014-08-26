@@ -1,4 +1,4 @@
-package org.eluder.coveralls.maven.plugin.cobertura;
+package org.eluder.coveralls.maven.plugin.parser;
 
 /*
  * #[license]
@@ -28,54 +28,49 @@ package org.eluder.coveralls.maven.plugin.cobertura;
 
 import java.io.File;
 import java.io.IOException;
-
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import org.eluder.coveralls.maven.plugin.AbstractXmlEventParser;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.SourceCallback;
 import org.eluder.coveralls.maven.plugin.domain.Source;
 import org.eluder.coveralls.maven.plugin.domain.SourceLoader;
 
-public class CoberturaParser extends AbstractXmlEventParser {
+public class JaCoCoParser extends AbstractXmlEventParser {
 
-    protected Source source;
-    protected boolean inMethods;
+    private String packageName;
+    private Source source;
     
-    public CoberturaParser(final File coverageFile, final SourceLoader sourceLoader) {
+    public JaCoCoParser(final File coverageFile, final SourceLoader sourceLoader) {
         super(coverageFile, sourceLoader);
     }
     
     @Override
     protected void onEvent(final XMLStreamReader xml, final SourceCallback callback) throws XMLStreamException, ProcessingException, IOException {
-        if (isStartElement(xml, "class")) {
-            source = loadSource(xml.getAttributeValue(null, "filename"));
-            String className = xml.getAttributeValue(null, "name");
-            int classifierPosition = className.indexOf('$');
-            if (classifierPosition > 0) {
-                source.setClassifier(className.substring(classifierPosition));
-            }
+        if (isStartElement(xml, "package")) {
+            this.packageName = xml.getAttributeValue(null, "name");
         } else
         
-        if (isStartElement(xml, "methods") && source != null) {
-            inMethods = true;
+        if (isStartElement(xml, "sourcefile") && packageName != null) {
+            String sourceFile = this.packageName + "/" + xml.getAttributeValue(null, "name");
+            this.source = loadSource(sourceFile);
         } else
         
-        if (isEndElement(xml, "methods") && source != null) {
-            inMethods = false;
-        } else
-        
-        if (isStartElement(xml, "line") && !inMethods && source != null) {
-            source.addCoverage(
-                    Integer.parseInt(xml.getAttributeValue(null, "number")),
-                    Integer.valueOf(xml.getAttributeValue(null, "hits"))
+        if (isStartElement(xml, "line") && this.source != null) {
+            int ci = Integer.parseInt(xml.getAttributeValue(null, "ci"));
+            this.source.addCoverage(
+                    Integer.parseInt(xml.getAttributeValue(null, "nr")),
+                    (ci == 0 ? 0 : 1) // jacoco does not count hits
             );
         } else
         
-        if (isEndElement(xml, "class") && source != null) {
-            callback.onSource(source);
-            source = null;
+        if (isEndElement(xml, "sourcefile") && this.source != null) {
+            callback.onSource(this.source);
+            this.source = null;
+        } else
+        
+        if (isEndElement(xml, "package")) {
+            this.packageName = null;
         }
     }
 

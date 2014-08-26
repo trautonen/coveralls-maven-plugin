@@ -1,4 +1,4 @@
-package org.eluder.coveralls.maven.plugin.saga;
+package org.eluder.coveralls.maven.plugin.parser;
 
 /*
  * #[license]
@@ -26,26 +26,31 @@ package org.eluder.coveralls.maven.plugin.saga;
  * %[license]
  */
 
-import org.eluder.coveralls.maven.plugin.AbstractCoverallsMojo;
-import org.eluder.coveralls.maven.plugin.AbstractCoverallsMojoTest;
-import org.eluder.coveralls.maven.plugin.CoverageFixture;
-import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
+import java.io.File;
+import java.io.IOException;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+
+import org.eluder.coveralls.maven.plugin.ProcessingException;
+import org.eluder.coveralls.maven.plugin.SourceCallback;
+import org.eluder.coveralls.maven.plugin.domain.SourceLoader;
 
 /**
- * @author Jakub Bednář (25/12/2013 10:03)
+ * @author Jakub Bednář (25/12/2013 10:07)
  */
-public class SagaMojoTest extends AbstractCoverallsMojoTest {
+public class SagaParser extends CoberturaParser {
 
-    @Override
-    protected AbstractCoverallsMojo createMojo() {
-        SagaMojo mojo = new SagaMojo();
-        mojo.coverageFile = TestIoUtil.getFile("saga.xml");
-        return mojo;
+    public SagaParser(final File coverageFile, final SourceLoader sourceLoader) {
+        super(coverageFile, sourceLoader);
     }
 
     @Override
-    protected String[][] getCoverageFixture() {
-        return CoverageFixture.JAVASCRIPT_FILES;
+    protected void onEvent(final XMLStreamReader xml, final SourceCallback callback) throws XMLStreamException, ProcessingException, IOException {
+        if (isStartElement(xml, "class")) {
+            String filename = xml.getAttributeValue(null, "filename");
+            source = loadSource(filename);
+        } else {
+            super.onEvent(xml, callback);
+        }
     }
-
 }

@@ -1,4 +1,4 @@
-package org.eluder.coveralls.maven.plugin;
+package org.eluder.coveralls.maven.plugin.parser;
 
 /*
  * #[license]
@@ -42,6 +42,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eluder.coveralls.maven.plugin.CoverageFixture;
+import org.eluder.coveralls.maven.plugin.CoverageParser;
+import org.eluder.coveralls.maven.plugin.SourceCallback;
 import org.eluder.coveralls.maven.plugin.domain.Source;
 import org.eluder.coveralls.maven.plugin.domain.SourceLoader;
 import org.eluder.coveralls.maven.plugin.util.TestIoUtil;

@@ -1,4 +1,4 @@
-package org.eluder.coveralls.maven.plugin.saga;
+package org.eluder.coveralls.maven.plugin.parser;
 
 /*
  * #[license]
@@ -30,34 +30,24 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eluder.coveralls.maven.plugin.AbstractCoverageParserTest;
 import org.eluder.coveralls.maven.plugin.CoverageFixture;
 import org.eluder.coveralls.maven.plugin.CoverageParser;
 import org.eluder.coveralls.maven.plugin.domain.SourceLoader;
 
-/**
- * @author Jakub Bednář (25/12/2013 10:17)
- */
-public class SagaParserTest extends AbstractCoverageParserTest {
-
-    @Override
-    protected String sourceName(final String coverageFile) {
-        // emulate jasmine server
-        return "src/" + coverageFile;
-    }
-
+public class JaCoCoParserTest extends AbstractCoverageParserTest {
+    
     @Override
     protected CoverageParser createCoverageParser(final File coverageFile, final SourceLoader sourceLoader) {
-        return new SagaParser(coverageFile, sourceLoader);
+        return new JaCoCoParser(coverageFile, sourceLoader);
     }
-
+    
     @Override
     protected List<String> getCoverageResources() {
-        return Arrays.asList("saga.xml");
+        return Arrays.asList("jacoco1.xml", "jacoco2.xml");
     }
 
     @Override
     protected String[][] getCoverageFixture() {
-        return CoverageFixture.JAVASCRIPT_FILES;
+        return CoverageFixture.JAVA_FILES;
     }
 }

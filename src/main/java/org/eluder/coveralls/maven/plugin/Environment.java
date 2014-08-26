@@ -40,10 +40,10 @@ import org.eluder.coveralls.maven.plugin.service.ServiceSetup;
  */
 public final class Environment {
     
-    private final AbstractCoverallsMojo mojo;
+    private final CoverallsReportMojo mojo;
     private final Iterable<ServiceSetup> services;
 
-    public Environment(final AbstractCoverallsMojo mojo, final Iterable<ServiceSetup> services) {
+    public Environment(final CoverallsReportMojo mojo, final Iterable<ServiceSetup> services) {
         if (mojo == null) {
             throw new IllegalArgumentException("mojo must be defined");
         }
