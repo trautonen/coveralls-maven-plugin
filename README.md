@@ -14,7 +14,7 @@ service.
   [JaCoCo](http://www.eclemma.org/jacoco/trunk/doc/maven.html) and
   [Saga](http://timurstrekalov.github.io/saga/) coverage tools
 * Multi-module report aggregation with Cobertura
-* Built-in support for [Travis](https://travis-ci.org/), [Circle](https://circleci.com/),
+* Built-in support for [Travis CI](https://travis-ci.org/), [Circle](https://circleci.com/),
   [Codeship](https://www.codeship.io/), [Jenkins](http://jenkins-ci.org/) and
   [Bamboo](https://www.atlassian.com/software/bamboo/) continuous integration services
 * Fully streaming implementation for fast report generation and small memory footprint
@@ -46,7 +46,7 @@ configuration section in the plugin or setting the Maven property `repoToken` to
 `-DrepoToken=yourcoverallsprojectrepositorytoken` when running the maven command. **Do not publish
 your repository token in public GitHub repositories.** If you do, anyone can submit coverage data without permission.
 
-If you are using Travis, Circle, Codeship, Jenkins or Bamboo continuous integration services, no
+If you are using Travis CI, Circle, Codeship, Jenkins or Bamboo continuous integration services, no
 other configuration is required. The plugin's built-in service environment support take care of
 the rest. Multi-module projects that require aggregated reports have to set up Cobertura Maven
 plugin for the root project with `aggregate=true`. For other projects you are free to choose
@@ -82,7 +82,7 @@ Execute Maven to create Cobertura report and submit Coveralls data:
 mvn cobertura:cobertura coveralls:cobertura
 ```
 
-For example if you are using Travis-CI this means you need to add to your `.travis.yml` the lines:
+For example if you are using Travis CI this means you need to add to your `.travis.yml` the lines:
 
 ```
 after_success:
@@ -116,7 +116,7 @@ Execute Maven to create JaCoCo report and submit Coveralls data:
 mvn clean test jacoco:report coveralls:jacoco
 ```
 
-Again, if you are using Travis-CI this means you need to add to your `.travis.yml` the lines:
+Again, if you are using Travis CI this means you need to add to your `.travis.yml` the lines:
 
 ```
 after_success:
@@ -165,7 +165,7 @@ Execute Maven to create Saga report and submit Coveralls data:
 mvn clean test saga:coverage coveralls:saga
 ```
 
-And if you are using Travis-CI this means you need to add to your `.travis.yml` the lines:
+And if you are using Travis CI this means you need to add to your `.travis.yml` the lines:
 ```
 after_success:
   - mvn clean test saga:coverage coveralls:saga
@@ -187,7 +187,7 @@ Execute Maven to create Cobertura and Saga report and submit Coveralls data:
 mvn clean test saga:coverage cobertura:cobertura coveralls:chain
 ```
 
-And if you are using Travis-CI this means you need to add to your `.travis.yml` the lines:
+And if you are using Travis CI this means you need to add to your `.travis.yml` the lines:
 
 ```
 after_success:
@@ -212,11 +212,11 @@ service environment will not override it.
 | `sourceUrls` | `List<URL>` | List of source urls. Can be used to load sources from external service, e.g. Jasmine server. |
 | `sourceEncoding` | `String` | **Default: ${project.build.sourceEncoding}**<br>Source file encoding. |
 | `serviceName` | `String` | CI service name. If not provided the supported service environments are used. |
-| `serviceJobId` | `String` | CI service job id. Currently supported only with Travis. If this property is set, `repoToken` is not required. If not provided the supported service environments are used. | 
+| `serviceJobId` | `String` | CI service job id. Currently supported only with Travis CI. If this property is set, `repoToken` is not required. If not provided the supported service environments are used. | 
 | `serviceBuildNumber` | `String` | CI service build number. If not provided the supported service environments are used. |
 | `serviceBuildUrl` | `String` | CI service build url. If not provided the supported service environments are used. |
 | `serviceEnvironment` | `Properties` | CI service specific environment properties. If not provided the supported service environments are used. |
-| `repoToken` | `String` | Coveralls repository token. **Do not publish this paramater unencrypted in public GitHub repositories.** |
+| `repoToken` | `String` | Coveralls repository token. **Do not publish this parameter unencrypted in public GitHub repositories.** |
 | `branch` | `String` | Git branch name. If not provided the supported service environments are used. |
 | `pullRequest` | `String` | GitHub pull request identifier. If not provided the supported service environments are used. |
 | `timestamp` | `Date` | **Default: ${timestamp}**<br>Build timestamp. Must be in Maven supported 'yyyy-MM-dd HH:mm:ssa' format. |
