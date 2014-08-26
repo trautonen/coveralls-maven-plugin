@@ -42,9 +42,9 @@ Set up the Coveralls maven plugin in the build section of the project pom.xml:
 
 If used as a standalone Maven build or with any continuous integration server other than Travis
 CI, the Coveralls repository token must be provided. This can be achieved by setting the
-configuration section in the plugin or setting a system property for VM using
+configuration section in the plugin or setting the Maven property `repoToken` to your coveralls project repository token, using
 `-DrepoToken=yourcoverallsprojectrepositorytoken` when running the maven command. **Do not publish
-your repository token in public GitHub repositories.**
+your repository token in public GitHub repositories.** If you do, anyone can submit coverage data without permission.
 
 If you are using Travis, Circle, Codeship, Jenkins or Bamboo continuous integration services, no
 other configuration is required. The plugin's built-in service environment support take care of
