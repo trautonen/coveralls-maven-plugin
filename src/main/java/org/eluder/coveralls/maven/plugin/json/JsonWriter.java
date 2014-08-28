@@ -54,6 +54,10 @@ public class JsonWriter implements SourceCallback, Closeable {
     private final JsonGenerator generator;
     
     public JsonWriter(final Job job, final File coverallsFile) throws IOException {
+        File directory = coverallsFile.getParentFile();
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
         this.job = job;
         this.coverallsFile = coverallsFile;
         this.generator = new MappingJsonFactory().createGenerator(coverallsFile, JsonEncoding.UTF8);

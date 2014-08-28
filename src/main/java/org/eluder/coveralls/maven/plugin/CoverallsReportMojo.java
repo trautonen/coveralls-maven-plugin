@@ -46,7 +46,6 @@ import org.eluder.coveralls.maven.plugin.domain.CoverallsResponse;
 import org.eluder.coveralls.maven.plugin.domain.Git;
 import org.eluder.coveralls.maven.plugin.domain.GitRepository;
 import org.eluder.coveralls.maven.plugin.domain.Job;
-import org.eluder.coveralls.maven.plugin.domain.SourceLoader;
 import org.eluder.coveralls.maven.plugin.httpclient.CoverallsClient;
 import org.eluder.coveralls.maven.plugin.json.JsonWriter;
 import org.eluder.coveralls.maven.plugin.logging.CoverageTracingLogger;
@@ -61,7 +60,9 @@ import org.eluder.coveralls.maven.plugin.service.Jenkins;
 import org.eluder.coveralls.maven.plugin.service.ServiceSetup;
 import org.eluder.coveralls.maven.plugin.service.Travis;
 import org.eluder.coveralls.maven.plugin.source.SourceCallback;
+import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 import org.eluder.coveralls.maven.plugin.util.CoverageParsersFactory;
+import org.eluder.coveralls.maven.plugin.util.SourceLoaderFactory;
 
 @Mojo(name = "report", threadSafe = false, aggregator = true)
 public class CoverallsReportMojo extends AbstractMojo {
@@ -225,7 +226,9 @@ public class CoverallsReportMojo extends AbstractMojo {
      * @return source loader to create source files
      */
     protected SourceLoader createSourceLoader() {
-        return new SourceLoader(sourceDirectories, sourceUrls, sourceEncoding);
+        return new SourceLoaderFactory(project, sourceEncoding)
+                .withSourceDirectories(sourceDirectories)
+                .createSourceLoader();
     }
 
     /**

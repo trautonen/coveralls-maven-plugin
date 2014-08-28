@@ -27,12 +27,8 @@ package org.eluder.coveralls.maven.plugin;
  */
 
 import static org.hamcrest.Matchers.contains;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -43,8 +39,8 @@ import java.util.Properties;
 
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
-import org.eluder.coveralls.maven.plugin.domain.SourceLoader;
 import org.eluder.coveralls.maven.plugin.service.ServiceSetup;
+import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

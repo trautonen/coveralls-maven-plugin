@@ -8,9 +8,9 @@ import java.util.List;
 import org.apache.maven.project.MavenProject;
 import org.eluder.coveralls.maven.plugin.CoverageParser;
 import org.eluder.coveralls.maven.plugin.parser.CoberturaParser;
-import org.eluder.coveralls.maven.plugin.domain.SourceLoader;
 import org.eluder.coveralls.maven.plugin.parser.JaCoCoParser;
 import org.eluder.coveralls.maven.plugin.parser.SagaParser;
+import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 
 public class CoverageParsersFactory {
     

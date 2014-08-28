@@ -26,12 +26,8 @@ package org.eluder.coveralls.maven.plugin.parser;
  * %[license]
  */
 
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,9 +40,9 @@ import java.util.Set;
 
 import org.eluder.coveralls.maven.plugin.CoverageFixture;
 import org.eluder.coveralls.maven.plugin.CoverageParser;
-import org.eluder.coveralls.maven.plugin.source.SourceCallback;
 import org.eluder.coveralls.maven.plugin.domain.Source;
-import org.eluder.coveralls.maven.plugin.domain.SourceLoader;
+import org.eluder.coveralls.maven.plugin.source.SourceCallback;
+import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
 import org.junit.Before;
 import org.junit.Test;

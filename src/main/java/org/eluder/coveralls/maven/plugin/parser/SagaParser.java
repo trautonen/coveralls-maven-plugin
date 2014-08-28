@@ -33,7 +33,7 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.source.SourceCallback;
-import org.eluder.coveralls.maven.plugin.domain.SourceLoader;
+import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 
 /**
  * @author Jakub Bednář (25/12/2013 10:07)
