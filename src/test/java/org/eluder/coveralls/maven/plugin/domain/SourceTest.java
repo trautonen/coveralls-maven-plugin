@@ -26,13 +26,21 @@ package org.eluder.coveralls.maven.plugin.domain;
  * %[license]
  */
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import org.junit.Ignore;
 import org.junit.Test;
 
 public class SourceTest {
 
+    @Test
+    public void testAddCoverage() {
+        Source source = new Source("src/main/java/Hello.java", "public class Hello {\n    \n}\n");
+        source.addCoverage(1, 3);
+        source.addCoverage(3, 3);
+        assertArrayEquals(new Integer[] { 3, null, 3, null }, source.getCoverage());
+    }
+    
     @Test
     @Ignore("#45: https://github.com/trautonen/coveralls-maven-plugin/issues/45")
     public void testGetNameWithClassifier() throws Exception {
