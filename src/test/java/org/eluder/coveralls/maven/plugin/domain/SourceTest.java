@@ -35,8 +35,8 @@ public class SourceTest {
     @Test
     public void testGetNameWithClassifier() throws Exception {
         Source source = new Source("src/main/java/Hello.java", "public class Hello {\n    \n}\n");
-        source.setClassifier("$Inner");
+        source.setClassifier("Inner");
         assertEquals("src/main/java/Hello.java", source.getName());
-        assertEquals("src/main/java/Hello.java$Inner", source.getFullName());
+        assertEquals("src/main/java/Hello.java#Inner", source.getFullName());
     }
 }

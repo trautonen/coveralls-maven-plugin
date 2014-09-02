@@ -35,6 +35,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public final class Source implements JsonObject {
     
     private static final Pattern NEWLINE = Pattern.compile("\r\n|\r|\n");
+    private static final String CLASSIFIER_SEPARATOR = "#";
     
     private final String name;
     private final String source;
@@ -62,7 +63,7 @@ public final class Source implements JsonObject {
     
     @JsonProperty("name")
     public String getFullName() {
-        return (classifier == null ? name : name + classifier);
+        return (classifier == null ? name : name + CLASSIFIER_SEPARATOR + classifier);
     }
     
     @JsonProperty("source")

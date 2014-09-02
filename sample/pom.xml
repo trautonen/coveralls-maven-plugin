@@ -35,9 +35,11 @@
           <sourceDirectories>
             <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
           </sourceDirectories>
+          <!--
           <sourceUrls>
             <sourceUrl>http://localhost:${jasmine.serverPort}</sourceUrl>
           </sourceUrls>
+          -->
         </configuration>
       </plugin>
     </plugins>

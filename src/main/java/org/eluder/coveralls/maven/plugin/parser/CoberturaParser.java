@@ -52,7 +52,7 @@ public class CoberturaParser extends AbstractXmlEventParser {
             String className = xml.getAttributeValue(null, "name");
             int classifierPosition = className.indexOf('$');
             if (classifierPosition > 0) {
-                source.setClassifier(className.substring(classifierPosition));
+                source.setClassifier(className.substring(classifierPosition + 1));
             }
         } else
         
