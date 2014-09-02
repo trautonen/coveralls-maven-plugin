@@ -28,11 +28,13 @@ package org.eluder.coveralls.maven.plugin.domain;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class SourceTest {
 
     @Test
+    @Ignore("#45: https://github.com/trautonen/coveralls-maven-plugin/issues/45")
     public void testGetNameWithClassifier() throws Exception {
         Source source = new Source("src/main/java/Hello.java", "public class Hello {\n    \n}\n");
         source.setClassifier("Inner");
