@@ -134,7 +134,7 @@ public class JsonWriterTest {
             .withBranch("master")
             .withPullRequest("pull10")
             .withTimestamp(new Date(TEST_TIME))
-            .withGit(new Git(head, "af456fge34acd", Arrays.asList(remote)));
+            .withGit(new Git(null, head, "af456fge34acd", Arrays.asList(remote)));
     }
     
     private Source source() {

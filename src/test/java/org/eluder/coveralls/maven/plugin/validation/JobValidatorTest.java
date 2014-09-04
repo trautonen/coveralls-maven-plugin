@@ -79,7 +79,7 @@ public class JobValidatorTest {
     
     @Test
     public void testValidateWithoutGitCommitId() {
-        Git git = new Git(new Head(null, null, null, null, null, null), null, null);
+        Git git = new Git(null, new Head(null, null, null, null, null, null), null, null);
         ValidationErrors errors = new JobValidator(new Job().withRepoToken("ad3fg5").withGit(git)).validate();
         assertThat(errors, hasSize(1));
         assertThat(errors.get(0).getLevel(), is(Level.ERROR));
@@ -87,7 +87,7 @@ public class JobValidatorTest {
     
     @Test
     public void testValidateWithGit() {
-        Git git = new Git(new Head("bc23af5", null, null, null, null, null), null, null);
+        Git git = new Git(null, new Head("bc23af5", null, null, null, null, null), null, null);
         ValidationErrors errors = new JobValidator(new Job().withRepoToken("ad3fg5").withGit(git)).validate();
         assertThat(errors, is(empty()));
     }

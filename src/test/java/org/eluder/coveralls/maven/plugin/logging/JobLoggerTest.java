@@ -69,7 +69,7 @@ public class JobLoggerTest {
     
     @Test
     public void testLogJobWithId() {
-        Git git = new Git(new Head("ab679cf2d81ac", null, null, null, null, null), "master", null);
+        Git git = new Git(null, new Head("ab679cf2d81ac", null, null, null, null, null), "master", null);
         when(jobMock.getServiceName()).thenReturn("service");
         when(jobMock.getServiceJobId()).thenReturn("666");
         when(jobMock.getRepoToken()).thenReturn("123456789");

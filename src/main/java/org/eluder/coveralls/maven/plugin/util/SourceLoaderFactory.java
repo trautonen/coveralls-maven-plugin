@@ -10,11 +10,13 @@ import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 
 public class SourceLoaderFactory {
     
+    private final File baseDir;
     private final MavenProject project;
     private final String sourceEncoding;
     private List<File> sourceDirectories;
 
-    public SourceLoaderFactory(final MavenProject project, final String sourceEncoding) {
+    public SourceLoaderFactory(final File baseDir, final MavenProject project, final String sourceEncoding) {
+        this.baseDir = baseDir;
         this.project = project;
         this.sourceEncoding = sourceEncoding;
     }
@@ -31,7 +33,15 @@ public class SourceLoaderFactory {
             for (String sourceRoot : module.getCompileSourceRoots()) {
                 File sourceDirectory = new File(sourceRoot);
                 if (sourceDirectory.exists() && sourceDirectory.isDirectory()) {
-                    DirectorySourceLoader moduleSourceLoader = new DirectorySourceLoader(project.getBasedir(), sourceDirectory, sourceEncoding);
+                    DirectorySourceLoader moduleSourceLoader = new DirectorySourceLoader(baseDir, sourceDirectory, sourceEncoding);
+                    multiSourceLoader.add(moduleSourceLoader);
+                }
+            }
+        }
+        if (sourceDirectories != null) {
+            for (File sourceDirectory : sourceDirectories) {
+                if (sourceDirectory.exists() && sourceDirectory.isDirectory()) {
+                    DirectorySourceLoader moduleSourceLoader = new DirectorySourceLoader(baseDir, sourceDirectory, sourceEncoding);
                     multiSourceLoader.add(moduleSourceLoader);
                 }
             }

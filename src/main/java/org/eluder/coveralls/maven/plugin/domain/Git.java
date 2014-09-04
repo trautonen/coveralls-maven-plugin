@@ -26,13 +26,18 @@ package org.eluder.coveralls.maven.plugin.domain;
  * %[license]
  */
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Git implements JsonObject {
 
+    @JsonIgnore
+    private final File baseDir;
+    
     @JsonProperty("head")
     private final Head head;
     
@@ -42,12 +47,17 @@ public class Git implements JsonObject {
     @JsonProperty("remotes")
     private final List<Remote> remotes;
     
-    public Git(final Head head, final String branch, final List<Remote> remotes) {
+    public Git(final File baseDir, final Head head, final String branch, final List<Remote> remotes) {
+        this.baseDir = baseDir;
         this.head = head;
         this.branch = branch;
         this.remotes = remotes;
     }
-    
+
+    public File getBaseDir() {
+        return baseDir;
+    }
+
     public Head getHead() {
         return head;
     }

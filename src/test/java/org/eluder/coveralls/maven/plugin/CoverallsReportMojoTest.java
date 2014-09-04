@@ -119,7 +119,7 @@ public class CoverallsReportMojoTest {
         
         mojo = new CoverallsReportMojo() {
             @Override
-            protected SourceLoader createSourceLoader() {
+            protected SourceLoader createSourceLoader(final Job job) {
                 return sourceLoaderMock;
             }
             @Override
@@ -165,7 +165,7 @@ public class CoverallsReportMojoTest {
     public void testDefaultBehavior() throws Exception {
         mojo = new CoverallsReportMojo() {
             @Override
-            protected SourceLoader createSourceLoader() {
+            protected SourceLoader createSourceLoader(final Job job) {
                 return sourceLoaderMock;
             }
         };

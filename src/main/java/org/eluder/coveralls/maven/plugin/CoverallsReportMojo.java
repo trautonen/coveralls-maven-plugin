@@ -187,10 +187,10 @@ public class CoverallsReportMojo extends AbstractMojo {
         
         try {
             createEnvironment().setup();
-            SourceLoader sourceLoader = createSourceLoader();
-            List<CoverageParser> parsers = createCoverageParsers(sourceLoader);
             Job job = createJob();
             job.validate().throwOrInform(getLog());
+            SourceLoader sourceLoader = createSourceLoader(job);
+            List<CoverageParser> parsers = createCoverageParsers(sourceLoader);
             JsonWriter writer = createJsonWriter(job);
             CoverallsClient client = createCoverallsClient();
             List<Logger> reporters = new ArrayList<Logger>();
@@ -225,8 +225,8 @@ public class CoverallsReportMojo extends AbstractMojo {
     /**
      * @return source loader to create source files
      */
-    protected SourceLoader createSourceLoader() {
-        return new SourceLoaderFactory(project, sourceEncoding)
+    protected SourceLoader createSourceLoader(final Job job) {
+        return new SourceLoaderFactory(job.getGit().getBaseDir(), project, sourceEncoding)
                 .withSourceDirectories(sourceDirectories)
                 .createSourceLoader();
     }

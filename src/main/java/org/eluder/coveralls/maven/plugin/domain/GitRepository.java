@@ -53,7 +53,7 @@ public class GitRepository {
             Git.Head head = getHead(repository);
             String branch = getBranch(repository);
             List<Git.Remote> remotes = getRemotes(repository);
-            return new Git(head, branch, remotes);
+            return new Git(repository.getWorkTree(), head, branch, remotes);
         } finally {
             repository.close();
         }
