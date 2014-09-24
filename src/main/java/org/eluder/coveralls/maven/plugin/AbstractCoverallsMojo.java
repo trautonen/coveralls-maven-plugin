@@ -165,7 +165,7 @@ public abstract class AbstractCoverallsMojo extends AbstractMojo {
     protected MavenProject project;
     
     @Override
-    public final void execute() throws MojoExecutionException, MojoFailureException {
+    public void execute() throws MojoExecutionException, MojoFailureException {
         if (skip) {
             getLog().info("Skip property set, skipping plugin execution");
             return;
