@@ -293,76 +293,12 @@ service environment will not override it.
 
 ### Changelog
 
-#### 2.2.0
-
-- #31: Improved error messages for Coveralls API failures
-- #30: Improved error message for missing charset
-- #28: More lenient XML parsing
-- #26, #29: Support for Saga coverage tool and chain multiple coverage reports
+See [changelog](CHANGELOG.md) for more details.
 
 
-#### 2.1.0
+### Migration
 
-- #24: Filter out remote names from git branches
-- #19, #20: Skip configuration property to allow skipping of plugin execution
-
-
-#### 2.0.1
-
-- #18: Update to HttpComponents HttpClient 4.3
-- #15, #16, #17: Disable PKCS cryptography provider at runtime to work around OpenJDK SSL issue
-
-
-#### 2.0.0
-
-- #13: Dry run property for test builds
-- #12: Use ServiceSetup as secondary configuration source and Maven/VM properties as primary
-- #11: Support multiple source directories
-- #9: Support for other CI tools and platforms
-- #8: Aggregated reports for multi-module projects
-
-
-#### 1.2.0
-
-- #10: Validation of the Coveralls job
-- #4: Report build timestamp to Coveralls
-- #3: Log code lines from generated report to Maven console
-
-
-#### 1.1.0
-
-- #1: Easier configuration for Travis CI
-
-
-#### 1.0.0
-
-- Initial release
-
-
-### Migration guide
-
-Changes marked with bold affect the plugin usage. Other changes are only related to development
-and codebase.
-
-
-#### 1.x to 2.x
-
-- **`sourceDirectory` parameter removed and replaced with a list parameter `sourceDirectories`**
-- **service environment parameters do not override configuration parameters**
-- `org.eluder.coveralls.maven.plugin.service.ServiceSetup` interface completely changed to reflect
-  the service specific configuration properly
-- `org.eluder.coveralls.maven.plugin.service.Travis` changed to reflect the new service setup
-  interface
-- `org.eluder.coveralls.maven.plugin.domain.JobValidator` and all validation related code is
-  now located in `org.eluder.coveralls.maven.plugin.validation` package
-- `org.eluder.coveralls.maven.plugin.domain.GitRepository` does not take custom branch parameter
-  as constructor argument anymore, the same behavior is handled with the new service environment
-  setup
-- `org.eluder.coveralls.maven.plugin.domain.Job` has only default constructor and initialization
-  is done with _with*_ methods, _validate()_ method returns list of validation errors instead of
-  throwing exception
-- `org.eluder.coveralls.maven.plugin.domain.SourceLoader` constructor takes a list of source
-  directories instead of a single source directory
+See [migration](MIGRATION.md) documentation for more information.
 
 
 ### Credits
