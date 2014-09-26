@@ -51,12 +51,12 @@ import org.eluder.coveralls.maven.plugin.domain.Job;
 import org.eluder.coveralls.maven.plugin.domain.Source;
 import org.eluder.coveralls.maven.plugin.httpclient.CoverallsClient;
 import org.eluder.coveralls.maven.plugin.json.JsonWriter;
+import org.eluder.coveralls.maven.plugin.parser.CoberturaParser;
 import org.eluder.coveralls.maven.plugin.service.ServiceSetup;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
 import org.eluder.coveralls.maven.plugin.validation.ValidationErrors;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -123,6 +123,12 @@ public class CoverallsReportMojoTest {
                 return sourceLoaderMock;
             }
             @Override
+            protected List<CoverageParser> createCoverageParsers(SourceLoader sourceLoader) throws IOException {
+                List<CoverageParser> parsers = new ArrayList<CoverageParser>();
+                parsers.add(new CoberturaParser(TestIoUtil.getFile("cobertura.xml"), sourceLoader));
+                return parsers;
+            }
+            @Override
             protected Environment createEnvironment() {
                 return new Environment(this, Collections.<ServiceSetup>emptyList());
             }
@@ -147,7 +153,7 @@ public class CoverallsReportMojoTest {
         
         when(modelMock.getReporting()).thenReturn(reportingMock);
         when(reportingMock.getOutputDirectory()).thenReturn(folder.getRoot().getAbsolutePath());
-        when(buildMock.getOutputDirectory()).thenReturn(folder.getRoot().getAbsolutePath());
+        when(buildMock.getDirectory()).thenReturn(folder.getRoot().getAbsolutePath());
         
         List<MavenProject> projects = new ArrayList<MavenProject>();
         projects.add(collectedProjectMock);
@@ -168,6 +174,10 @@ public class CoverallsReportMojoTest {
             protected SourceLoader createSourceLoader(final Job job) {
                 return sourceLoaderMock;
             }
+            @Override
+            protected List<CoverageParser> createCoverageParsers(SourceLoader sourceLoader) throws IOException {
+                return Collections.emptyList();
+            }
         };
         mojo.sourceDirectories = Arrays.asList(TestIoUtil.getFile("/"));
         mojo.sourceEncoding = "UTF-8";
@@ -183,7 +193,6 @@ public class CoverallsReportMojoTest {
     }
     
     @Test
-    @Ignore
     public void testSuccesfullSubmission() throws Exception {
         when(coverallsClientMock.submit(any(File.class))).thenReturn(new CoverallsResponse("success", false, null));
         mojo.execute();

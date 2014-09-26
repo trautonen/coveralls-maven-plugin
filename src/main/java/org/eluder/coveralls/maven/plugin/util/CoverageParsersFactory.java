@@ -1,6 +1,7 @@
 package org.eluder.coveralls.maven.plugin.util;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -40,7 +41,7 @@ public class CoverageParsersFactory {
         return this;
     }
     
-    public List<CoverageParser> createParsers() {
+    public List<CoverageParser> createParsers() throws IOException {
         List<CoverageParser> parsers = new ArrayList<CoverageParser>();
         List<MavenProject> projects = new MavenProjectCollector(project).collect();
 
@@ -49,7 +50,7 @@ public class CoverageParsersFactory {
         ExistingFiles sagaFiles = ExistingFiles.create(sagaReports);
         for (MavenProject p : projects) {
             File reportingDirectory = new File(p.getModel().getReporting().getOutputDirectory());
-            File buildDirectory = new File(p.getBuild().getOutputDirectory());
+            File buildDirectory = new File(p.getBuild().getDirectory());
             
             jacocoFiles.add(new File(reportingDirectory, "/jacoco/jacoco.xml"));
             coberturaFiles.add(new File(reportingDirectory, "/cobertura/coverage.xml"));
@@ -64,6 +65,10 @@ public class CoverageParsersFactory {
         }
         for (File sagaFile : sagaFiles) {
             parsers.add(new SagaParser(sagaFile, sourceLoader));
+        }
+        
+        if (parsers.isEmpty()) {
+            throw new IOException("No coverage report files found");
         }
         
         return Collections.unmodifiableList(parsers);

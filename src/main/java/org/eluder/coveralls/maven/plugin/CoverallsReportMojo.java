@@ -28,7 +28,6 @@ package org.eluder.coveralls.maven.plugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -67,12 +66,21 @@ import org.eluder.coveralls.maven.plugin.util.SourceLoaderFactory;
 @Mojo(name = "report", threadSafe = false, aggregator = true)
 public class CoverallsReportMojo extends AbstractMojo {
 
+    /**
+     * File paths to additional JaCoCo coverage report files.
+     */
     @Parameter(property = "jacocoReports")
     protected List<File> jacocoReports;
-    
+
+    /**
+     * File paths to additional Cobertura coverage report files.
+     */
     @Parameter(property = "coberturaReports")
     protected List<File> coberturaReports;
-    
+
+    /**
+     * File paths to additional Saga coverage report files.
+     */
     @Parameter(property = "sagaReports")
     protected List<File> sagaReports;
     
@@ -93,12 +101,6 @@ public class CoverallsReportMojo extends AbstractMojo {
      */
     @Parameter(property = "sourceDirectories")
     protected List<File> sourceDirectories;
-
-    /**
-     * Source urls.
-     */
-    @Parameter(property = "sourceUrls")
-    protected List<URL> sourceUrls;
     
     /**
      * Source file encoding.
@@ -213,8 +215,14 @@ public class CoverallsReportMojo extends AbstractMojo {
             throw new MojoExecutionException("Build error", ex);
         }
     }
-    
-    protected List<CoverageParser> createCoverageParsers(final SourceLoader sourceLoader) {
+
+    /**
+     * 
+     * @param sourceLoader source loader that extracts source files
+     * @return coverage parsers for all maven modules and additional reports
+     * @throws IOException if parsers cannot be created
+     */
+    protected List<CoverageParser> createCoverageParsers(final SourceLoader sourceLoader) throws IOException {
         return new CoverageParsersFactory(project, sourceLoader)
                 .withJacocoReports(jacocoReports)
                 .withCoberturaReports(coberturaReports)
@@ -223,7 +231,7 @@ public class CoverallsReportMojo extends AbstractMojo {
     }
     
     /**
-     * @return source loader to create source files
+     * @return source loader that extracts source files
      */
     protected SourceLoader createSourceLoader(final Job job) {
         return new SourceLoaderFactory(job.getGit().getBaseDir(), project, sourceEncoding)
