@@ -14,6 +14,10 @@ import org.eluder.coveralls.maven.plugin.parser.SagaParser;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 
 public class CoverageParsersFactory {
+
+    private static final String JACOCO_FILE = "/jacoco/jacoco.xml";
+    private static final String COBERTURA_FILE = "/cobertura/coverage.xml";
+    private static final String SAGA_FILE = "/saga-coverage/total-coverage.xml";
     
     private final MavenProject project;
     private final SourceLoader sourceLoader;
@@ -26,7 +30,7 @@ public class CoverageParsersFactory {
         this.sourceLoader = sourceLoader;
     }
     
-    public CoverageParsersFactory withJacocoReports(final List<File> jacocoReports) {
+    public CoverageParsersFactory withJaCoCoReports(final List<File> jacocoReports) {
         this.jacocoReports = jacocoReports;
         return this;
     }
@@ -52,9 +56,9 @@ public class CoverageParsersFactory {
             File reportingDirectory = new File(p.getModel().getReporting().getOutputDirectory());
             File buildDirectory = new File(p.getBuild().getDirectory());
             
-            jacocoFiles.add(new File(reportingDirectory, "/jacoco/jacoco.xml"));
-            coberturaFiles.add(new File(reportingDirectory, "/cobertura/coverage.xml"));
-            sagaFiles.add(new File(buildDirectory, "/saga-coverage/total-coverage.xml"));
+            jacocoFiles.add(new File(reportingDirectory, JACOCO_FILE));
+            coberturaFiles.add(new File(reportingDirectory, COBERTURA_FILE));
+            sagaFiles.add(new File(buildDirectory, SAGA_FILE));
         }
         
         for (File jacocoFile : jacocoFiles) {
