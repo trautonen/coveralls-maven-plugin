@@ -224,7 +224,7 @@ public class CoverallsReportMojo extends AbstractMojo {
      */
     protected List<CoverageParser> createCoverageParsers(final SourceLoader sourceLoader) throws IOException {
         return new CoverageParsersFactory(project, sourceLoader)
-                .withJacocoReports(jacocoReports)
+                .withJaCoCoReports(jacocoReports)
                 .withCoberturaReports(coberturaReports)
                 .withSagaReports(sagaReports)
                 .createParsers();

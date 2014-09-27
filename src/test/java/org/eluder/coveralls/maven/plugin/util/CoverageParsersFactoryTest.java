@@ -1,0 +1,132 @@
+package org.eluder.coveralls.maven.plugin.util;
+
+import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import org.apache.maven.model.Build;
+import org.apache.maven.model.Model;
+import org.apache.maven.model.Reporting;
+import org.apache.maven.project.MavenProject;
+import org.eluder.coveralls.maven.plugin.CoverageParser;
+import org.eluder.coveralls.maven.plugin.parser.CoberturaParser;
+import org.eluder.coveralls.maven.plugin.parser.JaCoCoParser;
+import org.eluder.coveralls.maven.plugin.parser.SagaParser;
+import org.eluder.coveralls.maven.plugin.source.SourceLoader;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+
+@RunWith(MockitoJUnitRunner.class)
+public class CoverageParsersFactoryTest {
+
+    @Rule
+    public TemporaryFolder folder = new TemporaryFolder();
+    
+    @Mock
+    private MavenProject projectMock;
+    
+    @Mock
+    private SourceLoader sourceLoaderMock;
+    
+    @Mock
+    private Model modelMock;
+    
+    @Mock
+    private Reporting reportingMock;
+    
+    @Mock
+    private Build buildMock;
+    
+    private File reportingDir;
+    
+    private File targetDir;
+    
+    @Before
+    public void init() throws Exception{
+        reportingDir = folder.newFolder();
+        targetDir = folder.newFolder();
+        when(projectMock.getCollectedProjects()).thenReturn(Collections.<MavenProject>emptyList());
+        when(projectMock.getModel()).thenReturn(modelMock);
+        when(projectMock.getBuild()).thenReturn(buildMock);
+        when(modelMock.getReporting()).thenReturn(reportingMock);
+        when(reportingMock.getOutputDirectory()).thenReturn(reportingDir.getAbsolutePath());
+        when(buildMock.getDirectory()).thenReturn(targetDir.getAbsolutePath());
+    }
+    
+    @Test(expected = IOException.class)
+    public void testCreateEmptyParsers() throws Exception {
+        createCoverageParsersFactory().createParsers();
+    }
+    
+    @Test
+    public void testCreateJaCoCoParser() throws Exception {
+        File jacocoDir = new File(reportingDir, "jacoco");
+        jacocoDir.mkdir(); new File(jacocoDir, "jacoco.xml").createNewFile();
+        List<CoverageParser> parsers = createCoverageParsersFactory().createParsers();
+        assertEquals(1, parsers.size());
+        assertTrue(JaCoCoParser.class.equals(parsers.get(0).getClass()));
+    }
+    
+    @Test
+    public void testCreateCoberturaParser() throws Exception {
+        File coberturaDir = new File(reportingDir, "cobertura");
+        coberturaDir.mkdir(); new File(coberturaDir, "coverage.xml").createNewFile();
+        List<CoverageParser> parsers = createCoverageParsersFactory().createParsers();
+        assertEquals(1, parsers.size());
+        assertTrue(CoberturaParser.class.equals(parsers.get(0).getClass()));
+    }
+    
+    @Test
+    public void testCreateSagaParser() throws Exception {
+        File sagaDir = new File(targetDir, "saga-coverage");
+        sagaDir.mkdir(); new File(sagaDir, "total-coverage.xml").createNewFile();
+        List<CoverageParser> parsers = createCoverageParsersFactory().createParsers();
+        assertEquals(1, parsers.size());
+        assertTrue(SagaParser.class.equals(parsers.get(0).getClass()));
+    }
+    
+    @Test
+    public void testWithJaCoCoReport() throws Exception {
+        File jacocoFile = new File(reportingDir, "jacoco-report.xml");
+        jacocoFile.createNewFile();
+        CoverageParsersFactory factory = createCoverageParsersFactory().withJaCoCoReports(Arrays.asList(jacocoFile));
+        List<CoverageParser> parsers = factory.createParsers();
+        assertEquals(1, parsers.size());
+        assertTrue(JaCoCoParser.class.equals(parsers.get(0).getClass()));
+    }
+    
+    @Test
+    public void testWithCoberturaReport() throws Exception {
+        File coberturaFile = new File(reportingDir, "cobertura-report.xml");
+        coberturaFile.createNewFile();
+        CoverageParsersFactory factory = createCoverageParsersFactory().withCoberturaReports(Arrays.asList(coberturaFile));
+        List<CoverageParser> parsers = factory.createParsers();
+        assertEquals(1, parsers.size());
+        assertTrue(CoberturaParser.class.equals(parsers.get(0).getClass()));
+    }
+    
+    @Test
+    public void testWithSagaReport() throws Exception {
+        File sagaFile = new File(reportingDir, "saga-report.xml");
+        sagaFile.createNewFile();
+        CoverageParsersFactory factory = createCoverageParsersFactory().withSagaReports(Arrays.asList(sagaFile));
+        List<CoverageParser> parsers = factory.createParsers();
+        assertEquals(1, parsers.size());
+        assertTrue(SagaParser.class.equals(parsers.get(0).getClass()));
+    }
+    
+    private CoverageParsersFactory createCoverageParsersFactory() {
+        return new CoverageParsersFactory(projectMock, sourceLoaderMock);
+    }
+}
