@@ -31,7 +31,7 @@ Set up the Coveralls maven plugin in the build section of the project pom.xml:
 <plugin>
     <groupId>org.eluder.coveralls</groupId>
     <artifactId>coveralls-maven-plugin</artifactId>
-    <version>2.2.0</version>
+    <version>3.0.0-SNAPSHOT</version>
     <configuration>
         <repoToken>yourcoverallsprojectrepositorytoken</repoToken>
     </configuration>
