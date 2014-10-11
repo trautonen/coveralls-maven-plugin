@@ -233,7 +233,7 @@ public class CoverallsReportMojo extends AbstractMojo {
     /**
      * @return source loader that extracts source files
      * 
-     * @param job the job describing the coveralls report 
+     * @param job the job describing the coveralls report
      */
     protected SourceLoader createSourceLoader(final Job job) {
         return new SourceLoaderFactory(job.getGit().getBaseDir(), project, sourceEncoding)
