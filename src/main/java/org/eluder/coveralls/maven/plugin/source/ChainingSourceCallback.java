@@ -54,6 +54,10 @@ public abstract class ChainingSourceCallback implements SourceCallback {
     
     /**
      * @see #onSource(Source)
+     * 
+     * @param source the source file
+     * @throws ProcessingException if further processing of the source fails
+     * @throws IOException if an I/O error occurs
      */
     protected abstract void onSourceInternal(final Source source) throws ProcessingException, IOException;
 }

@@ -232,6 +232,8 @@ public class CoverallsReportMojo extends AbstractMojo {
     
     /**
      * @return source loader that extracts source files
+     * 
+     * @param job the job describing the coveralls report 
      */
     protected SourceLoader createSourceLoader(final Job job) {
         return new SourceLoaderFactory(job.getGit().getBaseDir(), project, sourceEncoding)
@@ -298,6 +300,7 @@ public class CoverallsReportMojo extends AbstractMojo {
     
     /**
      * @param writer the JSON writer
+     * @param reporters the logging reporters
      * @return source callback chain for different source handlers
      */
     protected SourceCallback createSourceCallbackChain(final JsonWriter writer, final List<Logger> reporters) {
