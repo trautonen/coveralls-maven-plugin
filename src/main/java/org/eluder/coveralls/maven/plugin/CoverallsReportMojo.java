@@ -60,6 +60,7 @@ import org.eluder.coveralls.maven.plugin.service.ServiceSetup;
 import org.eluder.coveralls.maven.plugin.service.Travis;
 import org.eluder.coveralls.maven.plugin.source.SourceCallback;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
+import org.eluder.coveralls.maven.plugin.source.UniqueSourceCallback;
 import org.eluder.coveralls.maven.plugin.util.CoverageParsersFactory;
 import org.eluder.coveralls.maven.plugin.util.SourceLoaderFactory;
 
@@ -310,6 +311,7 @@ public class CoverallsReportMojo extends AbstractMojo {
             chain = coverageTracingReporter;
             reporters.add(coverageTracingReporter);
         }
+        chain = new UniqueSourceCallback(chain);
         return chain;
     }
     
