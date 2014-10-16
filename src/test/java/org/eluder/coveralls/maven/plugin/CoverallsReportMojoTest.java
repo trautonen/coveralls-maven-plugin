@@ -150,6 +150,7 @@ public class CoverallsReportMojoTest {
             }
         };
         mojo.project = projectMock;
+        mojo.sourceEncoding = "UTF-8";
         
         when(modelMock.getReporting()).thenReturn(reportingMock);
         when(reportingMock.getOutputDirectory()).thenReturn(folder.getRoot().getAbsolutePath());

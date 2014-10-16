@@ -26,12 +26,8 @@ package org.eluder.coveralls.maven.plugin;
  * %[license]
  */
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
-import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
 import org.eluder.coveralls.maven.plugin.service.ServiceSetup;
 
@@ -55,31 +51,13 @@ public final class Environment {
     }
     
     public void setup() {
-        setupSourceDirectories();
         setupService();
+        verify();
     }
     
-    private void setupSourceDirectories() {
-        if (mojo.sourceDirectories == null || mojo.sourceDirectories.isEmpty()) {
-            List<File> directories = new ArrayList<File>();
-            collectSourceDirectories(mojo.project, directories);
-            mojo.sourceDirectories = directories;
-        }
-        if (mojo.sourceDirectories == null || mojo.sourceDirectories.isEmpty()) {
-            throw new IllegalArgumentException("No source directories set up");
-        }
-        logSourceDirectories();
-    }
-    
-    private void collectSourceDirectories(final MavenProject project, final List<File> directories) {
-        for (String sourceRoot : project.getCompileSourceRoots()) {
-            File directory = new File(sourceRoot);
-            if (directory.exists() && directory.isDirectory()) {
-                directories.add(directory);
-            }
-        }
-        for (MavenProject collectedProject : project.getCollectedProjects()) {
-            collectSourceDirectories(collectedProject, directories);
+    private void verify() {
+        if (mojo.sourceEncoding == null) {
+            throw new IllegalArgumentException("Source encoding not set, use <sourceEncoding> configuration option or set project wide property <project.build.sourceEncoding>");
         }
     }
     
@@ -127,15 +105,6 @@ public final class Environment {
         if ((mojo.serviceEnvironment == null || mojo.serviceEnvironment.isEmpty()) &&
                 (environment != null && !environment.isEmpty())) {
             mojo.serviceEnvironment = environment;
-        }
-    }
-    
-    private void logSourceDirectories() {
-        if (mojo.getLog().isDebugEnabled()) {
-            mojo.getLog().debug("Using " + mojo.sourceDirectories.size() + " source directories to scan source files:");
-            for (File sourceDirectory : mojo.sourceDirectories) {
-                mojo.getLog().debug("- " + sourceDirectory.getAbsolutePath());
-            }
         }
     }
 }

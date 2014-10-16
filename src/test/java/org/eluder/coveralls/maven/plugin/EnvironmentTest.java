@@ -26,34 +26,26 @@ package org.eluder.coveralls.maven.plugin;
  * %[license]
  */
 
-import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
 import org.apache.maven.plugin.logging.Log;
-import org.apache.maven.project.MavenProject;
 import org.eluder.coveralls.maven.plugin.service.ServiceSetup;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EnvironmentTest {
-
-    @Rule
-    public TemporaryFolder folder = new TemporaryFolder();
     
     private CoverallsReportMojo mojo;
     
@@ -66,29 +58,8 @@ public class EnvironmentTest {
     @Mock
     private ServiceSetup serviceMock;
     
-    @Mock
-    private MavenProject mavenProjectMock;
-    
-    @Mock
-    private MavenProject mavenProjectMock2;
-    private File folder2;
-
-    @Mock
-    private MavenProject mavenProjectMock3;
-
-    @Mock
-    private MavenProject mavenProjectMock4;
-    private File folder4;
-
-    @Mock
-    private MavenProject mavenProjectMock5;
-    private File folder5;
-    
     @Before
     public void init() throws Exception {
-        folder2 = folder.newFolder();
-        folder4 = folder.newFolder();
-        folder5 = folder.newFolder();
         mojo = new CoverallsReportMojo() {
             @Override
             protected List<CoverageParser> createCoverageParsers(SourceLoader sourceLoader) {
@@ -101,15 +72,10 @@ public class EnvironmentTest {
             }
         };
         mojo.serviceName = "service";
-        mojo.project = mavenProjectMock;
+        mojo.sourceEncoding = "UTF-8";
         when(logMock.isDebugEnabled()).thenReturn(true);
         when(logMock.isInfoEnabled()).thenReturn(true);
         when(serviceMock.isSelected()).thenReturn(true);
-        when(mavenProjectMock.getCollectedProjects()).thenReturn(Arrays.asList(mavenProjectMock2, mavenProjectMock3));
-        when(mavenProjectMock3.getCollectedProjects()).thenReturn(Arrays.asList(mavenProjectMock4, mavenProjectMock5));
-        when(mavenProjectMock2.getCompileSourceRoots()).thenReturn(Arrays.asList(folder2.getAbsolutePath()));
-        when(mavenProjectMock4.getCompileSourceRoots()).thenReturn(Arrays.asList(folder4.getAbsolutePath()));
-        when(mavenProjectMock5.getCompileSourceRoots()).thenReturn(Arrays.asList(folder5.getAbsolutePath()));
     }
     
     @Test(expected = IllegalArgumentException.class)
@@ -122,31 +88,16 @@ public class EnvironmentTest {
         new Environment(mojo, null);
     }
     
-    @Test(expected = IllegalArgumentException.class)
-    public void testSetupWithoutSourceDirectories() {
-        when(mavenProjectMock.getCollectedProjects()).thenReturn(new ArrayList<MavenProject>());
-        create(Collections.<ServiceSetup>emptyList()).setup();
-    }
-    
-    @Test
-    public void testSetupWithProjectSourceDirectories() {
-        create(Collections.<ServiceSetup>emptyList()).setup();
-        assertThat(mojo.sourceDirectories, contains(folder2.getAbsoluteFile(), folder4.getAbsoluteFile(), folder5.getAbsoluteFile()));
-        verify(logMock).debug("Using 3 source directories to scan source files:");
-    }
-    
-    @Test
-    public void testSetupWithMojoSourceDirectories() {
-        mojo.sourceDirectories = Arrays.asList(folder.getRoot());
-        create(Collections.<ServiceSetup>emptyList()).setup();
-        assertThat(mojo.sourceDirectories, contains(folder.getRoot()));
-        verify(logMock).debug("Using 1 source directories to scan source files:");
-    }
-    
     @Test
     public void testSetupWithoutServices() {
         create(Collections.<ServiceSetup>emptyList()).setup();
         assertEquals("service", mojo.serviceName);
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testSetupWithoutSourceEncoding() {
+        mojo.sourceEncoding = null;
+        create(Arrays.asList(serviceMock)).setup();
     }
     
     @Test
