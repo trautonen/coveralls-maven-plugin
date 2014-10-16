@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.0.0
+
+- #48: Removed support for URL based source loading due to Coveralls changes
+- #42, #45, #46: Support Coveralls new GitHub based source view 
+- #40: Proper multi-module support and report aggregation
+- #37, #41: Disclaimer for Java 8 usage
+
+
 ## 2.2.0
 
 - #31: Improved error messages for Coveralls API failures
