@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.1
+
+- #53: Improved error message for missing source encoding
+- #52: Ignore duplicate source files on Cobertura aggregate mode
+
+
 ## 3.0.0
 
 - #48: Removed support for URL based source loading due to Coveralls changes
