@@ -3,6 +3,7 @@ coveralls-maven-plugin
 
 [![Build Status](http://img.shields.io/travis/trautonen/coveralls-maven-plugin/master.svg)](https://travis-ci.org/trautonen/coveralls-maven-plugin)
 [![Coverage Status](http://img.shields.io/coveralls/trautonen/coveralls-maven-plugin/master.svg)](https://coveralls.io/r/trautonen/coveralls-maven-plugin?branch=master)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.eluder.coveralls/coveralls-maven-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.eluder.coveralls/coveralls-maven-plugin/)
 
 Maven plugin for submitting Java code coverage reports to [Coveralls](https://coveralls.io/) web
 service.
