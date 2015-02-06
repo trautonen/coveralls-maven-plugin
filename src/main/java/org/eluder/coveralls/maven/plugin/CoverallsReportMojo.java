@@ -180,7 +180,13 @@ public class CoverallsReportMojo extends AbstractMojo {
      */
     @Component
     protected MavenProject project;
-    
+
+    /**
+     * Scan subdirectories for a sources file.
+     */
+    @Parameter(property = "coveralls.scanForSources", defaultValue = "false")
+    private boolean scanForSources;
+
     @Override
     public final void execute() throws MojoExecutionException, MojoFailureException {
         if (skip) {
@@ -239,6 +245,7 @@ public class CoverallsReportMojo extends AbstractMojo {
     protected SourceLoader createSourceLoader(final Job job) {
         return new SourceLoaderFactory(job.getGit().getBaseDir(), project, sourceEncoding)
                 .withSourceDirectories(sourceDirectories)
+                .withScanForSources(scanForSources)
                 .createSourceLoader();
     }
 

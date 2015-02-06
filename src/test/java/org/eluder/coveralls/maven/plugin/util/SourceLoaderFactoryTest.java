@@ -90,7 +90,26 @@ public class SourceLoaderFactoryTest {
                 .createSourceLoader();
         assertNotNull(sourceLoader);
     }
-    
+
+    @Test
+    public void testCreateSourceLoaderWithScanForSources() throws Exception {
+        SourceLoader sourceLoader = createSourceLoaderFactory("UTF-8")
+                .withScanForSources( true )
+                .createSourceLoader();
+        assertNotNull(sourceLoader);
+    }
+
+    @Test
+    public void testCreateSourceLoaderInvalidDirectory() throws Exception {
+        File file = new File(folder.getRoot(), "aFile");
+        file.createNewFile();
+        SourceLoader sourceLoader = createSourceLoaderFactory("UTF-8")
+                .withSourceDirectories(Arrays.asList(file))
+                .withScanForSources(true)
+                .createSourceLoader();
+        assertNotNull(sourceLoader);
+    }
+
     private SourceLoaderFactory createSourceLoaderFactory(String sourceEncoding) {
         return new SourceLoaderFactory(folder.getRoot(), root, sourceEncoding);
     }
