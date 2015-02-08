@@ -26,12 +26,6 @@ package org.eluder.coveralls.maven.plugin.util;
  * %[license]
  */
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.apache.maven.project.MavenProject;
 import org.eluder.coveralls.maven.plugin.CoverageParser;
 import org.eluder.coveralls.maven.plugin.parser.CoberturaParser;
@@ -39,17 +33,29 @@ import org.eluder.coveralls.maven.plugin.parser.JaCoCoParser;
 import org.eluder.coveralls.maven.plugin.parser.SagaParser;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class CoverageParsersFactory {
 
-    private static final String JACOCO_FILE = "/jacoco/jacoco.xml";
-    private static final String COBERTURA_FILE = "/cobertura/coverage.xml";
-    private static final String SAGA_FILE = "/saga-coverage/total-coverage.xml";
+    private static final String JACOCO_FILE = "/jacoco.xml";
+    private static final String JACOCO_PREFIX = "/jacoco";
+
+    private static final String COBERTURA_FILE = "/coverage.xml";
+    private static final String COBERTURA_PREFIX = "/cobertura";
+
+    private static final String SAGA_FILE = "/total-coverage.xml";
+    private static final String SAGA_PREFIX = "/saga-coverage";
     
     private final MavenProject project;
     private final SourceLoader sourceLoader;
     private List<File> jacocoReports;
     private List<File> coberturaReports;
     private List<File> sagaReports;
+    private List<String> relativeReportDirs;
 
     public CoverageParsersFactory(final MavenProject project, final SourceLoader sourceLoader) {
         this.project = project;
@@ -70,6 +76,11 @@ public class CoverageParsersFactory {
         this.sagaReports = sagaReports;
         return this;
     }
+
+    public CoverageParsersFactory withRelativeReportDirs(final List<String> relativeReportDirs) {
+        this.relativeReportDirs = relativeReportDirs;
+        return this;
+    }
     
     public List<CoverageParser> createParsers() throws IOException {
         List<CoverageParser> parsers = new ArrayList<CoverageParser>();
@@ -82,9 +93,27 @@ public class CoverageParsersFactory {
             File reportingDirectory = new File(p.getModel().getReporting().getOutputDirectory());
             File buildDirectory = new File(p.getBuild().getDirectory());
             
-            jacocoFiles.add(new File(reportingDirectory, JACOCO_FILE));
-            coberturaFiles.add(new File(reportingDirectory, COBERTURA_FILE));
-            sagaFiles.add(new File(buildDirectory, SAGA_FILE));
+            jacocoFiles.add(new File(reportingDirectory, JACOCO_PREFIX + JACOCO_FILE));
+            coberturaFiles.add(new File(reportingDirectory, COBERTURA_PREFIX + COBERTURA_FILE));
+            sagaFiles.add(new File(buildDirectory, SAGA_PREFIX + SAGA_FILE));
+
+            if (relativeReportDirs != null) {
+                for (String relativeReportPath : relativeReportDirs) {
+                    File relativeReportingDirectory = reportingDirectory;
+                    File relativeBuildDirectory = buildDirectory;
+                    if (!relativeReportPath.isEmpty() && !File.separator.equals(relativeReportPath)) {
+                        relativeReportingDirectory = new File(reportingDirectory, relativeReportPath);
+                        relativeBuildDirectory = new File(buildDirectory, relativeReportPath);
+                    }
+
+                    jacocoFiles.add(new File(relativeReportingDirectory, JACOCO_FILE));
+                    jacocoFiles.add(new File(relativeBuildDirectory, JACOCO_FILE));
+                    coberturaFiles.add(new File(relativeReportingDirectory, COBERTURA_FILE));
+                    coberturaFiles.add(new File(relativeBuildDirectory, COBERTURA_FILE));
+                    sagaFiles.add(new File(relativeReportingDirectory, SAGA_FILE));
+                    sagaFiles.add(new File(relativeBuildDirectory, SAGA_FILE));
+                }
+            }
         }
         
         for (File jacocoFile : jacocoFiles) {

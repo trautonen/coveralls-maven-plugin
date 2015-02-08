@@ -26,14 +26,6 @@ package org.eluder.coveralls.maven.plugin;
  * %[license]
  */
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -64,6 +56,14 @@ import org.eluder.coveralls.maven.plugin.source.UniqueSourceCallback;
 import org.eluder.coveralls.maven.plugin.util.CoverageParsersFactory;
 import org.eluder.coveralls.maven.plugin.util.SourceLoaderFactory;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
 @Mojo(name = "report", threadSafe = false, aggregator = true)
 public class CoverallsReportMojo extends AbstractMojo {
 
@@ -84,7 +84,13 @@ public class CoverallsReportMojo extends AbstractMojo {
      */
     @Parameter(property = "sagaReports")
     protected List<File> sagaReports;
-    
+
+    /**
+     * Directories for relative per module specific report files.
+     */
+    @Parameter(property = "relativeReportDirs")
+    protected List<String> relativeReportDirs;
+
     /**
      * File path to write and submit Coveralls data.
      */
@@ -228,6 +234,7 @@ public class CoverallsReportMojo extends AbstractMojo {
                 .withJaCoCoReports(jacocoReports)
                 .withCoberturaReports(coberturaReports)
                 .withSagaReports(sagaReports)
+                .withRelativeReportDirs(relativeReportDirs)
                 .createParsers();
     }
     
