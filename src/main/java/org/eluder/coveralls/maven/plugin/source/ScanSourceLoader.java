@@ -51,18 +51,7 @@ public class ScanSourceLoader extends AbstractSourceLoader {
 
     @Override
     protected InputStream locate(final String sourceFile) throws IOException {
-        String extension = FileUtils.extension(sourceFile);
-        String[] matchingExtensionFiles = scanFor(extension);
-
-        String filename = sourceFile;
-        for (String matchingExtensionFile : matchingExtensionFiles) {
-            if (SelectorUtils.matchPath("**/" + sourceFile, matchingExtensionFile, true)) {
-                filename = matchingExtensionFile;
-                break;
-            }
-        }
-
-        File file = new File(sourceDirectory, filename);
+        File file = new File(sourceDirectory, getFileName(sourceFile));
 
         if (file.exists()) {
             if (!file.isFile()) {
@@ -85,4 +74,18 @@ public class ScanSourceLoader extends AbstractSourceLoader {
         }
         return cache.get(extension);
     }
+
+    protected String getFileName(final String sourceFile) {
+        String extension = FileUtils.extension(sourceFile);
+        String[] matchingExtensionFiles = scanFor(extension);
+
+        for (String matchingExtensionFile : matchingExtensionFiles) {
+            if (SelectorUtils.matchPath("**/" + sourceFile, matchingExtensionFile, true)) {
+                return matchingExtensionFile;
+            }
+        }
+
+        return sourceFile;
+    }
+
 }

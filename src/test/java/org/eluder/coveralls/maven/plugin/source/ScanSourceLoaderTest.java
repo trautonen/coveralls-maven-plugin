@@ -73,11 +73,11 @@ public class ScanSourceLoaderTest {
         TestIoUtil.writeFileContent("public class Foo {\r\n    \n}\r", fileB);
         ScanSourceLoader sourceLoader = new ScanSourceLoader(folder.getRoot(), folder.getRoot(), "UTF-8");
         Source sourceA = sourceLoader.load(fileA.getName());
-        assertEquals(fileA.getName(), sourceA.getName());
+        assertEquals("level1/level2/level3/AFile.java", sourceA.getName());
         assertEquals("public class Foo {\n    \n}\n", sourceA.getSource());
         assertEquals(4, sourceA.getCoverage().length);
         Source sourceB = sourceLoader.load(fileB.getName());
-        assertEquals(fileB.getName(), sourceB.getName());
+        assertEquals("level1/level2/level3/BFile.java", sourceB.getName());
         assertEquals("public class Foo {\n    \n}\n", sourceB.getSource());
         assertEquals(4, sourceB.getCoverage().length);
     }
