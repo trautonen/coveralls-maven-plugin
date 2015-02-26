@@ -28,6 +28,7 @@ package org.eluder.coveralls.maven.plugin.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
@@ -45,6 +46,7 @@ public class ShippableTest {
         env.put(Shippable.SHIPPABLE_BUILD_NUMBER, "431.1");
         env.put(Shippable.SHIPPABLE_BRANCH, "master");
         env.put(Shippable.SHIPPABLE_COMMIT, "a3562fgcd2");
+		env.put( Shippable.SHIPPABLE_PULL_REQUEST, "10" );
         return env;
     }
     
@@ -77,6 +79,18 @@ public class ShippableTest {
     public void testGetBranch() {
         assertEquals("master", new Shippable(env()).getBranch());
     }
+
+	@Test
+	public void testPullRequest() {
+		assertEquals( "10", new Shippable( env() ).getPullRequest() );
+	}
+
+	@Test
+	public void testPullRequestFalse() {
+		Map<String, String> env = env();
+		env.put( Shippable.SHIPPABLE_PULL_REQUEST, "false" );
+		assertNull( new Shippable( env ).getPullRequest() );
+	}
     
     @Test
     public void testGetEnvironment() {

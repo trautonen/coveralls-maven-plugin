@@ -75,7 +75,11 @@ public class Shippable extends AbstractServiceSetup {
 
     @Override
     public String getPullRequest() {
-        return getProperty(SHIPPABLE_PULL_REQUEST);
+        String pullRequest = getProperty(SHIPPABLE_PULL_REQUEST);
+        if ("false".equals(pullRequest)) {
+            return null;
+        }
+        return pullRequest;
     }
 
     @Override
