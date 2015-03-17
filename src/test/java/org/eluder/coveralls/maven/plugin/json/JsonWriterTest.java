@@ -26,8 +26,16 @@ package org.eluder.coveralls.maven.plugin.json;
  * %[license]
  */
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.MapType;
+import org.eluder.coveralls.maven.plugin.domain.Git;
+import org.eluder.coveralls.maven.plugin.domain.Job;
+import org.eluder.coveralls.maven.plugin.domain.Source;
+import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,17 +47,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.eluder.coveralls.maven.plugin.domain.Git;
-import org.eluder.coveralls.maven.plugin.domain.Job;
-import org.eluder.coveralls.maven.plugin.domain.Source;
-import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.MapType;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 public class JsonWriterTest {
 
@@ -64,7 +64,14 @@ public class JsonWriterTest {
     public void init() throws IOException {
         file = folder.newFile();
     }
-    
+
+    @Test
+    public void testSubDirectoryCreation() throws Exception {
+        File f = new File(new File(folder.getRoot(), "sub1"), "sub2");
+        Job job = job();
+        assertTrue(new JsonWriter(job, f).getCoverallsFile().getParentFile().isDirectory());
+    }
+
     @Test
     @SuppressWarnings("resource")
     public void testGetJob() throws Exception {
