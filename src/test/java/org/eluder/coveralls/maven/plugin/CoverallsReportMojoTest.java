@@ -26,19 +26,6 @@ package org.eluder.coveralls.maven.plugin;
  * %[license]
  */
 
-import static org.hamcrest.Matchers.containsString;
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Reporting;
@@ -47,6 +34,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.eluder.coveralls.maven.plugin.domain.CoverallsResponse;
+import org.eluder.coveralls.maven.plugin.domain.Git;
 import org.eluder.coveralls.maven.plugin.domain.Job;
 import org.eluder.coveralls.maven.plugin.domain.Source;
 import org.eluder.coveralls.maven.plugin.httpclient.CoverallsClient;
@@ -62,9 +50,23 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import static org.hamcrest.Matchers.containsString;
+import static org.junit.Assert.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CoverallsReportMojoTest {
@@ -83,7 +85,7 @@ public class CoverallsReportMojoTest {
     
     @Mock
     private Job jobMock;
-    
+
     @Mock
     private Log logMock;
 
@@ -116,6 +118,7 @@ public class CoverallsReportMojoTest {
         });
         when(logMock.isInfoEnabled()).thenReturn(true);
         when(jobMock.validate()).thenReturn(new ValidationErrors());
+
         
         mojo = new CoverallsReportMojo() {
             @Override
@@ -166,6 +169,27 @@ public class CoverallsReportMojoTest {
         when(collectedProjectMock.getCompileSourceRoots()).thenReturn(sourceRoots);
         when(collectedProjectMock.getBuild()).thenReturn(buildMock);
         when(collectedProjectMock.getModel()).thenReturn(modelMock);
+    }
+
+    @Test(expected = IOException.class)
+    public void testCreateCoverageParsersWithoutCoverageReports() throws Exception {
+        mojo = new CoverallsReportMojo();
+        mojo.project = projectMock;
+        mojo.createCoverageParsers(sourceLoaderMock);
+    }
+
+    @Test
+    public void testCreateSourceLoader() throws Exception {
+        Git gitMock = Mockito.mock(Git.class);
+        when(gitMock.getBaseDir()).thenReturn(folder.newFolder("git"));
+        when(jobMock.getGit()).thenReturn(gitMock);
+        TestIoUtil.writeFileContent("public interface Test { }", folder.newFile("source.java"));
+        mojo = new CoverallsReportMojo();
+        mojo.project = projectMock;
+        mojo.sourceEncoding = "UTF-8";
+        SourceLoader sourceLoader = mojo.createSourceLoader(jobMock);
+        Source source = sourceLoader.load("source.java");
+        assertNotNull(source);
     }
 
     @Test
