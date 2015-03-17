@@ -191,7 +191,13 @@ public class CoverallsReportMojo extends AbstractMojo {
      * Scan subdirectories for a sources file.
      */
     @Parameter(property = "coveralls.scanForSources", defaultValue = "false")
-    private boolean scanForSources;
+    protected boolean scanForSources;
+    
+    /**
+     * Scan subdirectories for a sources file.
+     */
+    @Parameter(property = "coveralls.basedir", defaultValue = "${project.basedir}")
+    protected File basedir;
 
     @Override
     public final void execute() throws MojoExecutionException, MojoFailureException {
@@ -282,7 +288,7 @@ public class CoverallsReportMojo extends AbstractMojo {
      * @throws IOException if an I/O error occurs
      */
     protected Job createJob() throws IOException {
-        Git git = new GitRepository(project.getBasedir()).load();
+        Git git = new GitRepository(basedir).load();
         return new Job()
             .withRepoToken(repoToken)
             .withServiceName(serviceName)

@@ -211,6 +211,7 @@ public class CoverallsReportMojoTest {
         mojo.coverallsFile = folder.newFile();
         mojo.dryRun = true;
         mojo.skip = false;
+        mojo.basedir = TestIoUtil.getFile("/");
         
         when(projectMock.getBasedir()).thenReturn(TestIoUtil.getFile("/"));
         
