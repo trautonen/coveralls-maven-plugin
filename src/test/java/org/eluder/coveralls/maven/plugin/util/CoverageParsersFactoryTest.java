@@ -26,16 +26,6 @@ package org.eluder.coveralls.maven.plugin.util;
  * %[license]
  */
 
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Reporting;
@@ -52,6 +42,16 @@ import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CoverageParsersFactoryTest {
@@ -151,7 +151,26 @@ public class CoverageParsersFactoryTest {
         assertEquals(1, parsers.size());
         assertTrue(SagaParser.class.equals(parsers.get(0).getClass()));
     }
-    
+
+    @Test
+    public void testWithRelativeReportDirectory() throws Exception {
+        File coberturaDir = new File(reportingDir, "customdir");
+        coberturaDir.mkdir(); new File(coberturaDir, "coverage.xml").createNewFile();
+        CoverageParsersFactory factory = createCoverageParsersFactory().withRelativeReportDirs(Arrays.asList("customdir"));
+        List<CoverageParser> parsers = factory.createParsers();
+        assertEquals(1, parsers.size());
+        assertTrue(CoberturaParser.class.equals(parsers.get(0).getClass()));
+    }
+
+    @Test
+    public void testWithRootRelativeReportDirectory() throws Exception {
+        new File(reportingDir, "coverage.xml").createNewFile();
+        CoverageParsersFactory factory = createCoverageParsersFactory().withRelativeReportDirs(Arrays.asList(File.separator));
+        List<CoverageParser> parsers = factory.createParsers();
+        assertEquals(1, parsers.size());
+        assertTrue(CoberturaParser.class.equals(parsers.get(0).getClass()));
+    }
+
     private CoverageParsersFactory createCoverageParsersFactory() {
         return new CoverageParsersFactory(projectMock, sourceLoaderMock);
     }
