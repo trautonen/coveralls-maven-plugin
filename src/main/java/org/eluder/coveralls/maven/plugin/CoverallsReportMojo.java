@@ -177,7 +177,7 @@ public class CoverallsReportMojo extends AbstractMojo {
     protected boolean dryRun;
 
     /**
-     * Scan subdirectories for a sources file.
+     * Scan subdirectories for source files.
      */
     @Parameter(property = "scanForSources", defaultValue = "false")
     protected boolean scanForSources;
