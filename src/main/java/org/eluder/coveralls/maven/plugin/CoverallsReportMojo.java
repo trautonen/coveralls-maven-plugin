@@ -177,6 +177,18 @@ public class CoverallsReportMojo extends AbstractMojo {
     protected boolean dryRun;
 
     /**
+     * Scan subdirectories for a sources file.
+     */
+    @Parameter(property = "scanForSources", defaultValue = "false")
+    protected boolean scanForSources;
+
+    /**
+     * Base directory of the project.
+     */
+    @Parameter(property = "coveralls.basedir", defaultValue = "${project.basedir}")
+    protected File basedir;
+
+    /**
      * Skip the plugin execution.
      */
     @Parameter(property = "coveralls.skip", defaultValue = "false")
@@ -188,17 +200,6 @@ public class CoverallsReportMojo extends AbstractMojo {
     @Component
     protected MavenProject project;
 
-    /**
-     * Scan subdirectories for a sources file.
-     */
-    @Parameter(property = "coveralls.scanForSources", defaultValue = "false")
-    protected boolean scanForSources;
-    
-    /**
-     * Scan subdirectories for a sources file.
-     */
-    @Parameter(property = "coveralls.basedir", defaultValue = "${project.basedir}")
-    protected File basedir;
 
     @Override
     public final void execute() throws MojoExecutionException, MojoFailureException {

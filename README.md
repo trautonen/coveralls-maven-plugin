@@ -202,6 +202,7 @@ service environment will not override it.
 | `jacocoReports` | `List<File>` | List of additional JaCoCo report files. ${project.reporting.outputDirectory}/jacoco/jacoco.xml is used as default for every module. |
 | `coberturaReports` | `List<File>` | List of additional Cobertura report files. ${project.reporting.outputDirectory}/cobertura/coverage.xml is used as default for every module. |
 | `sagaReports` | `List<File>` | List of additional Saga report files. ${project.build.directory}/saga-coverage/total-coverage.xml is used as default for every module. |
+| `relativeReportDirs` | `List<String>` | List of additional relative report directories. Directories relative to ${project.reporting.outputDirectory} and ${project.build.directory} are scanned for reports. |
 | `coverallsFile` | `File` | **Default: ${project.build.directory}/coveralls.json**<br>File path to write and submit Coveralls data. |
 | `coverallsUrl` | `String` | **Default: https://coveralls.io/api/v1/jobs**<br>Url for the Coveralls API. |
 | `sourceDirectories` | `List<File>` | List of additional source directories. The plugin will scan the project's compiled source roots for defaults. |
@@ -216,6 +217,8 @@ service environment will not override it.
 | `pullRequest` | `String` | GitHub pull request identifier. If not provided the supported service environments are used. |
 | `timestamp` | `Date` | **Default: ${timestamp}**<br>Build timestamp. Must be in Maven supported 'yyyy-MM-dd HH:mm:ssa' format. |
 | `dryRun` | `boolean` | **Default: false**<br>Dry run Coveralls report without actually sending it. |
+| `scanForSources` | `boolean` | **Default: false**<br>Scan subdirectories for source files. |
+| `coveralls.basedir` | `File` | **Default: ${project.basedir}<br>Base directory of the project. |
 | `coveralls.skip` | `boolean` | **Default: false**<br>Skip the plugin execution. |
 
 
