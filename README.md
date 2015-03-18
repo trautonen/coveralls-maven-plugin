@@ -308,7 +308,8 @@ See [migration](MIGRATION.md) documentation for more information.
 
 - Jakub Bednář (@bednar) for Saga integration and the idea of chaining multiple reports provided
   by different coverage tools.
-
+- Marvin Froeder (@velo) for Shippable support, configurable basidr and directory scanning source
+  loader.
 
 ### Continuous integration
 
