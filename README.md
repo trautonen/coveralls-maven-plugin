@@ -16,8 +16,8 @@ service.
   [Saga](http://timurstrekalov.github.io/saga/) coverage tools
 * Multi-module report aggregation
 * Built-in support for [Travis CI](https://travis-ci.org/), [Circle](https://circleci.com/),
-  [Codeship](https://www.codeship.io/), [Jenkins](http://jenkins-ci.org/) and
-  [Bamboo](https://www.atlassian.com/software/bamboo/) continuous integration services
+  [Codeship](https://www.codeship.io/), [Jenkins](http://jenkins-ci.org/),
+  [Bamboo](https://www.atlassian.com/software/bamboo/) and [Shippable](https://www.shippable.com/) continuous integration services
 * Fully streaming implementation for fast report generation and small memory footprint
 * Provides clean interfaces to allow easy extending to different coverage tools
 * Convention over configuration for almost zero configuration usage
