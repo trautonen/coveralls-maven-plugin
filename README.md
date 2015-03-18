@@ -218,7 +218,7 @@ service environment will not override it.
 | `timestamp` | `Date` | **Default: ${timestamp}**<br>Build timestamp. Must be in Maven supported 'yyyy-MM-dd HH:mm:ssa' format. |
 | `dryRun` | `boolean` | **Default: false**<br>Dry run Coveralls report without actually sending it. |
 | `scanForSources` | `boolean` | **Default: false**<br>Scan subdirectories for source files. |
-| `coveralls.basedir` | `File` | **Default: ${project.basedir}<br>Base directory of the project. |
+| `coveralls.basedir` | `File` | **Default: ${project.basedir}**<br>Base directory of the project. |
 | `coveralls.skip` | `boolean` | **Default: false**<br>Skip the plugin execution. |
 
 
