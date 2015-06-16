@@ -26,10 +26,11 @@ package org.eluder.coveralls.maven.plugin.domain;
  * %[license]
  */
 
-import static org.junit.Assert.*;
-
 import org.junit.Ignore;
 import org.junit.Test;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 public class SourceTest {
 
@@ -39,6 +40,12 @@ public class SourceTest {
         source.addCoverage(1, 3);
         source.addCoverage(3, 3);
         assertArrayEquals(new Integer[] { 3, null, 3, null }, source.getCoverage());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddCoverageForSourceOutOfBounds() {
+        Source source = new Source("src/main/java/Hello.java", "public class Hello {\n    \n}\n");
+        source.addCoverage(5, 1);
     }
     
     @Test

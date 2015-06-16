@@ -26,11 +26,11 @@ package org.eluder.coveralls.maven.plugin.domain;
  * %[license]
  */
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class Source implements JsonObject {
     
@@ -89,6 +89,10 @@ public final class Source implements JsonObject {
     }
     
     public void addCoverage(final int lineNumber, final Integer coverage) {
+        int index = lineNumber - 1;
+        if (index >= this.coverage.length) {
+            throw new IllegalArgumentException("Line number " + lineNumber + " is greater than the source file " + name + " size");
+        }
         this.coverage[lineNumber - 1] = coverage;
     }
 }
