@@ -217,6 +217,7 @@ service environment will not override it.
 | `pullRequest` | `String` | GitHub pull request identifier. If not provided the supported service environments are used. |
 | `timestamp` | `Date` | **Default: ${timestamp}**<br>Build timestamp. Must be in Maven supported 'yyyy-MM-dd HH:mm:ssa' format. |
 | `dryRun` | `boolean` | **Default: false**<br>Dry run Coveralls report without actually sending it. |
+| `failOnServiceError` | `boolean` | **Default: true**<br> Fail build if Coveralls service is not available or submission fails for internal errors. |
 | `scanForSources` | `boolean` | **Default: false**<br>Scan subdirectories for source files. |
 | `coveralls.basedir` | `File` | **Default: ${project.basedir}**<br>Base directory of the project. |
 | `coveralls.skip` | `boolean` | **Default: false**<br>Skip the plugin execution. |
