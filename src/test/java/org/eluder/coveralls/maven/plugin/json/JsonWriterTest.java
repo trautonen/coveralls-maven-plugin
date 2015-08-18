@@ -150,7 +150,7 @@ public class JsonWriterTest {
             .withGit(new Git(null, head, "af456fge34acd", Arrays.asList(remote)));
     }
     
-    private Source source() {
+    private Source source() throws IOException {
         return new Source("Foo.java", SourceTest.createTempFile("public class Foo { }"), StandardCharsets.UTF_8);
     }
     

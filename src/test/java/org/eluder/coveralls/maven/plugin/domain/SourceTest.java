@@ -41,7 +41,7 @@ import java.nio.charset.StandardCharsets;
 public class SourceTest {
 
     @Test
-    public void testAddCoverage() {
+    public void testAddCoverage() throws Exception {
         Source source = new Source("src/main/java/Hello.java", createTempFile("public class Hello {\n    \n}\n"), StandardCharsets.UTF_8);
         source.addCoverage(1, 3);
         source.addCoverage(3, 3);
@@ -49,7 +49,7 @@ public class SourceTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testAddCoverageForSourceOutOfBounds() {
+    public void testAddCoverageForSourceOutOfBounds()  throws Exception {
         Source source = new Source("src/main/java/Hello.java", createTempFile("public class Hello {\n    \n}\n"), StandardCharsets.UTF_8);
         source.addCoverage(5, 1);
     }

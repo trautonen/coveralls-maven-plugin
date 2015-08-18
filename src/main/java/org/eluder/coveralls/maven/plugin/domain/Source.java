@@ -45,20 +45,15 @@ public final class Source implements JsonObject {
     private final Integer[] coverage;
     private String classifier;
     
-    public Source(final String name, final File source, final Charset sourceEncoding) {
+    public Source(final String name, final File source, final Charset sourceEncoding) throws IOException {
         this.source = source;
         this.sourceEncoding = sourceEncoding;
         int lines = 1;
-        // Checkstyle OFF: EmptyBlock
-        try {
-            String src = new String(Files.readAllBytes(source.toPath()));
-            Matcher matcher = NEWLINE.matcher(src);
-            while (matcher.find()) {
-                lines++;
-            }
-        } catch (IOException e) {
+        String src = new String(Files.readAllBytes(source.toPath()));
+        Matcher matcher = NEWLINE.matcher(src);
+        while (matcher.find()) {
+            lines++;
         }
-        // Checkstyle ON: EmptyBlock
         this.coverage = new Integer[lines];
         this.name = name;
     }
@@ -77,13 +72,9 @@ public final class Source implements JsonObject {
     }
 
     @JsonProperty("source")
-    public String getSource() {
-        try {
-            String src = new String(Files.readAllBytes(source.toPath()), sourceEncoding);
-            return src.replaceAll(NEWLINE.pattern(), "\n");
-        } catch (IOException e) {
-            return "";
-        }
+    public String getSource() throws IOException {
+        String src = new String(Files.readAllBytes(source.toPath()), sourceEncoding);
+        return src.replaceAll(NEWLINE.pattern(), "\n");
     }
 
     @JsonProperty("coverage")

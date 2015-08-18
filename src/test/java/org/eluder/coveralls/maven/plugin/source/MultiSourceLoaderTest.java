@@ -48,10 +48,13 @@ public class MultiSourceLoaderTest {
     @Mock
     private SourceLoader sl2;
     
-    private Source s1 = new Source("source", SourceTest.createTempFile("{ 1 }"), StandardCharsets.UTF_8);
-    
-    private Source s2 = new Source("source", SourceTest.createTempFile("{ 2 }"), StandardCharsets.UTF_8);
-    
+    private Source s1;
+    private Source s2;
+
+    public MultiSourceLoaderTest() throws IOException {
+        s1 = new Source("source", SourceTest.createTempFile("{ 1 }"), StandardCharsets.UTF_8);
+        s2 = new Source("source", SourceTest.createTempFile("{ 2 }"), StandardCharsets.UTF_8);
+    }
     @Test(expected = IOException.class)
     public void testMissingSource() throws Exception {
         creaMultiSourceLoader().load("source");
