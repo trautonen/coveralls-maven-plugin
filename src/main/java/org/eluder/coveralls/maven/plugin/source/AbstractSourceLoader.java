@@ -47,7 +47,7 @@ public abstract class AbstractSourceLoader implements SourceLoader {
     public Source load(final String sourceFile) throws IOException {
         File source = locate(sourceFile);
         if (source != null) {
-            return new Source(getFileName(sourceFile), source);
+            return new Source(getFileName(sourceFile), source, getSourceEncoding());
         } else {
             return null;
         }

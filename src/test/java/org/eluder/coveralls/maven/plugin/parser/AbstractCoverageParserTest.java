@@ -31,6 +31,7 @@ import static org.mockito.Mockito.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -80,7 +81,7 @@ public abstract class AbstractCoverageParserTest {
         return new Answer<Source>() {
             @Override
             public Source answer(final InvocationOnMock invocation) throws Throwable {
-                return new Source(name, SourceTest.createTempFile(content));
+                return new Source(name, SourceTest.createTempFile(content), StandardCharsets.UTF_8);
             }
         };
     }

@@ -58,6 +58,7 @@ import org.mockito.stubbing.Answer;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -114,7 +115,7 @@ public class CoverallsReportMojoTest {
             public Source answer(final InvocationOnMock invocation) throws Throwable {
                 String sourceFile = invocation.getArguments()[0].toString();
                 String content = readFileContent(sourceFile);
-                return new Source(sourceFile, SourceTest.createTempFile(content));
+                return new Source(sourceFile, SourceTest.createTempFile(content), StandardCharsets.UTF_8);
             }
         });
         when(logMock.isInfoEnabled()).thenReturn(true);

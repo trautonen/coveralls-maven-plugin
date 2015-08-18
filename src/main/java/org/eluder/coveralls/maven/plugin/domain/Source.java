@@ -31,6 +31,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,11 +41,13 @@ public final class Source implements JsonObject {
     private static final Pattern NEWLINE = Pattern.compile("\r\n|\r|\n");
     private final String name;
     private final File source;
+    private final Charset sourceEncoding;
     private final Integer[] coverage;
     private String classifier;
     
-    public Source(final String name, final File source) {
+    public Source(final String name, final File source, final Charset sourceEncoding) {
         this.source = source;
+        this.sourceEncoding = sourceEncoding;
         int lines = 1;
         // Checkstyle OFF: EmptyBlock
         try {
@@ -59,12 +62,12 @@ public final class Source implements JsonObject {
         this.coverage = new Integer[lines];
         this.name = name;
     }
-    
+
     @JsonIgnore
     public String getName() {
         return name;
     }
-    
+
     @JsonProperty("name")
     public String getFullName() {
         return name;
@@ -72,31 +75,31 @@ public final class Source implements JsonObject {
         // #45: cannot use identifier due to unfetchable source files
         //return (classifier == null ? name : name + CLASSIFIER_SEPARATOR + classifier);
     }
-    
+
     @JsonProperty("source")
     public String getSource() {
         try {
-            String src = new String(Files.readAllBytes(source.toPath()));
+            String src = new String(Files.readAllBytes(source.toPath()), sourceEncoding);
             return src.replaceAll(NEWLINE.pattern(), "\n");
         } catch (IOException e) {
             return "";
         }
     }
-    
+
     @JsonProperty("coverage")
     public Integer[] getCoverage() {
         return coverage;
     }
-    
+
     @JsonIgnore
     public String getClassifier() {
         return classifier;
     }
-    
+
     public void setClassifier(final String classifier) {
         this.classifier = classifier;
     }
-    
+
     public void addCoverage(final int lineNumber, final Integer coverage) {
         int index = lineNumber - 1;
         if (index >= this.coverage.length) {

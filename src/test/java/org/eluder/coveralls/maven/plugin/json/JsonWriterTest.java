@@ -40,6 +40,7 @@ import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -150,7 +151,7 @@ public class JsonWriterTest {
     }
     
     private Source source() {
-        return new Source("Foo.java", SourceTest.createTempFile("public class Foo { }"));
+        return new Source("Foo.java", SourceTest.createTempFile("public class Foo { }"), StandardCharsets.UTF_8);
     }
     
     private Map<String, Object> stringToJsonMap(final String content) throws Exception {
