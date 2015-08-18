@@ -26,16 +26,11 @@ package org.eluder.coveralls.maven.plugin.httpclient;
  * %[license]
  */
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.security.Provider;
-import java.security.Security;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;
@@ -47,6 +42,12 @@ import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.CoverallsResponse;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.security.Provider;
+import java.security.Security;
 
 public class CoverallsClient {
 
@@ -94,6 +95,9 @@ public class CoverallsClient {
         ContentType contentType = ContentType.getOrDefault(entity);
         InputStreamReader reader = null;
         try {
+            if (response.getStatusLine().getStatusCode() >= HttpStatus.SC_INTERNAL_SERVER_ERROR) {
+                throw new IOException("Coveralls API interal error");
+            }
             reader = new InputStreamReader(entity.getContent(), contentType.getCharset());
             CoverallsResponse cr = objectMapper.readValue(reader, CoverallsResponse.class);
             if (cr.isError()) {

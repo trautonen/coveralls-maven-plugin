@@ -26,15 +26,6 @@ package org.eluder.coveralls.maven.plugin.httpclient;
  * %[license]
  */
 
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.when;
-
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -52,6 +43,15 @@ import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CoverallsClientTest {
@@ -83,9 +83,20 @@ public class CoverallsClientTest {
     
     @Test
     public void testSubmit() throws Exception {
+        StatusLine statusLine = new BasicStatusLine(HttpVersion.HTTP_1_1, 200, "OK");
+        when(httpResponseMock.getStatusLine()).thenReturn(statusLine);
         when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);
         when(httpResponseMock.getEntity()).thenReturn(httpEntityMock);
         when(httpEntityMock.getContent()).thenReturn(coverallsResponse(new CoverallsResponse("success", false, "")));
+        CoverallsClient client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
+        client.submit(file);
+    }
+
+    @Test(expected = IOException.class)
+    public void testFailOnServiceError() throws Exception {
+        StatusLine statusLine = new BasicStatusLine(HttpVersion.HTTP_1_1, 500, "Internal Error");
+        when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);
+        when(httpResponseMock.getStatusLine()).thenReturn(statusLine);
         CoverallsClient client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
         client.submit(file);
     }

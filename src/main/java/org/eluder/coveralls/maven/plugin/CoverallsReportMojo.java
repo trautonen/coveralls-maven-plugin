@@ -177,6 +177,12 @@ public class CoverallsReportMojo extends AbstractMojo {
     protected boolean dryRun;
 
     /**
+     * Fail build if Coveralls service is not available or submission fails for internal errors.
+     */
+    @Parameter(property = "failOnServiceError", defaultValue = "true")
+    protected boolean failOnServiceError;
+
+    /**
      * Scan subdirectories for source files.
      */
     @Parameter(property = "scanForSources", defaultValue = "false")
@@ -367,12 +373,21 @@ public class CoverallsReportMojo extends AbstractMojo {
             getLog().info("    If you see question marks in the report, please be patient");
         } catch (ProcessingException ex) {
             long duration = System.currentTimeMillis() - now;
-            getLog().error("Submission failed in " + duration + "ms while processing data");
-            throw ex;
+            String message = "Submission failed in " + duration + "ms while processing data";
+            handleSubmissionError(ex, message, true);
         } catch (IOException ex) {
             long duration = System.currentTimeMillis() - now;
-            getLog().error("Submission failed in " + duration + "ms while handling I/O operations");
+            String message = "Submission failed in " + duration + "ms while handling I/O operations";
+            handleSubmissionError(ex, message, failOnServiceError);
+        }
+    }
+
+    private <T extends Exception> void handleSubmissionError(final T ex, final String message, final boolean failOnException) throws T {
+        if (failOnException) {
+            getLog().error(message);
             throw ex;
+        } else {
+            getLog().warn(message);
         }
     }
     

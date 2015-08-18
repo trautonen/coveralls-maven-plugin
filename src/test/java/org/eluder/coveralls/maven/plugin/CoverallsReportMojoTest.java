@@ -154,6 +154,7 @@ public class CoverallsReportMojoTest {
         };
         mojo.project = projectMock;
         mojo.sourceEncoding = "UTF-8";
+        mojo.failOnServiceError = true;
         
         when(modelMock.getReporting()).thenReturn(reportingMock);
         when(reportingMock.getOutputDirectory()).thenReturn(folder.getRoot().getAbsolutePath());
@@ -232,15 +233,21 @@ public class CoverallsReportMojoTest {
 
         verifySuccessfullSubmit(logMock, fixture);
     }
-
-    @Test(expected = MojoFailureException.class)
-    public void testFailedSubmission() throws Exception {
-        when(coverallsClientMock.submit(any(File.class))).thenThrow(ProcessingException.class);
-        mojo.execute();
-    }
     
     @Test
     public void testFailWithProcessingException() throws Exception {
+        when(coverallsClientMock.submit(any(File.class))).thenThrow(new ProcessingException());
+        try {
+            mojo.execute();
+            fail("Should have failed with MojoFailureException");
+        } catch (MojoFailureException ex) {
+            assertEquals(ex.getCause().getClass(), ProcessingException.class);
+        }
+    }
+
+    @Test
+    public void testProcessingExceptionWithAllowedServiceFailure() throws Exception {
+        mojo.failOnServiceError = false;
         when(coverallsClientMock.submit(any(File.class))).thenThrow(new ProcessingException());
         try {
             mojo.execute();
@@ -259,6 +266,14 @@ public class CoverallsReportMojoTest {
         } catch (MojoFailureException ex) {
             assertEquals(ex.getCause().getClass(), IOException.class);
         }
+    }
+
+    @Test
+    public void testIOExceptionWithAllowedServiceFailure() throws Exception {
+        mojo.failOnServiceError = false;
+        when(coverallsClientMock.submit(any(File.class))).thenThrow(new IOException());
+        mojo.execute();
+        verify(logMock).warn(anyString());
     }
     
     @Test
