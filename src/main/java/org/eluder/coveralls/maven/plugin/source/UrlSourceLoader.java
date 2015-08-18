@@ -1,5 +1,8 @@
 package org.eluder.coveralls.maven.plugin.source;
 
+import java.io.File;
+import java.io.FileOutputStream;
+
 /*
  * #[license]
  * coveralls-maven-plugin
@@ -28,6 +31,7 @@ package org.eluder.coveralls.maven.plugin.source;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 
 import org.eluder.coveralls.maven.plugin.util.UrlUtils;
@@ -35,6 +39,7 @@ import org.eluder.coveralls.maven.plugin.util.UrlUtils;
 public class UrlSourceLoader extends AbstractSourceLoader {
 
     private final URL sourceUrl;
+    private static final int BUFF_LEN = 4 * 1024;
 
     public UrlSourceLoader(final URL base, final URL sourceUrl, final String sourceEncoding) {
         super(UrlUtils.toUri(base), UrlUtils.toUri(sourceUrl), sourceEncoding);
@@ -42,11 +47,22 @@ public class UrlSourceLoader extends AbstractSourceLoader {
     }
     
     @Override
-    protected InputStream locate(final String sourceFile) throws IOException {
+    protected File locate(final String sourceFile) throws IOException {
+        File file = File.createTempFile(sourceFile, "tmpDownload");
+        file.deleteOnExit();
         URL url = new URL(sourceUrl, sourceFile);
         // Checkstyle OFF: EmptyBlock
-        try {
-            return url.openStream();
+        try (InputStream in = url.openStream();
+                OutputStream out = new FileOutputStream(file)) {
+            byte[] buffer = new byte[BUFF_LEN];
+            int read = 0;
+            while (-1 < (read = in.read(buffer))) {
+                if (read > 0) {
+                    out.write(buffer, 0, read);
+                }
+            }
+            out.flush();
+            return file;
         } catch (IOException ex) {
             // not found from url
         }

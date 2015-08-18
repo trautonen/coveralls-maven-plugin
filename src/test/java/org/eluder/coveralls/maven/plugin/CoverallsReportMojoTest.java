@@ -37,6 +37,7 @@ import org.eluder.coveralls.maven.plugin.domain.CoverallsResponse;
 import org.eluder.coveralls.maven.plugin.domain.Git;
 import org.eluder.coveralls.maven.plugin.domain.Job;
 import org.eluder.coveralls.maven.plugin.domain.Source;
+import org.eluder.coveralls.maven.plugin.domain.SourceTest;
 import org.eluder.coveralls.maven.plugin.httpclient.CoverallsClient;
 import org.eluder.coveralls.maven.plugin.json.JsonWriter;
 import org.eluder.coveralls.maven.plugin.parser.CoberturaParser;
@@ -113,7 +114,7 @@ public class CoverallsReportMojoTest {
             public Source answer(final InvocationOnMock invocation) throws Throwable {
                 String sourceFile = invocation.getArguments()[0].toString();
                 String content = readFileContent(sourceFile);
-                return new Source(sourceFile, content);
+                return new Source(sourceFile, SourceTest.createTempFile(content));
             }
         });
         when(logMock.isInfoEnabled()).thenReturn(true);

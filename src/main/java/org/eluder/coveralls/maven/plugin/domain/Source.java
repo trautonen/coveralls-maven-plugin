@@ -29,29 +29,33 @@ package org.eluder.coveralls.maven.plugin.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class Source implements JsonObject {
     
     private static final Pattern NEWLINE = Pattern.compile("\r\n|\r|\n");
-    //private static final String CLASSIFIER_SEPARATOR = "#";
-    
     private final String name;
-    private final String source;
+    private final File source;
     private final Integer[] coverage;
     private String classifier;
     
-    public Source(final String name, final String source) {
+    public Source(final String name, final File source) {
+        this.source = source;
         int lines = 1;
-        StringBuffer replaced = new StringBuffer(source.length());
-        Matcher matcher = NEWLINE.matcher(source);
-        while (matcher.find()) {
-            lines++;
-            matcher.appendReplacement(replaced, "\n");
+        // Checkstyle OFF: EmptyBlock
+        try {
+            String src = new String(Files.readAllBytes(source.toPath()));
+            Matcher matcher = NEWLINE.matcher(src);
+            while (matcher.find()) {
+                lines++;
+            }
+        } catch (IOException e) {
         }
-        matcher.appendTail(replaced);
-        this.source = replaced.toString();
+        // Checkstyle ON: EmptyBlock
         this.coverage = new Integer[lines];
         this.name = name;
     }
@@ -71,7 +75,12 @@ public final class Source implements JsonObject {
     
     @JsonProperty("source")
     public String getSource() {
-        return source;
+        try {
+            String src = new String(Files.readAllBytes(source.toPath()));
+            return src.replaceAll(NEWLINE.pattern(), "\n");
+        } catch (IOException e) {
+            return "";
+        }
     }
     
     @JsonProperty("coverage")

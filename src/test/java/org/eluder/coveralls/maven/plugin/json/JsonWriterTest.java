@@ -31,6 +31,7 @@ import com.fasterxml.jackson.databind.type.MapType;
 import org.eluder.coveralls.maven.plugin.domain.Git;
 import org.eluder.coveralls.maven.plugin.domain.Job;
 import org.eluder.coveralls.maven.plugin.domain.Source;
+import org.eluder.coveralls.maven.plugin.domain.SourceTest;
 import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
 import org.junit.Before;
 import org.junit.Rule;
@@ -149,7 +150,7 @@ public class JsonWriterTest {
     }
     
     private Source source() {
-        return new Source("Foo.java", "public class Foo { }");
+        return new Source("Foo.java", SourceTest.createTempFile("public class Foo { }"));
     }
     
     private Map<String, Object> stringToJsonMap(final String content) throws Exception {

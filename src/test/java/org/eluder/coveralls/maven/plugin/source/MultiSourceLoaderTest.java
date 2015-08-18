@@ -32,6 +32,7 @@ import static org.mockito.Mockito.when;
 import java.io.IOException;
 
 import org.eluder.coveralls.maven.plugin.domain.Source;
+import org.eluder.coveralls.maven.plugin.domain.SourceTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -46,9 +47,9 @@ public class MultiSourceLoaderTest {
     @Mock
     private SourceLoader sl2;
     
-    private Source s1 = new Source("source", "{ 1 }");
+    private Source s1 = new Source("source", SourceTest.createTempFile("{ 1 }"));
     
-    private Source s2 = new Source("source", "{ 2 }");
+    private Source s2 = new Source("source", SourceTest.createTempFile("{ 2 }"));
     
     @Test(expected = IOException.class)
     public void testMissingSource() throws Exception {

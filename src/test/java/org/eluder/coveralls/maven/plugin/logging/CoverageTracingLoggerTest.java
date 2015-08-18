@@ -34,6 +34,7 @@ import static org.mockito.Mockito.verify;
 import org.apache.maven.plugin.logging.Log;
 import org.eluder.coveralls.maven.plugin.source.SourceCallback;
 import org.eluder.coveralls.maven.plugin.domain.Source;
+import org.eluder.coveralls.maven.plugin.domain.SourceTest;
 import org.eluder.coveralls.maven.plugin.logging.Logger.Position;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -61,15 +62,15 @@ public class CoverageTracingLoggerTest {
     
     @Test
     public void testLogForSources() throws Exception {
-        Source source1 = new Source("Source1.java", "public class Source1 {\n    \n}\n");
+        Source source1 = new Source("Source1.java", SourceTest.createTempFile("public class Source1 {\n    \n}\n"));
         source1.addCoverage(1, 0);
         source1.addCoverage(2, 0);
         source1.addCoverage(3, 0);
-        Source source2 = new Source("Source2.java", "public class Source2 {\n    new Interface() { public void run() { } };\n}\n");
+        Source source2 = new Source("Source2.java", SourceTest.createTempFile("public class Source2 {\n    new Interface() { public void run() { } };\n}\n"));
         source2.addCoverage(1, 1);
         source2.addCoverage(2, 1);
         source2.addCoverage(3, 1);
-        Source source2inner = new Source("Source2.java", "public class Source2 {\n    new Interface() { public void run() { } };\n}\n");
+        Source source2inner = new Source("Source2.java", SourceTest.createTempFile("public class Source2 {\n    new Interface() { public void run() { } };\n}\n"));
         source2inner.setClassifier("$1");
         source2inner.addCoverage(2, 1);
         

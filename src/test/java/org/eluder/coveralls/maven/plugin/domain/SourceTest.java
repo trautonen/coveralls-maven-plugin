@@ -32,11 +32,17 @@ import org.junit.Test;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+
 public class SourceTest {
 
     @Test
     public void testAddCoverage() {
-        Source source = new Source("src/main/java/Hello.java", "public class Hello {\n    \n}\n");
+        Source source = new Source("src/main/java/Hello.java", createTempFile("public class Hello {\n    \n}\n"));
         source.addCoverage(1, 3);
         source.addCoverage(3, 3);
         assertArrayEquals(new Integer[] { 3, null, 3, null }, source.getCoverage());
@@ -44,16 +50,30 @@ public class SourceTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testAddCoverageForSourceOutOfBounds() {
-        Source source = new Source("src/main/java/Hello.java", "public class Hello {\n    \n}\n");
+        Source source = new Source("src/main/java/Hello.java", createTempFile("public class Hello {\n    \n}\n"));
         source.addCoverage(5, 1);
     }
-    
+
     @Test
     @Ignore("#45: https://github.com/trautonen/coveralls-maven-plugin/issues/45")
     public void testGetNameWithClassifier() throws Exception {
-        Source source = new Source("src/main/java/Hello.java", "public class Hello {\n    \n}\n");
+        Source source = new Source("src/main/java/Hello.java", createTempFile("public class Hello {\n    \n}\n"));
         source.setClassifier("Inner");
         assertEquals("src/main/java/Hello.java", source.getName());
         assertEquals("src/main/java/Hello.java#Inner", source.getFullName());
+    }
+
+    public static File createTempFile(String tmpFileContent) {
+        File tmp = null;
+        try {
+            tmp = File.createTempFile("testfile", ".tmp");
+        } catch (IOException e1) {
+        }
+        try (OutputStream out = new FileOutputStream(tmp)){
+            out.write(tmpFileContent.getBytes(StandardCharsets.UTF_8));
+            out.flush();
+        } catch (IOException e) {
+        }
+        return tmp;
     }
 }
