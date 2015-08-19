@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.2.0
+
+- #82: Improved error message for duplicate classes in different modules
+- #76: Property to allow Coveralls service fail without build failure
+- #74: Handle transitive logging dependencies better
+
+
 ## 3.1.0
 
 - #67: Configurable project basedir
