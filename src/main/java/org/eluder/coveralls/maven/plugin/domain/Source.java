@@ -44,13 +44,10 @@ public final class Source implements JsonObject {
     
     public Source(final String name, final String source, final String digest) {
         int lines = 1;
-        StringBuffer replaced = new StringBuffer(source.length());
         Matcher matcher = NEWLINE.matcher(source);
         while (matcher.find()) {
             lines++;
-            matcher.appendReplacement(replaced, "\n");
         }
-        matcher.appendTail(replaced);
         this.digest = digest;
         this.coverage = new Integer[lines];
         this.name = name;
