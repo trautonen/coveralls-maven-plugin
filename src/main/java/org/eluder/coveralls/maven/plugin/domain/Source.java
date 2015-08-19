@@ -38,11 +38,11 @@ public final class Source implements JsonObject {
     //private static final String CLASSIFIER_SEPARATOR = "#";
     
     private final String name;
-    private final String source;
+    private final String digest;
     private final Integer[] coverage;
     private String classifier;
     
-    public Source(final String name, final String source) {
+    public Source(final String name, final String source, final String digest) {
         int lines = 1;
         StringBuffer replaced = new StringBuffer(source.length());
         Matcher matcher = NEWLINE.matcher(source);
@@ -51,7 +51,7 @@ public final class Source implements JsonObject {
             matcher.appendReplacement(replaced, "\n");
         }
         matcher.appendTail(replaced);
-        this.source = replaced.toString();
+        this.digest = digest;
         this.coverage = new Integer[lines];
         this.name = name;
     }
@@ -69,9 +69,9 @@ public final class Source implements JsonObject {
         //return (classifier == null ? name : name + CLASSIFIER_SEPARATOR + classifier);
     }
     
-    @JsonProperty("source")
-    public String getSource() {
-        return source;
+    @JsonProperty("source_digest")
+    public String getDigest() {
+        return digest;
     }
     
     @JsonProperty("coverage")

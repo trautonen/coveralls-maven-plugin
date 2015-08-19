@@ -74,11 +74,11 @@ public class ScanSourceLoaderTest {
         ScanSourceLoader sourceLoader = new ScanSourceLoader(folder.getRoot(), folder.getRoot(), "UTF-8");
         Source sourceA = sourceLoader.load(fileA.getName());
         assertEquals("level1/level2/level3/AFile.java", sourceA.getName());
-        assertEquals("public class Foo {\n    \n}\n", sourceA.getSource());
+        assertEquals("2ac359c9a152fd7cd79c4eb147069224", sourceA.getDigest());
         assertEquals(4, sourceA.getCoverage().length);
         Source sourceB = sourceLoader.load(fileB.getName());
         assertEquals("level1/level2/level3/BFile.java", sourceB.getName());
-        assertEquals("public class Foo {\n    \n}\n", sourceB.getSource());
+        assertEquals("2ac359c9a152fd7cd79c4eb147069224", sourceB.getDigest());
         assertEquals(4, sourceB.getCoverage().length);
     }
 }

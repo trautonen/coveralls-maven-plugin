@@ -79,7 +79,7 @@ public abstract class AbstractCoverageParserTest {
         return new Answer<Source>() {
             @Override
             public Source answer(final InvocationOnMock invocation) throws Throwable {
-                return new Source(name, content);
+                return new Source(name, content, "asdfasdf1234asfasdf2345");
             }
         };
     }

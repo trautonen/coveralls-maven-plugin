@@ -79,7 +79,7 @@ public class UniqueSourceCallbackTest {
     }
     
     private Source createSource(final String name, final String source, final int... relevant) {
-        Source s = new Source(name, source);
+        Source s = new Source(name, source, "asdfasdf1234asfasdf2345");
         for (int i : relevant) {
             s.addCoverage(i, 1);
         }

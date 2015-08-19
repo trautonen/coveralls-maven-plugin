@@ -46,9 +46,9 @@ public class MultiSourceLoaderTest {
     @Mock
     private SourceLoader sl2;
     
-    private Source s1 = new Source("source", "{ 1 }");
+    private Source s1 = new Source("source", "{ 1 }", "asdfasdf1234asfasdf2345");
     
-    private Source s2 = new Source("source", "{ 2 }");
+    private Source s2 = new Source("source", "{ 2 }", "asdfasdf1234asfasdf2345");
     
     @Test(expected = IOException.class)
     public void testMissingSource() throws Exception {
