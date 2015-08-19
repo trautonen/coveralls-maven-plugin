@@ -1,5 +1,4 @@
 package org.eluder.coveralls.maven.plugin.source;
-
 /*
  * #[license]
  * coveralls-maven-plugin
@@ -26,11 +25,8 @@ package org.eluder.coveralls.maven.plugin.source;
  * %[license]
  */
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 public class DirectorySourceLoader extends AbstractSourceLoader {
 
@@ -42,13 +38,13 @@ public class DirectorySourceLoader extends AbstractSourceLoader {
     }
 
     @Override
-    protected InputStream locate(final String sourceFile) throws IOException {
+    protected File locate(final String sourceFile) throws IOException {
         File file = new File(sourceDirectory, sourceFile);
         if (file.exists()) {
             if (!file.isFile()) {
                 throw new IllegalArgumentException(file.getAbsolutePath() + " is not file");
             }
-            return new BufferedInputStream(new FileInputStream(file));
+            return file.getAbsoluteFile();
         }
         return null;
     }

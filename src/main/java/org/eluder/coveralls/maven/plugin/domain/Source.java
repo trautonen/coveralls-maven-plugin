@@ -29,38 +29,40 @@ package org.eluder.coveralls.maven.plugin.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class Source implements JsonObject {
     
     private static final Pattern NEWLINE = Pattern.compile("\r\n|\r|\n");
-    //private static final String CLASSIFIER_SEPARATOR = "#";
-    
     private final String name;
-    private final String source;
+    private final File source;
+    private final Charset sourceEncoding;
     private final Integer[] coverage;
     private String classifier;
     
-    public Source(final String name, final String source) {
+    public Source(final String name, final File source, final Charset sourceEncoding) throws IOException {
+        this.source = source;
+        this.sourceEncoding = sourceEncoding;
         int lines = 1;
-        StringBuffer replaced = new StringBuffer(source.length());
-        Matcher matcher = NEWLINE.matcher(source);
+        String src = new String(Files.readAllBytes(source.toPath()));
+        Matcher matcher = NEWLINE.matcher(src);
         while (matcher.find()) {
             lines++;
-            matcher.appendReplacement(replaced, "\n");
         }
-        matcher.appendTail(replaced);
-        this.source = replaced.toString();
         this.coverage = new Integer[lines];
         this.name = name;
     }
-    
+
     @JsonIgnore
     public String getName() {
         return name;
     }
-    
+
     @JsonProperty("name")
     public String getFullName() {
         return name;
@@ -68,31 +70,42 @@ public final class Source implements JsonObject {
         // #45: cannot use identifier due to unfetchable source files
         //return (classifier == null ? name : name + CLASSIFIER_SEPARATOR + classifier);
     }
-    
+
     @JsonProperty("source")
-    public String getSource() {
-        return source;
+    public String getSource() throws IOException {
+        String src = new String(Files.readAllBytes(source.toPath()), sourceEncoding);
+        return src.replaceAll(NEWLINE.pattern(), "\n");
     }
-    
+
     @JsonProperty("coverage")
     public Integer[] getCoverage() {
         return coverage;
     }
-    
+
     @JsonIgnore
     public String getClassifier() {
         return classifier;
     }
-    
+
     public void setClassifier(final String classifier) {
         this.classifier = classifier;
     }
-    
+
     public void addCoverage(final int lineNumber, final Integer coverage) {
         int index = lineNumber - 1;
         if (index >= this.coverage.length) {
             throw new IllegalArgumentException("Line number " + lineNumber + " is greater than the source file " + name + " size");
         }
         this.coverage[lineNumber - 1] = coverage;
+    }
+
+    public void merge(final Source source) {
+        for (int i = 0; i < this.coverage.length && i < source.coverage.length; i++) {
+            if (this.coverage[i] == null && source.coverage[i] != null) {
+                this.coverage[i] = source.coverage[i];
+            } else if (this.coverage[i] != null && source.coverage[i] != null) {
+                this.coverage[i] += source.coverage[i];
+            }
+        }
     }
 }

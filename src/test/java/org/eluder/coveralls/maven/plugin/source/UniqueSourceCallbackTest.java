@@ -29,7 +29,11 @@ package org.eluder.coveralls.maven.plugin.source;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+
 import org.eluder.coveralls.maven.plugin.domain.Source;
+import org.eluder.coveralls.maven.plugin.domain.SourceTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -79,9 +83,13 @@ public class UniqueSourceCallbackTest {
     }
     
     private Source createSource(final String name, final String source, final int... relevant) {
-        Source s = new Source(name, source);
-        for (int i : relevant) {
-            s.addCoverage(i, 1);
+        Source s = null;
+        try {
+            s = new Source(name, SourceTest.createTempFile(source), StandardCharsets.UTF_8);
+            for (int i : relevant) {
+                s.addCoverage(i, 1);
+            }
+        } catch (IOException e) {
         }
         return s;
     }

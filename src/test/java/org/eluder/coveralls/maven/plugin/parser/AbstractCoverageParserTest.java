@@ -31,6 +31,7 @@ import static org.mockito.Mockito.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -41,6 +42,7 @@ import java.util.Set;
 import org.eluder.coveralls.maven.plugin.CoverageFixture;
 import org.eluder.coveralls.maven.plugin.CoverageParser;
 import org.eluder.coveralls.maven.plugin.domain.Source;
+import org.eluder.coveralls.maven.plugin.domain.SourceTest;
 import org.eluder.coveralls.maven.plugin.source.SourceCallback;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
@@ -79,7 +81,7 @@ public abstract class AbstractCoverageParserTest {
         return new Answer<Source>() {
             @Override
             public Source answer(final InvocationOnMock invocation) throws Throwable {
-                return new Source(name, content);
+                return new Source(name, SourceTest.createTempFile(content), StandardCharsets.UTF_8);
             }
         };
     }

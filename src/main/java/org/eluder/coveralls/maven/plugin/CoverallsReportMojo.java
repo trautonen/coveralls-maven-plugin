@@ -1,5 +1,13 @@
 package org.eluder.coveralls.maven.plugin;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
 /*
  * #[license]
  * coveralls-maven-plugin
@@ -53,17 +61,8 @@ import org.eluder.coveralls.maven.plugin.service.Shippable;
 import org.eluder.coveralls.maven.plugin.service.Travis;
 import org.eluder.coveralls.maven.plugin.source.SourceCallback;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
-import org.eluder.coveralls.maven.plugin.source.UniqueSourceCallback;
 import org.eluder.coveralls.maven.plugin.util.CoverageParsersFactory;
 import org.eluder.coveralls.maven.plugin.util.SourceLoaderFactory;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 
 @Mojo(name = "report", threadSafe = false, aggregator = true)
 public class CoverallsReportMojo extends AbstractMojo {
@@ -340,7 +339,6 @@ public class CoverallsReportMojo extends AbstractMojo {
             chain = coverageTracingReporter;
             reporters.add(coverageTracingReporter);
         }
-        chain = new UniqueSourceCallback(chain);
         return chain;
     }
     

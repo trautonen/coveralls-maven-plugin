@@ -31,6 +31,7 @@ import com.fasterxml.jackson.databind.type.MapType;
 import org.eluder.coveralls.maven.plugin.domain.Git;
 import org.eluder.coveralls.maven.plugin.domain.Job;
 import org.eluder.coveralls.maven.plugin.domain.Source;
+import org.eluder.coveralls.maven.plugin.domain.SourceTest;
 import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
 import org.junit.Before;
 import org.junit.Rule;
@@ -39,11 +40,13 @@ import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -116,12 +119,15 @@ public class JsonWriterTest {
     public void testOnSource() throws Exception {
         JsonWriter writer = new JsonWriter(job(), file);
         try {
+            writer.writeStart();
             writer.onSource(source());
+            writer.writeEnd();
         } finally {
             writer.close();
         }
         String content = TestIoUtil.readFileContent(file);
         Map<String, Object> jsonMap = stringToJsonMap(content);
+        jsonMap = ((List<Map<String, Object>>)jsonMap.get("source_files")).get(0);
         assertEquals("Foo.java", jsonMap.get("name"));
         assertEquals("public class Foo { }", jsonMap.get("source"));
         assertEquals(1, ((Collection<?>) jsonMap.get("coverage")).size());
@@ -144,8 +150,8 @@ public class JsonWriterTest {
             .withGit(new Git(null, head, "af456fge34acd", Arrays.asList(remote)));
     }
     
-    private Source source() {
-        return new Source("Foo.java", "public class Foo { }");
+    private Source source() throws IOException {
+        return new Source("Foo.java", SourceTest.createTempFile("public class Foo { }"), StandardCharsets.UTF_8);
     }
     
     private Map<String, Object> stringToJsonMap(final String content) throws Exception {
