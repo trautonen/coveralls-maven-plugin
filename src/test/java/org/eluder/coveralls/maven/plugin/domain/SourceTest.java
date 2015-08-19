@@ -36,7 +36,7 @@ public class SourceTest {
 
     @Test
     public void testAddCoverage() {
-        Source source = new Source("src/main/java/Hello.java", "public class Hello {\n    \n}\n");
+        Source source = new Source("src/main/java/Hello.java", "public class Hello {\n    \n}\n", "asdfasdf1234asfasdf2345");
         source.addCoverage(1, 3);
         source.addCoverage(3, 3);
         assertArrayEquals(new Integer[] { 3, null, 3, null }, source.getCoverage());
@@ -44,14 +44,14 @@ public class SourceTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testAddCoverageForSourceOutOfBounds() {
-        Source source = new Source("src/main/java/Hello.java", "public class Hello {\n    \n}\n");
+        Source source = new Source("src/main/java/Hello.java", "public class Hello {\n    \n}\n", "asdfasdf1234asfasdf2345");
         source.addCoverage(5, 1);
     }
     
     @Test
     @Ignore("#45: https://github.com/trautonen/coveralls-maven-plugin/issues/45")
     public void testGetNameWithClassifier() throws Exception {
-        Source source = new Source("src/main/java/Hello.java", "public class Hello {\n    \n}\n");
+        Source source = new Source("src/main/java/Hello.java", "public class Hello {\n    \n}\n", "asdfasdf1234asfasdf2345");
         source.setClassifier("Inner");
         assertEquals("src/main/java/Hello.java", source.getName());
         assertEquals("src/main/java/Hello.java#Inner", source.getFullName());
