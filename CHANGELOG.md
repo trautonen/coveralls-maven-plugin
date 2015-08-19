@@ -2,9 +2,9 @@
 
 ## 3.1.0
 
-- #63: Directory scanning source loader
-- #65, #66, #68: Support for Shippable CI
 - #67: Configurable project basedir
+- #65, #66, #68: Support for Shippable CI
+- #63: Directory scanning source loader
 
 
 ## 3.0.1
