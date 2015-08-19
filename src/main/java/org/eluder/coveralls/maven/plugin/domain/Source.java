@@ -95,4 +95,14 @@ public final class Source implements JsonObject {
         }
         this.coverage[lineNumber - 1] = coverage;
     }
+
+    public void merge(final Source source) {
+        for (int i = 0; i < this.coverage.length && i < source.coverage.length; i++) {
+            if (this.coverage[i] == null && source.coverage[i] != null) {
+                this.coverage[i] = source.coverage[i];
+            } else if (this.coverage[i] != null && source.coverage[i] != null) {
+                this.coverage[i] += source.coverage[i];
+            }
+        }
+    }
 }

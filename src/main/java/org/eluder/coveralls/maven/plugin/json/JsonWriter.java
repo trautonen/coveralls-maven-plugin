@@ -31,6 +31,8 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
@@ -52,6 +54,7 @@ public class JsonWriter implements SourceCallback, Closeable {
     private final Job job;
     private final File coverallsFile;
     private final JsonGenerator generator;
+    private final Map<String, Source> sources = new LinkedHashMap<String, Source>();
     
     public JsonWriter(final Job job, final File coverallsFile) throws IOException {
         File directory = coverallsFile.getParentFile();
@@ -91,6 +94,13 @@ public class JsonWriter implements SourceCallback, Closeable {
     }
     
     public void writeEnd() throws ProcessingException, IOException {
+        for (Source source : sources.values()) {
+            try {
+                generator.writeObject(source);
+            } catch (JsonProcessingException ex) {
+                throw new ProcessingException(ex);
+            }
+        }
         try {
             generator.writeEndArray();
             generator.writeEndObject();
@@ -101,10 +111,10 @@ public class JsonWriter implements SourceCallback, Closeable {
     
     @Override
     public void onSource(final Source source) throws ProcessingException, IOException {
-        try {
-            generator.writeObject(source);
-        } catch (JsonProcessingException ex) {
-            throw new ProcessingException(ex);
+        if (sources.get(source.getName()) != null) {
+            sources.get(source.getName()).merge(source);
+        } else {
+            sources.put(source.getName(), source);
         }
     }
     
