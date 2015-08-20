@@ -47,6 +47,7 @@
   </scm>
 
   <properties>
+    <java.version>1.7</java.version>
     <httpclient.version>4.5</httpclient.version>
     <jackson.version>2.6.1</jackson.version>
     <jgit.version>4.0.1.201506240215-r</jgit.version>
@@ -213,14 +214,6 @@
 
   <build>
     <plugins>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.1</version>
-        <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
-        </configuration>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
