@@ -26,6 +26,16 @@ package org.eluder.coveralls.maven.plugin.json;
  * %[license]
  */
 
+import com.fasterxml.jackson.core.JsonEncoding;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.MappingJsonFactory;
+import org.codehaus.plexus.util.StringUtils;
+import org.eluder.coveralls.maven.plugin.ProcessingException;
+import org.eluder.coveralls.maven.plugin.domain.Job;
+import org.eluder.coveralls.maven.plugin.domain.Source;
+import org.eluder.coveralls.maven.plugin.source.SourceCallback;
+
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
@@ -36,17 +46,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import org.codehaus.plexus.util.StringUtils;
-import org.eluder.coveralls.maven.plugin.ProcessingException;
-import org.eluder.coveralls.maven.plugin.source.SourceCallback;
-import org.eluder.coveralls.maven.plugin.domain.Job;
-import org.eluder.coveralls.maven.plugin.domain.Source;
-
-import com.fasterxml.jackson.core.JsonEncoding;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.MappingJsonFactory;
-
 public class JsonWriter implements SourceCallback, Closeable {
 
     protected static final String TIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss Z";
@@ -54,7 +53,7 @@ public class JsonWriter implements SourceCallback, Closeable {
     private final Job job;
     private final File coverallsFile;
     private final JsonGenerator generator;
-    private final Map<String, Source> sources = new LinkedHashMap<String, Source>();
+    private final Map<Source, Source> sources;
     
     public JsonWriter(final Job job, final File coverallsFile) throws IOException {
         File directory = coverallsFile.getParentFile();
@@ -64,6 +63,7 @@ public class JsonWriter implements SourceCallback, Closeable {
         this.job = job;
         this.coverallsFile = coverallsFile;
         this.generator = new MappingJsonFactory().createGenerator(coverallsFile, JsonEncoding.UTF8);
+        this.sources = new LinkedHashMap<>();
     }
     
     public final Job getJob() {
@@ -111,11 +111,8 @@ public class JsonWriter implements SourceCallback, Closeable {
     
     @Override
     public void onSource(final Source source) throws ProcessingException, IOException {
-        if (sources.get(source.getName()) != null) {
-            sources.get(source.getName()).merge(source);
-        } else {
-            sources.put(source.getName(), source);
-        }
+        Source merged = source.merge(sources.get(source));
+        sources.put(merged, merged);
     }
     
     @Override

@@ -26,19 +26,19 @@ package org.eluder.coveralls.maven.plugin.logging;
  * %[license]
  */
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
 import org.apache.maven.plugin.logging.Log;
-import org.eluder.coveralls.maven.plugin.source.SourceCallback;
 import org.eluder.coveralls.maven.plugin.domain.Source;
 import org.eluder.coveralls.maven.plugin.logging.Logger.Position;
+import org.eluder.coveralls.maven.plugin.source.SourceCallback;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CoverageTracingLoggerTest {
@@ -61,15 +61,15 @@ public class CoverageTracingLoggerTest {
     
     @Test
     public void testLogForSources() throws Exception {
-        Source source1 = new Source("Source1.java", "public class Source1 {\n    \n}\n", "asdfasdf1234asfasdf2345");
+        Source source1 = new Source("Source1.java", "public class Source1 {\n    \n}\n", "0ABCEBD0C34F82CA8CF631A48BDBC941");
         source1.addCoverage(1, 0);
         source1.addCoverage(2, 0);
         source1.addCoverage(3, 0);
-        Source source2 = new Source("Source2.java", "public class Source2 {\n    new Interface() { public void run() { } };\n}\n", "asdfasdf1234asfasdf2345");
+        Source source2 = new Source("Source2.java", "public class Source2 {\n    new Interface() { public void run() { } };\n}\n", "34BD6501A6D1CE5181AECEA688C7D382");
         source2.addCoverage(1, 1);
         source2.addCoverage(2, 1);
         source2.addCoverage(3, 1);
-        Source source2inner = new Source("Source2.java", "public class Source2 {\n    new Interface() { public void run() { } };\n}\n", "asdfasdf1234asfasdf2345");
+        Source source2inner = new Source("Source2.java", "public class Source2 {\n    new Interface() { public void run() { } };\n}\n", "34BD6501A6D1CE5181AECEA688C7D382");
         source2inner.setClassifier("$1");
         source2inner.addCoverage(2, 1);
         

@@ -26,10 +26,6 @@ package org.eluder.coveralls.maven.plugin.source;
  * %[license]
  */
 
-import static org.junit.Assert.*;
-
-import java.io.File;
-
 import org.eluder.coveralls.maven.plugin.domain.Source;
 import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
 import org.junit.Rule;
@@ -38,6 +34,11 @@ import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import java.io.File;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DirectorySourceLoaderTest {
@@ -71,7 +72,7 @@ public class DirectorySourceLoaderTest {
         DirectorySourceLoader sourceLoader = new DirectorySourceLoader(folder.getRoot(), folder.getRoot(), "UTF-8");
         Source source = sourceLoader.load(file.getName());
         assertEquals(file.getName(), source.getName());
-        assertEquals("2ac359c9a152fd7cd79c4eb147069224", source.getDigest());
+        assertEquals("2AC359C9A152FD7CD79C4EB147069224", source.getDigest());
         assertEquals(4, source.getCoverage().length);
     }
 }

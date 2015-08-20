@@ -26,12 +26,12 @@ package org.eluder.coveralls.maven.plugin.source;
  * %[license]
  */
 
+import org.eluder.coveralls.maven.plugin.ProcessingException;
+import org.eluder.coveralls.maven.plugin.domain.Source;
+
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.eluder.coveralls.maven.plugin.ProcessingException;
-import org.eluder.coveralls.maven.plugin.domain.Source;
 
 /**
  * Source callback that tracks passed by source files and provides only unique
@@ -41,9 +41,7 @@ import org.eluder.coveralls.maven.plugin.domain.Source;
  */
 public class UniqueSourceCallback implements SourceCallback {
     
-    private static final String LINES_SEPARATOR = "#";
-    
-    private final Set<String> cache = new HashSet<String>();
+    private final Set<Source> cache = new HashSet<>();
     private final SourceCallback delegate;
 
     public UniqueSourceCallback(final SourceCallback delegate) {
@@ -52,24 +50,9 @@ public class UniqueSourceCallback implements SourceCallback {
 
     @Override
     public void onSource(final Source source) throws ProcessingException, IOException {
-        String key = getKey(source);
-        if (!cache.contains(key)) {
-            cache.add(key);
+        if (!cache.contains(source)) {
+            cache.add(source);
             delegate.onSource(source);
         }
-    }
-    
-    private String getKey(final Source source) {
-        return source.getFullName() + LINES_SEPARATOR + getRelevantLines(source);
-    }
-    
-    private int getRelevantLines(final Source source) {
-        int relevant = 0;
-        for (Integer cov : source.getCoverage()) {
-            if (cov != null) {
-                relevant++;
-            }
-        }
-        return relevant;
     }
 }

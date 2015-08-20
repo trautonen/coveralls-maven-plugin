@@ -26,16 +26,16 @@ package org.eluder.coveralls.maven.plugin.source;
  * %[license]
  */
 
-import static org.junit.Assert.assertSame;
-import static org.mockito.Mockito.when;
-
-import java.io.IOException;
-
 import org.eluder.coveralls.maven.plugin.domain.Source;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import java.io.IOException;
+
+import static org.junit.Assert.assertSame;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MultiSourceLoaderTest {
@@ -46,9 +46,9 @@ public class MultiSourceLoaderTest {
     @Mock
     private SourceLoader sl2;
     
-    private Source s1 = new Source("source", "{ 1 }", "asdfasdf1234asfasdf2345");
+    private Source s1 = new Source("source", "{ 1 }", "9A0174D3A5B8D202C6E404601FC260D1");
     
-    private Source s2 = new Source("source", "{ 2 }", "asdfasdf1234asfasdf2345");
+    private Source s2 = new Source("source", "{ 2 }", "849409F24F4BCAAC904F3B142447D65D");
     
     @Test(expected = IOException.class)
     public void testMissingSource() throws Exception {

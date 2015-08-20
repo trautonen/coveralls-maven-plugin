@@ -113,7 +113,7 @@ public class CoverallsReportMojoTest {
             public Source answer(final InvocationOnMock invocation) throws Throwable {
                 String sourceFile = invocation.getArguments()[0].toString();
                 String content = readFileContent(sourceFile);
-                return new Source(sourceFile, content, "asdfasdf1234asfasdf2345");
+                return new Source(sourceFile, content, TestIoUtil.getMd5DigestHex(content));
             }
         });
         when(logMock.isInfoEnabled()).thenReturn(true);

@@ -26,10 +26,6 @@ package org.eluder.coveralls.maven.plugin.source;
  * %[license]
  */
 
-import static org.junit.Assert.*;
-
-import java.io.File;
-
 import org.eluder.coveralls.maven.plugin.domain.Source;
 import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
 import org.junit.Rule;
@@ -38,6 +34,11 @@ import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import java.io.File;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ScanSourceLoaderTest {
@@ -66,7 +67,7 @@ public class ScanSourceLoaderTest {
 
     @Test
     public void testLoadSource() throws Exception {
-        File dir = folder.newFolder( "level1", "level2", "level3");
+        File dir = folder.newFolder("level1", "level2", "level3");
         File fileA = new File(dir, "AFile.java");
         File fileB = new File(dir, "BFile.java");
         TestIoUtil.writeFileContent("public class Foo {\r\n    \n}\r", fileA);
@@ -74,11 +75,11 @@ public class ScanSourceLoaderTest {
         ScanSourceLoader sourceLoader = new ScanSourceLoader(folder.getRoot(), folder.getRoot(), "UTF-8");
         Source sourceA = sourceLoader.load(fileA.getName());
         assertEquals("level1/level2/level3/AFile.java", sourceA.getName());
-        assertEquals("2ac359c9a152fd7cd79c4eb147069224", sourceA.getDigest());
+        assertEquals("2AC359C9A152FD7CD79C4EB147069224", sourceA.getDigest());
         assertEquals(4, sourceA.getCoverage().length);
         Source sourceB = sourceLoader.load(fileB.getName());
         assertEquals("level1/level2/level3/BFile.java", sourceB.getName());
-        assertEquals("2ac359c9a152fd7cd79c4eb147069224", sourceB.getDigest());
+        assertEquals("2AC359C9A152FD7CD79C4EB147069224", sourceB.getDigest());
         assertEquals(4, sourceB.getCoverage().length);
     }
 }

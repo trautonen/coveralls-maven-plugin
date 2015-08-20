@@ -26,15 +26,16 @@ package org.eluder.coveralls.maven.plugin.source;
  * %[license]
  */
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
 import org.eluder.coveralls.maven.plugin.domain.Source;
+import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UniqueSourceCallbackTest {
@@ -43,7 +44,7 @@ public class UniqueSourceCallbackTest {
     private SourceCallback sourceCallbackMock;
     
     @Test
-    public void testOnSourceWithUniqueSources() throws Exception {
+    public void testOnSourceWithUniqueFiles() throws Exception {
         Source s1 = createSource("Foo.java", "{\n  void();\n}\n", 2);
         Source s2 = createSource("Bar.java", "{\n  bar();\n}\n", 2);
         
@@ -56,17 +57,18 @@ public class UniqueSourceCallbackTest {
     @Test
     public void testOnSourceWithDuplicateSources() throws Exception {
         Source s1 = createSource("Foo.java", "{\n  void();\n}\n", 2);
+        Source s2 = createSource("Foo.java", "{\n  void();\n}\n", 2);
 
         UniqueSourceCallback cb = createUniqueSourceCallback();
         cb.onSource(s1);
-        cb.onSource(s1);
+        cb.onSource(s2);
         verify(sourceCallbackMock, times(1)).onSource(Mockito.any(Source.class));
     }
 
     @Test
-    public void testOnSourceWithUniqueRelevantLines() throws Exception {
+    public void testOnSourceWithUniqueSources() throws Exception {
         Source s1 = createSource("Foo.java", "{\n  void();\n}\n", 2);
-        Source s2 = createSource("Foo.java", "{\n  void();\n}\n", 1, 3);
+        Source s2 = createSource("Foo.java", "{\n  void();\n  func();\n}\n", 2, 3);
 
         UniqueSourceCallback cb = createUniqueSourceCallback();
         cb.onSource(s1);
@@ -78,8 +80,8 @@ public class UniqueSourceCallbackTest {
         return new UniqueSourceCallback(sourceCallbackMock);
     }
     
-    private Source createSource(final String name, final String source, final int... relevant) {
-        Source s = new Source(name, source, "asdfasdf1234asfasdf2345");
+    private Source createSource(final String name, final String source, final int... relevant) throws Exception {
+        Source s = new Source(name, source, TestIoUtil.getMd5DigestHex(source));
         for (int i : relevant) {
             s.addCoverage(i, 1);
         }

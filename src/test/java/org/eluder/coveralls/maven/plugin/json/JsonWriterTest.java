@@ -127,7 +127,7 @@ public class JsonWriterTest {
         Map<String, Object> jsonMap = stringToJsonMap(content);
         jsonMap = ((List<Map<String, Object>>)jsonMap.get("source_files")).get(0);
         assertEquals("Foo.java", jsonMap.get("name"));
-        assertEquals("asdfasdf1234asfasdf2345", jsonMap.get("source_digest"));
+        assertEquals("6E0F89B516198DC6AB743EA5FBFB3108", jsonMap.get("source_digest"));
         assertEquals(1, ((Collection<?>) jsonMap.get("coverage")).size());
     }
     
@@ -149,7 +149,7 @@ public class JsonWriterTest {
     }
     
     private Source source() {
-        return new Source("Foo.java", "public class Foo { }", "asdfasdf1234asfasdf2345");
+        return new Source("Foo.java", "public class Foo { }", "6E0F89B516198DC6AB743EA5FBFB3108");
     }
     
     private Map<String, Object> stringToJsonMap(final String content) throws Exception {

@@ -29,6 +29,7 @@ package org.eluder.coveralls.maven.plugin.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,14 +44,14 @@ public final class Source implements JsonObject {
     private String classifier;
     
     public Source(final String name, final String source, final String digest) {
-        int lines = 1;
-        Matcher matcher = NEWLINE.matcher(source);
-        while (matcher.find()) {
-            lines++;
-        }
+        this(name, getLines(source), digest, null);
+    }
+
+    protected Source(final String name, final int lines, final String digest, String classifier) {
+        this.name = name;
         this.digest = digest;
         this.coverage = new Integer[lines];
-        this.name = name;
+        this.classifier = classifier;
     }
     
     @JsonIgnore
@@ -93,13 +94,43 @@ public final class Source implements JsonObject {
         this.coverage[lineNumber - 1] = coverage;
     }
 
-    public void merge(final Source source) {
-        for (int i = 0; i < this.coverage.length && i < source.coverage.length; i++) {
-            if (this.coverage[i] == null && source.coverage[i] != null) {
-                this.coverage[i] = source.coverage[i];
-            } else if (this.coverage[i] != null && source.coverage[i] != null) {
-                this.coverage[i] += source.coverage[i];
+    public Source merge(final Source source) {
+        Source copy = new Source(this.name, this.coverage.length, this.digest, this.classifier);
+        System.arraycopy(this.coverage, 0, copy.coverage, 0, this.coverage.length);
+        if (copy.equals(source)) {
+            for (int i = 0; i < copy.coverage.length; i++) {
+                if (source.coverage[i] != null) {
+                    int base = copy.coverage[i] != null ? copy.coverage[i] : 0;
+                    copy.coverage[i] = base + source.coverage[i];
+                }
             }
         }
+        return copy;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (!(obj instanceof Source)) {
+            return false;
+        }
+        Source other = (Source) obj;
+        return (Objects.equals(this.name, other.name) &&
+                Objects.equals(this.digest, other.digest) &&
+                Objects.equals(this.classifier, other.classifier) &&
+                Objects.equals(this.coverage.length, other.coverage.length));
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.name, this.digest, this.classifier, this.coverage.length);
+    }
+    
+    private static int getLines(final String source) {
+        int lines = 1;
+        Matcher matcher = NEWLINE.matcher(source);
+        while (matcher.find()) {
+            lines++;
+        }
+        return lines;
     }
 }
