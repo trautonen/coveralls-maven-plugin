@@ -8,7 +8,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class Md5DigestInputStream extends DigestInputStream {
 
-    public Md5DigestInputStream(InputStream stream) throws NoSuchAlgorithmException {
+    public Md5DigestInputStream(final InputStream stream) throws NoSuchAlgorithmException {
         super(stream, MessageDigest.getInstance("MD5"));
     }
 
