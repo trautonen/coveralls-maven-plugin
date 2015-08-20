@@ -47,7 +47,7 @@ public final class Source implements JsonObject {
         this(name, getLines(source), digest, null);
     }
 
-    protected Source(final String name, final int lines, final String digest, String classifier) {
+    protected Source(final String name, final int lines, final String digest, final String classifier) {
         this.name = name;
         this.digest = digest;
         this.coverage = new Integer[lines];
