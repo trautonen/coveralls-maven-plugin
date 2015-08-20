@@ -71,7 +71,7 @@ public class UrlSourceLoaderTest {
         Source source = sourceLoader.load(fileName);
 
         assertEquals(fileName, source.getName());
-        assertEquals("math =\n  root:   Math.sqrt\n  square: square", source.getSource());
+        assertEquals("9897a4bb0467180d3c6acd95475dd77d", source.getDigest());
         assertEquals(3, source.getCoverage().length);
     }
 

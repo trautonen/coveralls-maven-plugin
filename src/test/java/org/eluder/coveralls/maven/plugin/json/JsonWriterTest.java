@@ -44,6 +44,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -116,14 +117,17 @@ public class JsonWriterTest {
     public void testOnSource() throws Exception {
         JsonWriter writer = new JsonWriter(job(), file);
         try {
+            writer.writeStart();
             writer.onSource(source());
+            writer.writeEnd();
         } finally {
             writer.close();
         }
         String content = TestIoUtil.readFileContent(file);
         Map<String, Object> jsonMap = stringToJsonMap(content);
+        jsonMap = ((List<Map<String, Object>>)jsonMap.get("source_files")).get(0);
         assertEquals("Foo.java", jsonMap.get("name"));
-        assertEquals("public class Foo { }", jsonMap.get("source"));
+        assertEquals("asdfasdf1234asfasdf2345", jsonMap.get("source_digest"));
         assertEquals(1, ((Collection<?>) jsonMap.get("coverage")).size());
     }
     
@@ -145,7 +149,7 @@ public class JsonWriterTest {
     }
     
     private Source source() {
-        return new Source("Foo.java", "public class Foo { }");
+        return new Source("Foo.java", "public class Foo { }", "asdfasdf1234asfasdf2345");
     }
     
     private Map<String, Object> stringToJsonMap(final String content) throws Exception {

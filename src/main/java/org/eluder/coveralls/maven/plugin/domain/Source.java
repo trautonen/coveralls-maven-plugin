@@ -38,20 +38,17 @@ public final class Source implements JsonObject {
     //private static final String CLASSIFIER_SEPARATOR = "#";
     
     private final String name;
-    private final String source;
+    private final String digest;
     private final Integer[] coverage;
     private String classifier;
     
-    public Source(final String name, final String source) {
+    public Source(final String name, final String source, final String digest) {
         int lines = 1;
-        StringBuffer replaced = new StringBuffer(source.length());
         Matcher matcher = NEWLINE.matcher(source);
         while (matcher.find()) {
             lines++;
-            matcher.appendReplacement(replaced, "\n");
         }
-        matcher.appendTail(replaced);
-        this.source = replaced.toString();
+        this.digest = digest;
         this.coverage = new Integer[lines];
         this.name = name;
     }
@@ -69,9 +66,9 @@ public final class Source implements JsonObject {
         //return (classifier == null ? name : name + CLASSIFIER_SEPARATOR + classifier);
     }
     
-    @JsonProperty("source")
-    public String getSource() {
-        return source;
+    @JsonProperty("source_digest")
+    public String getDigest() {
+        return digest;
     }
     
     @JsonProperty("coverage")
@@ -94,5 +91,15 @@ public final class Source implements JsonObject {
             throw new IllegalArgumentException("Line number " + lineNumber + " is greater than the source file " + name + " size");
         }
         this.coverage[lineNumber - 1] = coverage;
+    }
+
+    public void merge(final Source source) {
+        for (int i = 0; i < this.coverage.length && i < source.coverage.length; i++) {
+            if (this.coverage[i] == null && source.coverage[i] != null) {
+                this.coverage[i] = source.coverage[i];
+            } else if (this.coverage[i] != null && source.coverage[i] != null) {
+                this.coverage[i] += source.coverage[i];
+            }
+        }
     }
 }

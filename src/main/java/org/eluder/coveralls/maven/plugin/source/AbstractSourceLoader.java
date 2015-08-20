@@ -31,9 +31,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.nio.charset.Charset;
+import java.security.NoSuchAlgorithmException;
 
 import org.codehaus.plexus.util.IOUtil;
 import org.eluder.coveralls.maven.plugin.domain.Source;
+import org.eluder.coveralls.maven.plugin.util.MD5SumInputStream;
 
 public abstract class AbstractSourceLoader implements SourceLoader {
 
@@ -49,12 +51,12 @@ public abstract class AbstractSourceLoader implements SourceLoader {
     public Source load(final String sourceFile) throws IOException {
         InputStream stream = locate(sourceFile);
         if (stream != null) {
-            InputStreamReader reader = new InputStreamReader(stream, getSourceEncoding());
-            try {
+            try (MD5SumInputStream digestStream = new MD5SumInputStream(stream);
+                    InputStreamReader reader = new InputStreamReader(digestStream, getSourceEncoding())) {
                 String source = IOUtil.toString(reader);
-                return new Source(getFileName(sourceFile), source);
-            } finally {
-                IOUtil.close(reader);
+                return new Source(getFileName(sourceFile), source, digestStream.digest());
+            } catch (NoSuchAlgorithmException e) {
+                throw new IOException("MD5 Algorithm not available", e);
             }
         } else {
             return null;
