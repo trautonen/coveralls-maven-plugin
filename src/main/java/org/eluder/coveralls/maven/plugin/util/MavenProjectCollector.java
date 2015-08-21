@@ -26,11 +26,11 @@ package org.eluder.coveralls.maven.plugin.util;
  * %[license]
  */
 
+import org.apache.maven.project.MavenProject;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import org.apache.maven.project.MavenProject;
 
 public class MavenProjectCollector {
     
@@ -41,7 +41,7 @@ public class MavenProjectCollector {
     }
     
     public List<MavenProject> collect() {
-        List<MavenProject> projects = new ArrayList<MavenProject>();
+        List<MavenProject> projects = new ArrayList<>();
         collect(root, projects);
         return Collections.unmodifiableList(projects);
     }

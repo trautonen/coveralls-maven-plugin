@@ -33,7 +33,7 @@ public interface Logger {
     /**
      * Position of the log output.
      */
-    public static enum Position {
+    enum Position {
         BEFORE, AFTER
     }
     

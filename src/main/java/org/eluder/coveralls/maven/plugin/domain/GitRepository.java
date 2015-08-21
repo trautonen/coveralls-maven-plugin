@@ -26,11 +26,6 @@ package org.eluder.coveralls.maven.plugin.domain;
  * %[license]
  */
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.jgit.lib.Config;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
@@ -38,6 +33,11 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.RepositoryBuilder;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GitRepository {
     
@@ -48,14 +48,11 @@ public class GitRepository {
     }
     
     public Git load() throws IOException {
-        Repository repository = new RepositoryBuilder().findGitDir(this.sourceDirectory).build();
-        try {
+        try (Repository repository = new RepositoryBuilder().findGitDir(this.sourceDirectory).build()) {
             Git.Head head = getHead(repository);
             String branch = getBranch(repository);
             List<Git.Remote> remotes = getRemotes(repository);
             return new Git(repository.getWorkTree(), head, branch, remotes);
-        } finally {
-            repository.close();
         }
     }
 
@@ -79,7 +76,7 @@ public class GitRepository {
     
     private List<Git.Remote> getRemotes(final Repository repository) {
         Config config = repository.getConfig();
-        List<Git.Remote> remotes = new ArrayList<Git.Remote>();
+        List<Git.Remote> remotes = new ArrayList<>();
         for (String remote : config.getSubsections("remote")) {
             String url = config.getString("remote", remote, "url");
             remotes.add(new Git.Remote(remote, url));

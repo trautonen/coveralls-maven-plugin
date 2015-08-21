@@ -83,7 +83,7 @@ public class CoverageParsersFactory {
     }
     
     public List<CoverageParser> createParsers() throws IOException {
-        List<CoverageParser> parsers = new ArrayList<CoverageParser>();
+        List<CoverageParser> parsers = new ArrayList<>();
         List<MavenProject> projects = new MavenProjectCollector(project).collect();
 
         ExistingFiles jacocoFiles = ExistingFiles.create(jacocoReports);

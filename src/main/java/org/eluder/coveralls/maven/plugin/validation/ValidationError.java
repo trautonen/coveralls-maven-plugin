@@ -28,9 +28,9 @@ package org.eluder.coveralls.maven.plugin.validation;
 
 public final class ValidationError {
 
-    public static enum Level {
+    public enum Level {
         WARN, ERROR
-    };
+    }
     
     private final Level level;
     private final String message;

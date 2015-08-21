@@ -26,15 +26,15 @@ package org.eluder.coveralls.maven.plugin.util;
  * %[license]
  */
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.maven.project.MavenProject;
 import org.eluder.coveralls.maven.plugin.source.DirectorySourceLoader;
 import org.eluder.coveralls.maven.plugin.source.MultiSourceLoader;
 import org.eluder.coveralls.maven.plugin.source.ScanSourceLoader;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SourceLoaderFactory {
 
@@ -62,7 +62,7 @@ public class SourceLoaderFactory {
 
     public SourceLoader createSourceLoader() {
         MultiSourceLoader multiSourceLoader = new MultiSourceLoader();
-        List<File> directories = new ArrayList<File>();
+        List<File> directories = new ArrayList<>();
         List<MavenProject> modules = new MavenProjectCollector(project).collect();
         for (MavenProject module : modules) {
             for (String sourceRoot : module.getCompileSourceRoots()) {

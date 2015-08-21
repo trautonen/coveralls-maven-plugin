@@ -32,7 +32,7 @@ import java.util.Iterator;
 
 public class ExistingFiles implements Iterable<File> {
     
-    private final ArrayList<File> delegate = new ArrayList<File>();
+    private final ArrayList<File> delegate = new ArrayList<>();
 
     public ExistingFiles addAll(final Iterable<File> files) {
         if (files == null) {

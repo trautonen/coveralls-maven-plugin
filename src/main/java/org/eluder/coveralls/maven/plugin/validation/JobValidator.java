@@ -26,13 +26,12 @@ package org.eluder.coveralls.maven.plugin.validation;
  * %[license]
  */
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import org.codehaus.plexus.util.StringUtils;
 import org.eluder.coveralls.maven.plugin.domain.Job;
 import org.eluder.coveralls.maven.plugin.validation.ValidationError.Level;
+
+import java.util.Collections;
+import java.util.List;
 
 public class JobValidator {
 
@@ -61,7 +60,7 @@ public class JobValidator {
         }
         Level level = (job.isDryRun() ? Level.WARN : Level.ERROR);
         String message = "Either repository token or service with job id must be defined";
-        return Arrays.asList(new ValidationError(level, message));
+        return Collections.singletonList(new ValidationError(level, message));
     }
     
     private List<ValidationError> git() {
@@ -71,7 +70,7 @@ public class JobValidator {
         if (hasValue(job.getGit().getHead().getId())) {
             return Collections.emptyList();
         }
-        return Arrays.asList(new ValidationError(Level.ERROR, "Commit id for HEAD must be defined"));
+        return Collections.singletonList(new ValidationError(Level.ERROR, "Commit id for HEAD must be defined"));
     }
     
     private boolean hasValue(final String value) {

@@ -26,11 +26,11 @@ package org.eluder.coveralls.maven.plugin.validation;
  * %[license]
  */
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.maven.plugin.logging.Log;
 import org.eluder.coveralls.maven.plugin.validation.ValidationError.Level;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ValidationErrors extends ArrayList<ValidationError> {
 
@@ -45,7 +45,7 @@ public class ValidationErrors extends ArrayList<ValidationError> {
     }
     
     private List<ValidationError> filter(final Level level) {
-        List<ValidationError> filtered = new ArrayList<ValidationError>();
+        List<ValidationError> filtered = new ArrayList<>();
         for (ValidationError error : this) {
             if (level.equals(error.getLevel())) {
                 filtered.add(error);
