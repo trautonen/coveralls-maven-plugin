@@ -26,15 +26,23 @@ package org.eluder.coveralls.maven.plugin.source;
  * %[license]
  */
 
-import java.io.IOException;
-
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.Source;
+
+import java.io.IOException;
 
 /**
  * Source callback handles parsed source files from coverage reports.
  */
 public interface SourceCallback {
+
+    /**
+     * Called before source parsing has started.
+     *
+     * @throws ProcessingException if processing fails
+     * @throws IOException if an I/O error occurs
+     */
+    void onBegin() throws ProcessingException, IOException;
 
     /**
      * Handles a parsed source file.
@@ -44,5 +52,13 @@ public interface SourceCallback {
      * @throws IOException if an I/O error occurs
      */
     void onSource(Source source) throws ProcessingException, IOException;
+
+    /**
+     * Called after all sources are handled.
+     *
+     * @throws ProcessingException if processing fails
+     * @throws IOException if an I/O error occurs
+     */
+    void onComplete() throws ProcessingException, IOException;
     
 }

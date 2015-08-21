@@ -41,8 +41,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
@@ -53,7 +51,6 @@ public class JsonWriter implements SourceCallback, Closeable {
     private final Job job;
     private final File coverallsFile;
     private final JsonGenerator generator;
-    private final Map<Source, Source> sources;
     
     public JsonWriter(final Job job, final File coverallsFile) throws IOException {
         File directory = coverallsFile.getParentFile();
@@ -63,7 +60,6 @@ public class JsonWriter implements SourceCallback, Closeable {
         this.job = job;
         this.coverallsFile = coverallsFile;
         this.generator = new MappingJsonFactory().createGenerator(coverallsFile, JsonEncoding.UTF8);
-        this.sources = new LinkedHashMap<>();
     }
     
     public final Job getJob() {
@@ -73,8 +69,9 @@ public class JsonWriter implements SourceCallback, Closeable {
     public final File getCoverallsFile() {
         return coverallsFile;
     }
-    
-    public void writeStart() throws ProcessingException, IOException {
+
+    @Override
+    public void onBegin() throws ProcessingException, IOException {
         try {
             generator.writeStartObject();
             writeOptionalString("repo_token", job.getRepoToken());
@@ -92,15 +89,18 @@ public class JsonWriter implements SourceCallback, Closeable {
             throw new ProcessingException(ex);
         }
     }
-    
-    public void writeEnd() throws ProcessingException, IOException {
-        for (Source source : sources.values()) {
-            try {
-                generator.writeObject(source);
-            } catch (JsonProcessingException ex) {
-                throw new ProcessingException(ex);
-            }
+
+    @Override
+    public void onSource(final Source source) throws ProcessingException, IOException {
+        try {
+            generator.writeObject(source);
+        } catch (JsonProcessingException ex) {
+            throw new ProcessingException(ex);
         }
+    }
+
+    @Override
+    public void onComplete() throws ProcessingException, IOException {
         try {
             generator.writeEndArray();
             generator.writeEndObject();
@@ -108,13 +108,7 @@ public class JsonWriter implements SourceCallback, Closeable {
             throw new ProcessingException(ex);
         }
     }
-    
-    @Override
-    public void onSource(final Source source) throws ProcessingException, IOException {
-        Source merged = source.merge(sources.get(source));
-        sources.put(merged, merged);
-    }
-    
+
     @Override
     public void close() throws IOException {
         generator.close();

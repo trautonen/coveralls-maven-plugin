@@ -26,10 +26,10 @@ package org.eluder.coveralls.maven.plugin.source;
  * %[license]
  */
 
-import java.io.IOException;
-
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.Source;
+
+import java.io.IOException;
 
 /**
  * Source callback handler that allows chaining multiple callback handlers. Chained callback
@@ -45,13 +45,37 @@ public abstract class ChainingSourceCallback implements SourceCallback {
         }
         this.chained = chained;
     }
-    
+
+    @Override
+    public final void onBegin() throws ProcessingException, IOException {
+        onBeginInternal();
+        chained.onBegin();
+    }
+
     @Override
     public final void onSource(final Source source) throws ProcessingException, IOException {
         onSourceInternal(source);
         chained.onSource(source);
     }
-    
+
+    @Override
+    public final void onComplete() throws ProcessingException, IOException {
+        onCompleteInternal();
+        chained.onComplete();
+    }
+
+    /**
+     * Defaults to no-op implementation.
+     *
+     * @see #onBegin()
+     *
+     * @throws ProcessingException if processing fails
+     * @throws IOException if an I/O error occurs
+     */
+    protected void onBeginInternal() throws ProcessingException, IOException {
+
+    }
+
     /**
      * @see #onSource(Source)
      * 
@@ -60,4 +84,16 @@ public abstract class ChainingSourceCallback implements SourceCallback {
      * @throws IOException if an I/O error occurs
      */
     protected abstract void onSourceInternal(final Source source) throws ProcessingException, IOException;
+
+    /**
+     * Defaults to no-op implementation.
+     *
+     * @see #onComplete()
+     *
+     * @throws ProcessingException if processing fails
+     * @throws IOException if an I/O error occurs
+     */
+    protected void onCompleteInternal() throws ProcessingException, IOException {
+
+    }
 }

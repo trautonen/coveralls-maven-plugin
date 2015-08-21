@@ -53,6 +53,7 @@ import org.eluder.coveralls.maven.plugin.service.Shippable;
 import org.eluder.coveralls.maven.plugin.service.Travis;
 import org.eluder.coveralls.maven.plugin.source.SourceCallback;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
+import org.eluder.coveralls.maven.plugin.source.UniqueSourceCallback;
 import org.eluder.coveralls.maven.plugin.util.CoverageParsersFactory;
 import org.eluder.coveralls.maven.plugin.util.SourceLoaderFactory;
 
@@ -221,13 +222,13 @@ public class CoverallsReportMojo extends AbstractMojo {
             List<CoverageParser> parsers = createCoverageParsers(sourceLoader);
             JsonWriter writer = createJsonWriter(job);
             CoverallsClient client = createCoverallsClient();
-            List<Logger> reporters = new ArrayList<Logger>();
+            List<Logger> reporters = new ArrayList<>();
             reporters.add(new JobLogger(job));
             SourceCallback sourceCallback = createSourceCallbackChain(writer, reporters);
             reporters.add(new DryRunLogger(job.isDryRun(), writer.getCoverallsFile()));
             
             report(reporters, Position.BEFORE);
-            writeCoveralls(writer, sourceLoader, sourceCallback, parsers);
+            writeCoveralls(writer, sourceCallback, parsers);
             report(reporters, Position.AFTER);
             
             if (!job.isDryRun()) {
@@ -281,7 +282,7 @@ public class CoverallsReportMojo extends AbstractMojo {
      */
     protected List<ServiceSetup> getServices() {
         Map<String, String> env = System.getenv();
-        List<ServiceSetup> services = new ArrayList<ServiceSetup>();
+        List<ServiceSetup> services = new ArrayList<>();
         services.add(new Shippable(env));
         services.add(new Travis(env));
         services.add(new Circle(env));
@@ -339,19 +340,20 @@ public class CoverallsReportMojo extends AbstractMojo {
             chain = coverageTracingReporter;
             reporters.add(coverageTracingReporter);
         }
+        chain = new UniqueSourceCallback(chain);
         return chain;
     }
     
-    protected void writeCoveralls(final JsonWriter writer, final SourceLoader sourceLoader, final SourceCallback sourceCallback, final List<CoverageParser> parsers) throws ProcessingException, IOException {
+    protected void writeCoveralls(final JsonWriter writer, final SourceCallback sourceCallback, final List<CoverageParser> parsers) throws ProcessingException, IOException {
         try {
             getLog().info("Writing Coveralls data to " + writer.getCoverallsFile().getAbsolutePath() + "...");
             long now = System.currentTimeMillis();
-            writer.writeStart();
+            sourceCallback.onBegin();
             for (CoverageParser parser : parsers) {
                 getLog().info("Processing coverage report from " + parser.getCoverageFile().getAbsolutePath());
                 parser.parse(sourceCallback);
             }
-            writer.writeEnd();
+            sourceCallback.onComplete();
             long duration = System.currentTimeMillis() - now;
             getLog().info("Successfully wrote Coveralls data in " + duration + "ms");
         } finally {

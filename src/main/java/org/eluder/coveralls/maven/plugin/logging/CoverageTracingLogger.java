@@ -26,13 +26,13 @@ package org.eluder.coveralls.maven.plugin.logging;
  * %[license]
  */
 
-import java.io.IOException;
-
 import org.apache.maven.plugin.logging.Log;
-import org.eluder.coveralls.maven.plugin.source.ChainingSourceCallback;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
-import org.eluder.coveralls.maven.plugin.source.SourceCallback;
 import org.eluder.coveralls.maven.plugin.domain.Source;
+import org.eluder.coveralls.maven.plugin.source.ChainingSourceCallback;
+import org.eluder.coveralls.maven.plugin.source.SourceCallback;
+
+import java.io.IOException;
 
 public class CoverageTracingLogger extends ChainingSourceCallback implements Logger {
 
@@ -77,7 +77,7 @@ public class CoverageTracingLogger extends ChainingSourceCallback implements Log
         log.info("- " + getCovered() + " covered lines");
         log.info("- " + getMissed() + " missed lines");
     }
-    
+
     @Override
     protected void onSourceInternal(final Source source) throws ProcessingException, IOException {
         if (source.getClassifier() == null) {

@@ -30,8 +30,8 @@ import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.Source;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Source callback that tracks passed by source files and provides only unique
@@ -40,19 +40,31 @@ import java.util.Set;
  * can be called only from single thread concurrently.
  */
 public class UniqueSourceCallback implements SourceCallback {
-    
-    private final Set<Source> cache = new HashSet<>();
+
+    private final Map<Source, Source> cache;
     private final SourceCallback delegate;
 
     public UniqueSourceCallback(final SourceCallback delegate) {
+        this.cache = new LinkedHashMap<>();
         this.delegate = delegate;
     }
 
     @Override
+    public void onBegin() throws ProcessingException, IOException {
+        delegate.onBegin();
+    }
+
+    @Override
     public void onSource(final Source source) throws ProcessingException, IOException {
-        if (!cache.contains(source)) {
-            cache.add(source);
+        Source merged = source.merge(cache.get(source));
+        cache.put(merged, merged);
+    }
+
+    @Override
+    public void onComplete() throws ProcessingException, IOException {
+        for (Source source : cache.values()) {
             delegate.onSource(source);
         }
+        delegate.onComplete();
     }
 }

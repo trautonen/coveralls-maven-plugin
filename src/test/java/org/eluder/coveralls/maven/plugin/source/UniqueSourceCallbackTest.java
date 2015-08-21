@@ -49,9 +49,13 @@ public class UniqueSourceCallbackTest {
         Source s2 = createSource("Bar.java", "{\n  bar();\n}\n", 2);
         
         UniqueSourceCallback cb = createUniqueSourceCallback();
+        cb.onBegin();
         cb.onSource(s1);
         cb.onSource(s2);
+        cb.onComplete();
+        verify(sourceCallbackMock).onBegin();
         verify(sourceCallbackMock, times(2)).onSource(Mockito.any(Source.class));
+        verify(sourceCallbackMock).onComplete();
     }
 
     @Test
@@ -60,9 +64,13 @@ public class UniqueSourceCallbackTest {
         Source s2 = createSource("Foo.java", "{\n  void();\n}\n", 2);
 
         UniqueSourceCallback cb = createUniqueSourceCallback();
+        cb.onBegin();
         cb.onSource(s1);
         cb.onSource(s2);
+        cb.onComplete();
+        verify(sourceCallbackMock).onBegin();
         verify(sourceCallbackMock, times(1)).onSource(Mockito.any(Source.class));
+        verify(sourceCallbackMock).onComplete();
     }
 
     @Test
@@ -71,9 +79,13 @@ public class UniqueSourceCallbackTest {
         Source s2 = createSource("Foo.java", "{\n  void();\n  func();\n}\n", 2, 3);
 
         UniqueSourceCallback cb = createUniqueSourceCallback();
+        cb.onBegin();
         cb.onSource(s1);
         cb.onSource(s2);
+        cb.onComplete();
+        verify(sourceCallbackMock).onBegin();
         verify(sourceCallbackMock, times(2)).onSource(Mockito.any(Source.class));
+        verify(sourceCallbackMock).onComplete();
     }
 
     private UniqueSourceCallback createUniqueSourceCallback() {

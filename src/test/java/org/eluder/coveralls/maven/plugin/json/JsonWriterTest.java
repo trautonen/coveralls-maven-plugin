@@ -93,8 +93,8 @@ public class JsonWriterTest {
     public void testWriteStartAndEnd() throws Exception {
         JsonWriter writer = new JsonWriter(job(), file);
         try {
-            writer.writeStart();
-            writer.writeEnd();
+            writer.onBegin();
+            writer.onComplete();
         } finally {
             writer.close();
         }
@@ -117,9 +117,9 @@ public class JsonWriterTest {
     public void testOnSource() throws Exception {
         JsonWriter writer = new JsonWriter(job(), file);
         try {
-            writer.writeStart();
+            writer.onBegin();
             writer.onSource(source());
-            writer.writeEnd();
+            writer.onComplete();
         } finally {
             writer.close();
         }
