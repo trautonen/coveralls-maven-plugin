@@ -1,9 +1,9 @@
 <?xml version="1.0" ?>
 <!DOCTYPE coverage SYSTEM 'http://cobertura.sourceforge.net/xml/coverage-04.dtd'>
-<!-- Generated using saga-core (http://timurstrekalov.github.com/saga/saga-core/) version 1.5.2 -->
+<!-- Generated using saga-core (http://timurstrekalov.github.com/saga/saga-core/) version 1.5.4 -->
 <coverage branch-rate="0.0" branches-covered="0" branches-valid="0" complexity="0" line-rate="0.8" lines-valid="10" lines-covered="8" timestamp="1376875707" version="1.9">
     <sources>
-        <source>/coveralls-maven-plugin/sample</source>
+        <source>coveralls-maven-plugin/sample/module1</source>
     </sources>
     <packages>
         <package name="default" line-rate="0.0" branch-rate="0.0" complexity="0">
