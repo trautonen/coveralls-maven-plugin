@@ -26,13 +26,13 @@ package org.eluder.coveralls.maven.plugin.parser;
  * %[license]
  */
 
-import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-
 import org.eluder.coveralls.maven.plugin.CoverageFixture;
 import org.eluder.coveralls.maven.plugin.CoverageParser;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
+
+import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
 public class JaCoCoParserTest extends AbstractCoverageParserTest {
     
@@ -43,11 +43,11 @@ public class JaCoCoParserTest extends AbstractCoverageParserTest {
     
     @Override
     protected List<String> getCoverageResources() {
-        return Arrays.asList("jacoco1.xml", "jacoco2.xml");
+        return Arrays.asList("jacoco1.xml", "jacoco2.xml", "jacoco2-it.xml");
     }
 
     @Override
     protected String[][] getCoverageFixture() {
-        return CoverageFixture.JAVA_FILES;
+        return CoverageFixture.JAVA_FILES_IT;
     }
 }

@@ -26,23 +26,14 @@ package org.eluder.coveralls.maven.plugin.parser;
  * %[license]
  */
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.eluder.coveralls.maven.plugin.CoverageFixture;
 import org.eluder.coveralls.maven.plugin.CoverageParser;
+import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.Source;
+import org.eluder.coveralls.maven.plugin.source.ChainingSourceCallback;
 import org.eluder.coveralls.maven.plugin.source.SourceCallback;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
+import org.eluder.coveralls.maven.plugin.source.UniqueSourceCallback;
 import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
 import org.junit.Before;
 import org.junit.Test;
@@ -52,6 +43,18 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public abstract class AbstractCoverageParserTest {
@@ -79,7 +82,7 @@ public abstract class AbstractCoverageParserTest {
         return new Answer<Source>() {
             @Override
             public Source answer(final InvocationOnMock invocation) throws Throwable {
-                return new Source(name, content, "asdfasdf1234asfasdf2345");
+                return new Source(name, content, TestIoUtil.getMd5DigestHex(content));
             }
         };
     }
@@ -95,10 +98,18 @@ public abstract class AbstractCoverageParserTest {
         
         ArgumentCaptor<Source> captor = ArgumentCaptor.forClass(Source.class);
         verify(sourceCallbackMock, atLeast(CoverageFixture.getTotalFiles(fixture))).onSource(captor.capture());
-        
-        Collection<Source> combined = combineCoverage(captor.getAllValues());
+
+        SourceCollector sourceCollector = new SourceCollector();
+        UniqueSourceCallback uniqueSourceCallback = new UniqueSourceCallback(sourceCollector);
+        ClassifierRemover classifierRemover = new ClassifierRemover(uniqueSourceCallback);
+        classifierRemover.onBegin();
+        for (Source source: captor.getAllValues()) {
+            classifierRemover.onSource(source);
+        }
+        classifierRemover.onComplete();
+
         for (String[] coverageFile : fixture) {
-            assertCoverage(combined, coverageFile[0], Integer.parseInt(coverageFile[1]), toSet(coverageFile[2]), toSet(coverageFile[3]));
+            assertCoverage(sourceCollector.sources, coverageFile[0], Integer.parseInt(coverageFile[1]), toIntegerSet(coverageFile[2]), toIntegerSet(coverageFile[3]));
         }
     }
     
@@ -108,36 +119,50 @@ public abstract class AbstractCoverageParserTest {
 
     protected abstract String[][] getCoverageFixture();
     
-    private Collection<Source> combineCoverage(final List<Source> sources) {
-        Map<String, Source> combined = new HashMap<String, Source>();
-        for (Source source : sources) {
-            Source existing = combined.get(source.getName());
-            if (existing == null) {
-                combined.put(source.getName(), source);
-            } else {
-                for (int i = 0; i < source.getCoverage().length; i++) {
-                    if (source.getCoverage()[i] != null) {
-                        existing.addCoverage(i + 1, source.getCoverage()[i]);
-                    }
-                }
-            }
-        }
-        return combined.values();
-    }
-    
-    private Set<Integer> toSet(final String commaSeparated) {
+    private Set<Integer> toIntegerSet(final String commaSeparated) {
         if (commaSeparated.isEmpty()) {
-            return new HashSet<Integer>(0);
+            return Collections.emptySet();
         }
-
         String[] split = commaSeparated.split(",");
-        Set<Integer> values = new HashSet<Integer>(split.length);
+        Set<Integer> values = new HashSet<>();
         for (String value : split) {
             values.add(Integer.valueOf(value));
         }
         return values;
     }
-    
+
+    private static class SourceCollector implements SourceCallback {
+
+        private List<Source> sources = new ArrayList<>();
+
+        @Override
+        public void onBegin() throws ProcessingException, IOException {
+
+        }
+
+        @Override
+        public void onSource(Source source) throws ProcessingException, IOException {
+            sources.add(source);
+        }
+
+        @Override
+        public void onComplete() throws ProcessingException, IOException {
+
+        }
+    }
+
+    private static class ClassifierRemover extends ChainingSourceCallback {
+
+        public ClassifierRemover(SourceCallback chained) {
+            super(chained);
+        }
+
+        @Override
+        protected void onSourceInternal(Source source) throws ProcessingException, IOException {
+            source.setClassifier(null);
+        }
+    }
+
     private static void assertCoverage(final Collection<Source> sources, final String name, final int lines, final Set<Integer> coveredLines, final Set<Integer> missedLines) {
         Source tested = null;
         for (Source source : sources) {

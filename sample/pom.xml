@@ -7,7 +7,7 @@
   <parent>
     <groupId>org.eluder</groupId>
     <artifactId>eluder-parent</artifactId>
-    <version>6</version>
+    <version>7</version>
     <relativePath></relativePath>
   </parent>
 
@@ -39,6 +39,12 @@
             <sourceDirectory>module1/src/main/resources</sourceDirectory>
           </sourceDirectories>
         </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-failsafe-plugin</artifactId>
       </plugin>
     </plugins>
   </build>
@@ -76,8 +82,27 @@
             <version>${maven.jacoco.version}</version>
             <executions>
               <execution>
+                <id>default-prepare-agent</id>
+                <goals>
+                  <goal>prepare-agent</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>default-prepare-agent-integration</id>
+                <goals>
+                  <goal>prepare-agent-integration</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>default-report</id>
                 <goals>
                   <goal>report</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>default-report-integration</id>
+                <goals>
+                  <goal>report-integration</goal>
                 </goals>
               </execution>
             </executions>

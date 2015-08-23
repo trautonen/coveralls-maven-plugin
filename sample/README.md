@@ -11,7 +11,7 @@ mvn -Pcobertura clean cobertura:cobertura
 ### JaCoCo
 
 ```
-mvn -Pjacoco clean test jacoco:report
+mvn -Pjacoco clean verify jacoco:report
 ```
 
 
