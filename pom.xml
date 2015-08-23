@@ -52,7 +52,7 @@
     <jackson.version>2.6.1</jackson.version>
     <jgit.version>4.0.1.201506240215-r</jgit.version>
     <maven.version>3.0</maven.version>
-    <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ssa</maven.build.timestamp.format>
+    <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss'Z'</maven.build.timestamp.format>
     <timestamp>${maven.build.timestamp}</timestamp>
   </properties>
 

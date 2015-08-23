@@ -56,6 +56,7 @@ import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 import org.eluder.coveralls.maven.plugin.source.UniqueSourceCallback;
 import org.eluder.coveralls.maven.plugin.util.CoverageParsersFactory;
 import org.eluder.coveralls.maven.plugin.util.SourceLoaderFactory;
+import org.eluder.coveralls.maven.plugin.util.TimestampParser;
 
 import java.io.File;
 import java.io.IOException;
@@ -163,12 +164,19 @@ public class CoverallsReportMojo extends AbstractMojo {
      */
     @Parameter(property = "pullRequest")
     protected String pullRequest;
-    
+
     /**
-     * Build timestamp. Must be in 'yyyy-MM-dd HH:mm:ssa' format.
+     * Build timestamp format. Must be in format supported by SimpleDateFormat.
      */
-    @Parameter(property = "timestamp", defaultValue = "${timestamp}")
-    protected Date timestamp;
+    @Parameter(property = "timestampFormat", defaultValue = "${maven.build.timestamp.format}")
+    protected String timestampFormat;
+
+    /**
+     * Build timestamp. Must be in format defined by 'timestampFormat' if it's available or in
+     * default timestamp format yyyy-MM-dd'T'HH:mm:ss'Z'.
+     */
+    @Parameter(property = "timestamp", defaultValue = "${maven.build.timestamp}")
+    protected String timestamp;
     
     /**
      * Dry run Coveralls report without actually sending it.
@@ -294,10 +302,12 @@ public class CoverallsReportMojo extends AbstractMojo {
     
     /**
      * @return job that describes the coveralls report
+     * @throws ProcessingException if processing of timestamp fails
      * @throws IOException if an I/O error occurs
      */
-    protected Job createJob() throws IOException {
+    protected Job createJob() throws ProcessingException, IOException {
         Git git = new GitRepository(basedir).load();
+        Date time = new TimestampParser(timestampFormat).parse(timestamp);
         return new Job()
             .withRepoToken(repoToken)
             .withServiceName(serviceName)
@@ -305,10 +315,10 @@ public class CoverallsReportMojo extends AbstractMojo {
             .withServiceBuildNumber(serviceBuildNumber)
             .withServiceBuildUrl(serviceBuildUrl)
             .withServiceEnvironment(serviceEnvironment)
-            .withTimestamp(timestamp)
             .withDryRun(dryRun)
             .withBranch(branch)
             .withPullRequest(pullRequest)
+            .withTimestamp(time)
             .withGit(git);
     }
     
