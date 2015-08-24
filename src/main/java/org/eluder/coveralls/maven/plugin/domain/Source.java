@@ -116,13 +116,12 @@ public final class Source implements JsonObject {
         Source other = (Source) obj;
         return (Objects.equals(this.name, other.name) &&
                 Objects.equals(this.digest, other.digest) &&
-                Objects.equals(this.classifier, other.classifier) &&
                 Objects.equals(this.coverage.length, other.coverage.length));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.name, this.digest, this.classifier, this.coverage.length);
+        return Objects.hash(this.name, this.digest, this.coverage.length);
     }
     
     private static int getLines(final String source) {

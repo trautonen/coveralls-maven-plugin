@@ -80,10 +80,8 @@ public class CoverageTracingLogger extends ChainingSourceCallback implements Log
 
     @Override
     protected void onSourceInternal(final Source source) throws ProcessingException, IOException {
-        if (source.getClassifier() == null) {
-            files++;
-            lines += source.getCoverage().length;
-        }
+        files++;
+        lines += source.getCoverage().length;
         for (Integer coverage : source.getCoverage()) {
             if (coverage != null) {
                 relevant++;
