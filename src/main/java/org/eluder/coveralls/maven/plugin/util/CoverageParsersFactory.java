@@ -43,6 +43,7 @@ public class CoverageParsersFactory {
 
     private static final String JACOCO_FILE = "/jacoco.xml";
     private static final String JACOCO_PREFIX = "/jacoco";
+    private static final String JACOCO_IT_PREFIX = "/jacoco-it";
 
     private static final String COBERTURA_FILE = "/coverage.xml";
     private static final String COBERTURA_PREFIX = "/cobertura";
@@ -94,6 +95,7 @@ public class CoverageParsersFactory {
             File buildDirectory = new File(p.getBuild().getDirectory());
             
             jacocoFiles.add(new File(reportingDirectory, JACOCO_PREFIX + JACOCO_FILE));
+            jacocoFiles.add(new File(reportingDirectory, JACOCO_IT_PREFIX + JACOCO_FILE));
             coberturaFiles.add(new File(reportingDirectory, COBERTURA_PREFIX + COBERTURA_FILE));
             sagaFiles.add(new File(buildDirectory, SAGA_PREFIX + SAGA_FILE));
 
