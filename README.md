@@ -311,6 +311,7 @@ See [migration](MIGRATION.md) documentation for more information.
   by different coverage tools.
 - Marvin Froeder (@velo) for Shippable support, configurable basedir and directory scanning source
   loader.
+- Pasi Niemi (@psiniemi) for coverage merging from different reports to single source file.
 
 ### Continuous integration
 
