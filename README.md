@@ -220,7 +220,8 @@ service environment will not override it.
 | `repoToken` | `String` | Coveralls repository token. **Do not publish this parameter unencrypted in public GitHub repositories.** |
 | `branch` | `String` | Git branch name. If not provided the supported service environments are used. |
 | `pullRequest` | `String` | GitHub pull request identifier. If not provided the supported service environments are used. |
-| `timestamp` | `Date` | **Default: ${timestamp}**<br>Build timestamp. Must be in Maven supported 'yyyy-MM-dd HH:mm:ssa' format. |
+| `timestampFormat` | `String` | **Default: ${maven.build.timestamp}**<br>Build timestamp format. Must be in format supported by SimpleDateFormat. |
+| `timestamp` | `String` | **Default: ${timestamp}**<br>Build timestamp. Must be in format defined by 'timestampFormat' if it's available or in default timestamp format yyyy-MM-dd'T'HH:mm:ss'Z'. |
 | `dryRun` | `boolean` | **Default: false**<br>Dry run Coveralls report without actually sending it. |
 | `failOnServiceError` | `boolean` | **Default: true**<br> Fail build if Coveralls service is not available or submission fails for internal errors. |
 | `scanForSources` | `boolean` | **Default: false**<br>Scan subdirectories for source files. |
