@@ -71,7 +71,7 @@ pom.xml:
 <plugin>
     <groupId>org.codehaus.mojo</groupId>
     <artifactId>cobertura-maven-plugin</artifactId>
-    <version>2.6</version>
+    <version>2.7</version>
     <configuration>
         <format>xml</format>
         <maxmem>256m</maxmem>
@@ -103,7 +103,7 @@ Set up the JaCoCo Maven plugin in the build section of the project pom.xml:
 <plugin>
     <groupId>org.jacoco</groupId>
     <artifactId>jacoco-maven-plugin</artifactId>
-    <version>0.7.2.201409121644</version>
+    <version>0.7.5.201505241946</version>
     <executions>
         <execution>
             <id>prepare-agent</id>
@@ -137,7 +137,7 @@ Set up the Saga Maven plugin in the build section of the project pom.xml:
 <plugin>
     <groupId>com.github.timurstrekalov</groupId>
     <artifactId>saga-maven-plugin</artifactId>
-    <version>1.5.2</version>
+    <version>1.5.4</version>
     <executions>
         <execution>
             <goals>
@@ -150,6 +150,8 @@ Set up the Saga Maven plugin in the build section of the project pom.xml:
         <outputDir>${project.build.directory}/saga-coverage</outputDir>
         <noInstrumentPatterns>
             <pattern>.*/spec/.*</pattern>
+            <pattern>.*/classpath/.*</pattern>
+            <pattern>.*/webjars/.*</pattern>
         </noInstrumentPatterns>
     </configuration>
 </plugin>
