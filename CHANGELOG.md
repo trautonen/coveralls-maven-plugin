@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.0.0
+
+- #85: Merge coverages from multiple reports to single source file
+- #84: Change source content to source digest per new Coveralls API
+- #83: Require Java 7 to support new features and syntax
+- #77: Support for custom build timestamp format
+
+
 ## 3.2.0
 
 - #82: Improved error message for duplicate classes in different modules
