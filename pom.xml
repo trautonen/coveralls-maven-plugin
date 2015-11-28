@@ -49,7 +49,7 @@
   <properties>
     <httpclient.version>4.5</httpclient.version>
     <jackson.version>2.6.1</jackson.version>
-    <jgit.version>4.0.1.201506240215-r</jgit.version>
+    <jgit.version>3.7.1.201504261725-r</jgit.version>
     <maven.version>3.0</maven.version>
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ssa</maven.build.timestamp.format>
     <timestamp>${maven.build.timestamp}</timestamp>
