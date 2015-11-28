@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.1.0
+
+- #88: Support for AppVeyor CI
+
+
 ## 4.0.0
 
 - #85: Merge coverages from multiple reports to single source file
