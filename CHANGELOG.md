@@ -13,6 +13,11 @@
 - #77: Support for custom build timestamp format
 
 
+## 3.2.1
+
+- #87: Downgraded jgit version to support Java 6
+
+
 ## 3.2.0
 
 - #82: Improved error message for duplicate classes in different modules
