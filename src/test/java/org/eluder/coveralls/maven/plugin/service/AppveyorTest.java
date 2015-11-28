@@ -30,7 +30,6 @@ import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import static org.junit.Assert.*;
 
@@ -83,4 +82,8 @@ public class AppveyorTest {
         assertEquals("10", new Appveyor(env()).getPullRequest());
     }
 
+    @Test
+    public void testGetJobId() {
+        assertEquals("54de3316c44f", new Appveyor(env()).getJobId());
+    }
 }
