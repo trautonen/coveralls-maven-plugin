@@ -1,9 +1,9 @@
 coveralls-maven-plugin
 ======================
 
-[![Build Status](http://img.shields.io/travis/trautonen/coveralls-maven-plugin/master.svg)](https://travis-ci.org/trautonen/coveralls-maven-plugin)
-[![Coverage Status](http://img.shields.io/coveralls/trautonen/coveralls-maven-plugin/master.svg)](https://coveralls.io/r/trautonen/coveralls-maven-plugin?branch=master)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.eluder.coveralls/coveralls-maven-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.eluder.coveralls/coveralls-maven-plugin/)
+[![Build Status](http://img.shields.io/travis/trautonen/coveralls-maven-plugin/master.svg?style=flat-square)](https://travis-ci.org/trautonen/coveralls-maven-plugin)
+[![Coverage Status](http://img.shields.io/coveralls/trautonen/coveralls-maven-plugin/master.svg?style=flat-square)](https://coveralls.io/r/trautonen/coveralls-maven-plugin?branch=master)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.eluder.coveralls/coveralls-maven-plugin/badge.svg?style=flat-square)](https://maven-badges.herokuapp.com/maven-central/org.eluder.coveralls/coveralls-maven-plugin/)
 
 Maven plugin for submitting Java code coverage reports to [Coveralls](https://coveralls.io/) web
 service.
@@ -22,7 +22,8 @@ service.
 * Multi-module report aggregation
 * Built-in support for [Travis CI](https://travis-ci.org/), [Circle](https://circleci.com/),
   [Codeship](https://www.codeship.io/), [Jenkins](http://jenkins-ci.org/),
-  [Bamboo](https://www.atlassian.com/software/bamboo/), [Shippable](https://www.shippable.com/) and [Appveyor](http://www.appveyor.com/) continuous integration services
+  [Bamboo](https://www.atlassian.com/software/bamboo/), [Shippable](https://www.shippable.com/)
+  and [Appveyor](http://www.appveyor.com/) continuous integration services
 * Fully streaming implementation for fast report generation and small memory footprint
 * Provides clean interfaces to allow easy extending to different coverage tools
 * Convention over configuration for almost zero configuration usage
