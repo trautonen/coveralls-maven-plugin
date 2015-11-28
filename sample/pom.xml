@@ -20,7 +20,7 @@
     <maven.jacoco.version>0.7.5.201505241946</maven.jacoco.version>
     <maven.cobertura.version>2.7</maven.cobertura.version>
     <maven.jasmine.version>2.0</maven.jasmine.version>
-    <maven.saga.version>1.5.4</maven.saga.version>
+    <maven.saga.version>1.5.5</maven.saga.version>
   </properties>
 
   <modules>

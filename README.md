@@ -138,7 +138,7 @@ Set up the Saga Maven plugin in the build section of the project pom.xml:
 <plugin>
     <groupId>com.github.timurstrekalov</groupId>
     <artifactId>saga-maven-plugin</artifactId>
-    <version>1.5.4</version>
+    <version>1.5.5</version>
     <executions>
         <execution>
             <goals>
@@ -318,8 +318,8 @@ See [migration](MIGRATION.md) documentation for more information.
 
 - Jakub Bednář (@bednar) for Saga integration and the idea of chaining multiple reports provided
   by different coverage tools.
-- Marvin Froeder (@velo) for Shippable support, configurable basedir and directory scanning source
-  loader.
+- Marvin Froeder (@velo) for Shippable and Appveyor support, configurable basedir and directory
+  scanning source loader.
 - Pasi Niemi (@psiniemi) for coverage merging from different reports to single source file.
 
 ### Continuous integration
