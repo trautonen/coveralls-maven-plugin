@@ -55,7 +55,7 @@ public class UrlSourceLoaderTest {
     
     @Test
     public void testMissingSourceFileFromUrl() throws Exception {
-        UrlSourceLoader sourceLoader = new UrlSourceLoader(folder.getRoot().toURI().toURL(), new URL("http://domainthatdoesnotexist.com"), "UTF-8");
+        UrlSourceLoader sourceLoader = new UrlSourceLoader(folder.getRoot().toURI().toURL(), new URL("http://domainthatreallydoesnotexistsdfsmshjsfsj.com"), "UTF-8");
         assertNull(sourceLoader.load("Foo.java"));
     }
 
