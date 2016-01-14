@@ -26,14 +26,24 @@ package org.eluder.coveralls.maven.plugin.util;
  * %[license]
  */
 
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 import java.net.URI;
 import java.net.URL;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 public class UrlUtilsTest {
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testCreateInvalidUrl() throws Exception {
+        UrlUtils.create("sdfds");
+    }
+
+    @Test
+    public void testCreateValidUrl() throws Exception {
+        assertEquals("http://example.org", UrlUtils.create("http://example.org").toURI().toASCIIString());
+    }
 
     @Test(expected = IllegalArgumentException.class)
     public void testInvalidUrlToUri() throws Exception {

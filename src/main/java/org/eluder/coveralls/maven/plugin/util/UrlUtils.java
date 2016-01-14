@@ -26,12 +26,21 @@ package org.eluder.coveralls.maven.plugin.util;
  * %[license]
  */
 
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
 public final class UrlUtils {
-    
+
+    public static URL create(final String url) {
+        try {
+            return new URL(url);
+        } catch (MalformedURLException ex) {
+            throw new IllegalArgumentException(ex);
+        }
+    }
+
     public static URI toUri(final URL url) {
         try {
             return url.toURI();
