@@ -11,7 +11,7 @@ public final class Wildcards {
      *
      * @param text the text to test against
      * @param wildcard the wildcard pattern
-     * @return
+     * @return <code>true</code> if the given text matches the wildcard, otherwise <code>false</code>
      */
     public static boolean matches(final String text, final String wildcard) {
         String pattern = wildcard.replace("?", "\\w").replace("*", "\\w*");
