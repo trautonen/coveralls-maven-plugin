@@ -25,11 +25,11 @@ class HttpClientFactory {
             .setConnectTimeout(DEFAULT_CONNECTION_TIMEOUT)
             .setSocketTimeout(DEFAULT_SOCKET_TIMEOUT);
 
-    public HttpClientFactory(String targetUrl) {
+    public HttpClientFactory(final String targetUrl) {
         this.targetUrl = targetUrl;
     }
 
-    public HttpClientFactory proxy(Proxy proxy) {
+    public HttpClientFactory proxy(final Proxy proxy) {
         if (proxy != null && isProxied(targetUrl, proxy)) {
             rcb.setProxy(new HttpHost(proxy.getHost(), proxy.getPort(), proxy.getProtocol()));
             if (StringUtils.isNotBlank(proxy.getUsername())) {
