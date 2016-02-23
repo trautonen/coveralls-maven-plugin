@@ -33,11 +33,13 @@ import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.settings.Settings;
 import org.eluder.coveralls.maven.plugin.domain.CoverallsResponse;
 import org.eluder.coveralls.maven.plugin.domain.Git;
 import org.eluder.coveralls.maven.plugin.domain.GitRepository;
 import org.eluder.coveralls.maven.plugin.domain.Job;
 import org.eluder.coveralls.maven.plugin.httpclient.CoverallsClient;
+import org.eluder.coveralls.maven.plugin.httpclient.CoverallsProxyClient;
 import org.eluder.coveralls.maven.plugin.json.JsonWriter;
 import org.eluder.coveralls.maven.plugin.logging.CoverageTracingLogger;
 import org.eluder.coveralls.maven.plugin.logging.DryRunLogger;
@@ -208,7 +210,14 @@ public class CoverallsReportMojo extends AbstractMojo {
      */
     @Parameter(property = "coveralls.skip", defaultValue = "false")
     protected boolean skip;
-    
+
+
+    /**
+     * Maven settings.
+     */
+    @Parameter(defaultValue = "${settings}", readonly = true, required = true)
+    protected Settings settings;
+
     /**
      * Maven project for runtime value resolution.
      */
@@ -337,7 +346,7 @@ public class CoverallsReportMojo extends AbstractMojo {
      * @return http client that submits the coveralls data
      */
     protected CoverallsClient createCoverallsClient() {
-        return new CoverallsClient(coverallsUrl);
+        return new CoverallsProxyClient(coverallsUrl, settings.getActiveProxy());
     }
     
     /**
@@ -355,7 +364,16 @@ public class CoverallsReportMojo extends AbstractMojo {
         chain = new UniqueSourceCallback(chain);
         return chain;
     }
-    
+
+    /**
+     * Writes coverage data to JSON file.
+     *
+     * @param writer JSON writer that writes the coveralls data
+     * @param sourceCallback the source callback handler
+     * @param parsers list of coverage parsers
+     * @throws ProcessingException if process to to create JSON file fails
+     * @throws IOException if an I/O error occurs
+     */
     protected void writeCoveralls(final JsonWriter writer, final SourceCallback sourceCallback, final List<CoverageParser> parsers) throws ProcessingException, IOException {
         try {
             getLog().info("Writing Coveralls data to " + writer.getCoverallsFile().getAbsolutePath() + "...");

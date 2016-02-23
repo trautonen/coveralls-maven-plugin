@@ -32,12 +32,10 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
@@ -62,15 +60,12 @@ public class CoverallsClient {
     private static final String FILE_NAME = "coveralls.json";
     private static final ContentType MIME_TYPE = ContentType.create("application/octet-stream", "utf-8");
     
-    private static final int DEFAULT_CONNECTION_TIMEOUT = 10000;
-    private static final int DEFAULT_SOCKET_TIMEOUT = 60000;
-    
     private final String coverallsUrl;
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
     
     public CoverallsClient(final String coverallsUrl) {
-        this(coverallsUrl, createDefaultClient(), new ObjectMapper());
+        this(coverallsUrl, new HttpClientFactory(coverallsUrl).create(), new ObjectMapper());
     }
     
     public CoverallsClient(final String coverallsUrl, final HttpClient httpClient, final ObjectMapper objectMapper) {
@@ -124,15 +119,5 @@ public class CoverallsClient {
             errorMessage += " (" + message + ")";
         }
         return errorMessage;
-    }
-    
-    private static HttpClient createDefaultClient() {
-        RequestConfig requestConfig = RequestConfig.custom()
-                .setConnectTimeout(DEFAULT_CONNECTION_TIMEOUT)
-                .setSocketTimeout(DEFAULT_SOCKET_TIMEOUT)
-                .build();
-        return HttpClientBuilder.create()
-                .setDefaultRequestConfig(requestConfig)
-                .build();
     }
 }

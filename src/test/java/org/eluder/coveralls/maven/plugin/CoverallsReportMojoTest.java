@@ -33,6 +33,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.settings.Settings;
 import org.eluder.coveralls.maven.plugin.domain.CoverallsResponse;
 import org.eluder.coveralls.maven.plugin.domain.Git;
 import org.eluder.coveralls.maven.plugin.domain.Job;
@@ -103,6 +104,9 @@ public class CoverallsReportMojoTest {
     
     @Mock
     private Build buildMock;
+
+    @Mock
+    private Settings settingsMock;
     
     @Before
     public void init() throws Exception {
@@ -152,6 +156,7 @@ public class CoverallsReportMojoTest {
                 return logMock;
             }
         };
+        mojo.settings = settingsMock;
         mojo.project = projectMock;
         mojo.sourceEncoding = "UTF-8";
         mojo.failOnServiceError = true;
@@ -175,6 +180,7 @@ public class CoverallsReportMojoTest {
     @Test(expected = IOException.class)
     public void testCreateCoverageParsersWithoutCoverageReports() throws Exception {
         mojo = new CoverallsReportMojo();
+        mojo.settings = settingsMock;
         mojo.project = projectMock;
         mojo.createCoverageParsers(sourceLoaderMock);
     }
@@ -186,6 +192,7 @@ public class CoverallsReportMojoTest {
         when(jobMock.getGit()).thenReturn(gitMock);
         TestIoUtil.writeFileContent("public interface Test { }", folder.newFile("source.java"));
         mojo = new CoverallsReportMojo();
+        mojo.settings = settingsMock;
         mojo.project = projectMock;
         mojo.sourceEncoding = "UTF-8";
         SourceLoader sourceLoader = mojo.createSourceLoader(jobMock);
@@ -207,6 +214,7 @@ public class CoverallsReportMojoTest {
         };
         mojo.sourceDirectories = Arrays.asList(TestIoUtil.getFile("/"));
         mojo.sourceEncoding = "UTF-8";
+        mojo.settings = settingsMock;
         mojo.project = projectMock;
         mojo.repoToken = "asdfg";
         mojo.coverallsFile = folder.newFile();
