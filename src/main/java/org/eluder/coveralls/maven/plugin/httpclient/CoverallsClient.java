@@ -88,10 +88,13 @@ public class CoverallsClient {
     private CoverallsResponse parseResponse(final HttpResponse response) throws ProcessingException, IOException {
         HttpEntity entity = response.getEntity();
         ContentType contentType = ContentType.getOrDefault(entity);
+        if (contentType.getCharset() == null) {
+            throw new ProcessingException(getResponseErrorMessage(response, "Response doesn't contain Content-Type header"));
+        }
         InputStreamReader reader = null;
         try {
             if (response.getStatusLine().getStatusCode() >= HttpStatus.SC_INTERNAL_SERVER_ERROR) {
-                throw new IOException("Coveralls API interal error");
+                throw new IOException("Coveralls API internal error");
             }
             reader = new InputStreamReader(entity.getContent(), contentType.getCharset());
             CoverallsResponse cr = objectMapper.readValue(reader, CoverallsResponse.class);
