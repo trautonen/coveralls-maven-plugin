@@ -43,6 +43,15 @@ public class TimestampParserTest {
     }
 
     @Test
+    public void testParseEpochMillis() throws Exception {
+        String format = TimestampParser.EPOCH_MILLIS;
+        long time = System.currentTimeMillis();
+        Date parsed = new TimestampParser(format).parse(String.valueOf(time));
+
+        assertEquals(time, parsed.getTime());
+    }
+
+    @Test
     public void testParseSimpleFormat() throws Exception {
         String format = "yyyy-MM-dd";
         Date parsed = new TimestampParser(format).parse("2015-08-20");

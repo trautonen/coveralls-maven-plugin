@@ -36,31 +36,60 @@ import java.util.Date;
 
 public class TimestampParser {
 
+    public static final String EPOCH_MILLIS = "EpochMillis";
+
     public static final String DEFAULT_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
-    private final DateFormat format;
+    private final Parser parser;
 
     public TimestampParser(final String format) {
         try {
-            if (StringUtils.isNotBlank(format)) {
-                this.format = new SimpleDateFormat(format);
+            if (EPOCH_MILLIS.equalsIgnoreCase(format)) {
+                this.parser = new EpochMillisParser();
+            } else if (StringUtils.isNotBlank(format)) {
+                this.parser = new DateFormatParser(format);
             } else {
-                this.format = new SimpleDateFormat(DEFAULT_FORMAT);
+                this.parser = new DateFormatParser(DEFAULT_FORMAT);
             }
         } catch (IllegalArgumentException ex) {
             throw new IllegalArgumentException("Invalid timestamp format \"" + format + "\"", ex);
         }
     }
 
-    public synchronized Date parse(final String timestamp) throws ProcessingException {
+    public Date parse(final String timestamp) throws ProcessingException {
         if (StringUtils.isBlank(timestamp)) {
             return null;
         }
         try {
-            return format.parse(timestamp);
-        } catch (ParseException ex) {
+            return parser.parse(timestamp);
+        } catch (Exception ex) {
             throw new ProcessingException("Unable to parse timestamp \"" + timestamp + "\"", ex);
         }
     }
 
+    private interface Parser {
+        Date parse(String timestamp) throws Exception;
+    }
+
+    private static class DateFormatParser implements Parser {
+
+        final DateFormat format;
+
+        DateFormatParser(final String format) {
+            this.format = new SimpleDateFormat(format);
+        }
+
+        @Override
+        public synchronized Date parse(final String timestamp) throws ParseException {
+            return format.parse(timestamp);
+        }
+    }
+
+    private static class EpochMillisParser implements Parser {
+
+        @Override
+        public Date parse(final String timestamp) {
+            return new Date(Long.valueOf(timestamp));
+        }
+    }
 }
