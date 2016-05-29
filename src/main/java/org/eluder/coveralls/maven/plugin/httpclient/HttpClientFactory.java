@@ -25,7 +25,7 @@ class HttpClientFactory {
             .setConnectTimeout(DEFAULT_CONNECTION_TIMEOUT)
             .setSocketTimeout(DEFAULT_SOCKET_TIMEOUT);
 
-    public HttpClientFactory(final String targetUrl) {
+    HttpClientFactory(final String targetUrl) {
         this.targetUrl = targetUrl;
     }
 
