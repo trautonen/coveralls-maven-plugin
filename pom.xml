@@ -24,14 +24,6 @@
     </developer>
   </developers>
 
-  <contributors>
-    <contributor>
-      <name>Marvin H Froeder</name>
-      <email>velo dot br at gmail dot com</email>
-      <url>about.me/velo</url>
-    </contributor>
-  </contributors>
-
   <licenses>
     <license>
       <name>The MIT License (MIT)</name>
