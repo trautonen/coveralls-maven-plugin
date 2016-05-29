@@ -104,7 +104,7 @@ Set up the JaCoCo Maven plugin in the build section of the project pom.xml:
 <plugin>
     <groupId>org.jacoco</groupId>
     <artifactId>jacoco-maven-plugin</artifactId>
-    <version>0.7.5.201505241946</version>
+    <version>0.7.6.201602180812</version>
     <executions>
         <execution>
             <id>prepare-agent</id>
