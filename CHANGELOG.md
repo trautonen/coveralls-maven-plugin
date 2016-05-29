@@ -1,5 +1,12 @@
 # Changelog
 
+## 4.2.0
+
+- #95, #96: Improved error message for misbehaving Coveralls API
+- #92: Support for HTTP proxies in settings.xml
+- #91: Support for epoch formatted timestamps
+
+
 ## 4.1.0
 
 - #88: Support for AppVeyor CI
