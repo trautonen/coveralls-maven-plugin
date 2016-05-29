@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.eluder</groupId>
     <artifactId>eluder-parent</artifactId>
-    <version>7</version>
+    <version>8</version>
   </parent>
 
   <groupId>org.eluder.coveralls</groupId>
@@ -48,9 +48,9 @@
 
   <properties>
     <java.version>1.7</java.version>
-    <httpclient.version>4.5</httpclient.version>
-    <jackson.version>2.6.1</jackson.version>
-    <jgit.version>4.0.1.201506240215-r</jgit.version>
+    <httpclient.version>4.5.2</httpclient.version>
+    <jackson.version>2.7.4</jackson.version>
+    <jgit.version>4.3.1.201605051710-r</jgit.version>
     <maven.version>3.0</maven.version>
     <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss'Z'</maven.build.timestamp.format>
     <timestamp>${maven.build.timestamp}</timestamp>
