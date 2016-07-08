@@ -32,6 +32,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.maven.plugin.logging.SystemStreamLog;
 
 public final class Source implements JsonObject {
     
@@ -87,11 +88,15 @@ public final class Source implements JsonObject {
     }
     
     public void addCoverage(final int lineNumber, final Integer coverage) {
+
+         SystemStreamLog log = new SystemStreamLog();
+
         int index = lineNumber - 1;
         if (index >= this.coverage.length) {
-            throw new IllegalArgumentException("Line number " + lineNumber + " is greater than the source file " + name + " size");
+            log.error ("Line number " + lineNumber + " is greater than the source file " + name + " size");
+        } else {
+            this.coverage[index] = coverage;
         }
-        this.coverage[lineNumber - 1] = coverage;
     }
 
     public Source merge(final Source source) {
