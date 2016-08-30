@@ -1,0 +1,71 @@
+package org.eluder.coveralls.maven.plugin.service;
+
+import java.util.Map;
+
+/*
+ * #[license]
+ * coveralls-maven-plugin
+ * %%
+ * Copyright (C) 2013 - 2016 Tapio Rautonen
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * %[license]
+ */
+
+/**
+ * Service implementation for Wercker CI.
+ * <p>
+ * http://wercker.com/
+ */
+public class Wercker extends AbstractServiceSetup {
+
+    public static final String WERCKER_NAME = "wercker";
+    public static final String WERCKER_BUILD_URL = "WERCKER_RUN_URL";
+    public static final String WERCKER_BRANCH = "WERCKER_GIT_BRANCH";
+
+    public Wercker(final Map<String, String> env) {
+        super(env);
+    }
+
+    @Override
+    public boolean isSelected() {
+        return getProperty(WERCKER_BRANCH) != null;
+    }
+
+    @Override
+    public String getName() {
+        return WERCKER_NAME;
+    }
+
+    @Override
+    public String getJobId() {
+        final String buildUrl = getBuildUrl();
+        return buildUrl.substring(buildUrl.lastIndexOf("/") + 1);
+    }
+
+    @Override
+    public String getBuildUrl() {
+        return getProperty(WERCKER_BUILD_URL);
+    }
+
+    @Override
+    public String getBranch() {
+        return getProperty(WERCKER_BRANCH);
+    }
+}
