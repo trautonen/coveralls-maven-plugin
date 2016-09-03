@@ -322,11 +322,37 @@ See [migration](MIGRATION.md) documentation for more information.
   scanning source loader.
 - Pasi Niemi (@psiniemi) for coverage merging from different reports to single source file.
 
+
 ### Continuous integration
 
 Travis CI builds the plugin with Oracle JDK 7. All successfully built snapshots are deployed to
 Sonatype OSS repository. Cobertura is used to gather coverage metrics and the report is submitted
 to Coveralls with this plugin.
+
+
+### Using test versions
+
+Add the following repository configurations to your `pom.xml` to enable snapshot versions of this
+plugin to be used.
+
+```xml
+  <repositories>
+    <repository>
+      <id>sonatype-nexus-snapshots</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <releases><enabled>false</enabled></releases>
+      <snapshots><enabled>true</enabled></snapshots>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>sonatype-nexus-snapshot</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <releases><enabled>false</enabled></releases>
+      <snapshots><enabled>true</enabled></snapshots>
+    </pluginRepository>
+  </pluginRepositories>
+```
 
 
 ### License
