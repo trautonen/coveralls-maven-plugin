@@ -39,7 +39,9 @@ public class WerckerTest {
     
     private Map<String, String> env() {
         Map<String, String> env = new HashMap<String, String>();
-        env.put("WERCKER_RUN_URL", "https://app.wercker.com/build/123456789");
+        env.put("WERCKER", "true");
+        env.put("WERCKER_BUILD_URL", "https://app.wercker.com/build/123456789");
+        env.put("WERCKER_BUILD_ID", "123456789");
         env.put("WERCKER_GIT_BRANCH", "master");
         return env;
     }
@@ -50,7 +52,7 @@ public class WerckerTest {
     }
     
     @Test
-    public void testIsSelectedForTravis() {
+    public void testIsSelectedForWercker() {
         assertTrue(new Wercker(env()).isSelected());
     }
     
@@ -62,6 +64,11 @@ public class WerckerTest {
     @Test
     public void testGetJobId() {
         assertEquals("123456789", new Wercker(env()).getJobId());
+    }
+
+    @Test
+    public void testGetBuildUrl() {
+        assertEquals("https://app.wercker.com/build/123456789", new Wercker(env()).getBuildUrl());
     }
 
     @Test
