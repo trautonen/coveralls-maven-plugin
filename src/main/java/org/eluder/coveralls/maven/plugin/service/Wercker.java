@@ -36,7 +36,9 @@ import java.util.Map;
 public class Wercker extends AbstractServiceSetup {
 
     public static final String WERCKER_NAME = "wercker";
-    public static final String WERCKER_BUILD_URL = "WERCKER_RUN_URL";
+    public static final String WERCKER = "WERCKER";
+    public static final String WERCKER_BUILD_ID = "WERCKER_BUILD_ID";
+    public static final String WERCKER_BUILD_URL = "WERCKER_BUILD_URL";
     public static final String WERCKER_BRANCH = "WERCKER_GIT_BRANCH";
 
     public Wercker(final Map<String, String> env) {
@@ -45,7 +47,7 @@ public class Wercker extends AbstractServiceSetup {
 
     @Override
     public boolean isSelected() {
-        return getProperty(WERCKER_BRANCH) != null;
+        return "true".equalsIgnoreCase(getProperty(WERCKER));
     }
 
     @Override
@@ -55,8 +57,7 @@ public class Wercker extends AbstractServiceSetup {
 
     @Override
     public String getJobId() {
-        final String buildUrl = getBuildUrl();
-        return buildUrl.substring(buildUrl.lastIndexOf("/") + 1);
+        return getProperty(WERCKER_BUILD_ID);
     }
 
     @Override
