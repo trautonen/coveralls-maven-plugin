@@ -36,6 +36,7 @@ import org.eluder.coveralls.maven.plugin.validation.ValidationErrors;
 public class Job {
 
     private String repoToken;
+    private boolean skipCoveralls;
     private String serviceName;
     private String serviceJobId;
     private String serviceBuildNumber;
@@ -53,6 +54,11 @@ public class Job {
 
     public Job withRepoToken(final String repoToken) {
         this.repoToken = repoToken;
+        return this;
+    }
+    
+    public Job withSkipCoveralls(final boolean skipCoveralls) {
+        this.skipCoveralls = skipCoveralls;
         return this;
     }
     
@@ -108,6 +114,10 @@ public class Job {
     
     public String getRepoToken() {
         return repoToken;
+    }
+    
+    public boolean isSkipCoveralls() {
+        return skipCoveralls;
     }
     
     public String getServiceName() {
