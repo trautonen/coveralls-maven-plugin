@@ -41,7 +41,7 @@ public class SourceTest {
         assertArrayEquals(new Integer[] { 3, null, 3, null }, source.getCoverage());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testAddCoverageForSourceOutOfBounds() {
         Source source = new Source("src/main/java/Hello.java", "public class Hello {\n  \n}\n", "E8BD88CF0BDB77A6408234FD91FD22C3");
         source.addCoverage(5, 1);
