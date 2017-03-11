@@ -29,6 +29,8 @@ package org.eluder.coveralls.maven.plugin.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -38,9 +40,16 @@ public final class Source implements JsonObject {
     private static final Pattern NEWLINE = Pattern.compile("\r\n|\r|\n");
     //private static final String CLASSIFIER_SEPARATOR = "#";
     
+    public static final int BRANCHES_PARTITION_SIZE = 4;
+    public static final int BRANCHES_LINE_INDEX = 0;
+    public static final int BRANCHES_BLOCK_INDEX = 1;
+    public static final int BRANCHES_BRANCH_INDEX = 2;
+    public static final int BRANCHES_HIT_INDEX = 3;
+
     private final String name;
     private final String digest;
     private final Integer[] coverage;
+    private final ArrayList<Integer> branches;
     private String classifier;
     
     public Source(final String name, final String source, final String digest) {
@@ -52,6 +61,7 @@ public final class Source implements JsonObject {
         this.digest = digest;
         this.coverage = new Integer[lines];
         this.classifier = classifier;
+        this.branches = new ArrayList<>();
     }
     
     @JsonIgnore
@@ -77,6 +87,11 @@ public final class Source implements JsonObject {
         return coverage;
     }
     
+    @JsonProperty("branches")
+    public Integer[] getBranches() {
+        return branches.toArray(new Integer[branches.size()]);
+    }
+
     @JsonIgnore
     public String getClassifier() {
         return classifier;
@@ -94,9 +109,17 @@ public final class Source implements JsonObject {
         this.coverage[lineNumber - 1] = coverage;
     }
 
+    public void addBranchCoverage(final int lineNumber,
+                                  final int blockNumber,
+                                  final int branchNumber,
+                                  final int hits) {
+        this.branches.addAll(Arrays.asList(lineNumber, blockNumber, branchNumber, hits));
+    }
+
     public Source merge(final Source source) {
         Source copy = new Source(this.name, this.coverage.length, this.digest, this.classifier);
         System.arraycopy(this.coverage, 0, copy.coverage, 0, this.coverage.length);
+        copy.branches.addAll(this.branches);
         if (copy.equals(source)) {
             for (int i = 0; i < copy.coverage.length; i++) {
                 if (source.coverage[i] != null) {

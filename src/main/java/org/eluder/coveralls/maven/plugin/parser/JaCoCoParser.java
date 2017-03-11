@@ -58,10 +58,22 @@ public class JaCoCoParser extends AbstractXmlEventParser {
         
         if (isStartElement(xml, "line") && this.source != null) {
             int ci = Integer.parseInt(xml.getAttributeValue(null, "ci"));
-            this.source.addCoverage(
-                    Integer.parseInt(xml.getAttributeValue(null, "nr")),
-                    (ci == 0 ? 0 : 1) // jacoco does not count hits
-            );
+            int cb = Integer.parseInt(xml.getAttributeValue(null, "cb"));
+            int mb = Integer.parseInt(xml.getAttributeValue(null, "mb"));
+            int nr = Integer.parseInt(xml.getAttributeValue(null, "nr"));
+
+            // jacoco does not count hits. this is why hits is always 0 or 1
+            this.source.addCoverage(nr, (ci == 0 ? 0 : 1));
+
+            // add branches. unfortunately, there is NO block number and
+            // branch number will NOT be unique between coverage changes.
+            // so we set boths as 0
+            for (int b = 0; b < cb; b++) {
+              this.source.addBranchCoverage(nr, 0, 0, 1);
+            }
+            for (int b = 0; b < mb; b++) {
+              this.source.addBranchCoverage(nr, 0, 0, 0);
+            }
         } else
         
         if (isEndElement(xml, "sourcefile") && this.source != null) {

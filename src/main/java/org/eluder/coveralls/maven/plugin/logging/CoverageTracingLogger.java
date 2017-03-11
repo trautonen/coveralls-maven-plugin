@@ -40,6 +40,8 @@ public class CoverageTracingLogger extends ChainingSourceCallback implements Log
     private long lines = 0;
     private long relevant = 0;
     private long covered = 0;
+    private long branches = 0;
+    private long coveredBranches = 0;
     
     public CoverageTracingLogger(final SourceCallback chained) {
         super(chained);
@@ -65,6 +67,18 @@ public class CoverageTracingLogger extends ChainingSourceCallback implements Log
         return relevant - covered;
     }
     
+    public final long getBranches() {
+        return branches;
+    }
+
+    public final long getCoveredBranches() {
+        return coveredBranches;
+    }
+
+    public final long getMissedBranches() {
+        return branches - coveredBranches;
+    }
+
     @Override
     public Position getPosition() {
         return Position.AFTER;
@@ -76,6 +90,9 @@ public class CoverageTracingLogger extends ChainingSourceCallback implements Log
         log.info("- " + getRelevant() + " relevant lines");
         log.info("- " + getCovered() + " covered lines");
         log.info("- " + getMissed() + " missed lines");
+        log.info("- " + getBranches() + " branches");
+        log.info("- " + getCoveredBranches() + " covered branches");
+        log.info("- " + getMissedBranches() + " missed branches");
     }
 
     @Override
@@ -90,5 +107,14 @@ public class CoverageTracingLogger extends ChainingSourceCallback implements Log
                 }
             }
         }
+
+        final Integer[] branchesRawArray = source.getBranches();
+        int sourceBranches = branchesRawArray.length / Source.BRANCHES_PARTITION_SIZE;
+        for (int i = 0; i < sourceBranches; i++) {
+            if (branchesRawArray[i * Source.BRANCHES_PARTITION_SIZE + Source.BRANCHES_HIT_INDEX] > 0) {
+                coveredBranches++;
+            }
+        }
+        this.branches += sourceBranches;
     }
 }
