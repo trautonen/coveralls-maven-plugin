@@ -67,12 +67,12 @@ public class JaCoCoParser extends AbstractXmlEventParser {
 
             // add branches. unfortunately, there is NO block number and
             // branch number will NOT be unique between coverage changes.
-            // so we set boths as 0
+            int branchId = 0;
             for (int b = 0; b < cb; b++) {
-              this.source.addBranchCoverage(nr, 0, 0, 1);
+              this.source.addBranchCoverage(nr, 0, branchId++, 1);
             }
             for (int b = 0; b < mb; b++) {
-              this.source.addBranchCoverage(nr, 0, 0, 0);
+              this.source.addBranchCoverage(nr, 0, branchId++, 0);
             }
         } else
         
