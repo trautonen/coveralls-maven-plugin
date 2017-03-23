@@ -41,7 +41,7 @@ public final class Source implements JsonObject {
     
     private static final Pattern NEWLINE = Pattern.compile("\r\n|\r|\n");
     //private static final String CLASSIFIER_SEPARATOR = "#";
-
+    
     private final String name;
     private final String digest;
     private final Integer[] coverage;
