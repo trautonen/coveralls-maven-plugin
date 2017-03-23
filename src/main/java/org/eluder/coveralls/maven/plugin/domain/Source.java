@@ -32,6 +32,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -124,6 +125,15 @@ public final class Source implements JsonObject {
                                   final int branchNumber,
                                   final int hits) {
         checkLineRange(lineNumber);
+        final ListIterator<Branch> it = this.branches.listIterator();
+        while (it.hasNext()) {
+            final Branch b = it.next();
+            if (b.getLineNumber() == lineNumber &&
+                b.getBlockNumber() == blockNumber &&
+                b.getBranchNumber() == branchNumber) {
+                    it.remove();
+                }
+        }
         this.branches.add(new Branch(lineNumber, blockNumber, branchNumber, hits));
     }
 
