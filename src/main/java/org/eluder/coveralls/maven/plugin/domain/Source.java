@@ -101,11 +101,15 @@ public final class Source implements JsonObject {
         this.classifier = classifier;
     }
     
-    public void addCoverage(final int lineNumber, final Integer coverage) {
+    private void checkLineRange(final int lineNumber) {
         int index = lineNumber - 1;
         if (index >= this.coverage.length) {
             throw new IllegalArgumentException("Line number " + lineNumber + " is greater than the source file " + name + " size");
         }
+    }
+
+    public void addCoverage(final int lineNumber, final Integer coverage) {
+        checkLineRange(lineNumber);
         this.coverage[lineNumber - 1] = coverage;
     }
 
@@ -113,6 +117,7 @@ public final class Source implements JsonObject {
                                   final int blockNumber,
                                   final int branchNumber,
                                   final int hits) {
+        checkLineRange(lineNumber);
         this.branches.addAll(Arrays.asList(lineNumber, blockNumber, branchNumber, hits));
     }
 

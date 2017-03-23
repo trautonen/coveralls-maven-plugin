@@ -41,12 +41,26 @@ public class SourceTest {
         assertArrayEquals(new Integer[] { 3, null, 3, null }, source.getCoverage());
     }
 
+    @Test
+    public void testAddBranchCoverage() {
+        Source source = new Source("src/main/java/Hello.java", "public class Hello {\n  if(true) {\n  }\n}\n", "609BD24390ADB11D11536CA2ADD18BD0");
+        source.addBranchCoverage(2, 0, 0, 2);
+        source.addBranchCoverage(2, 0, 1, 3);
+        assertArrayEquals(new Integer[] { 2, 0, 0, 2, 2, 0, 1, 3 }, source.getBranches());
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void testAddCoverageForSourceOutOfBounds() {
         Source source = new Source("src/main/java/Hello.java", "public class Hello {\n  \n}\n", "E8BD88CF0BDB77A6408234FD91FD22C3");
         source.addCoverage(5, 1);
     }
     
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddBranchCoverageForSourceOutOfBounds() {
+        Source source = new Source("src/main/java/Hello.java", "public class Hello {\n  if(true) {\n  }\n}\n", "609BD24390ADB11D11536CA2ADD18BD0");
+        source.addBranchCoverage(6, 0, 0, 2);
+    }
+
     @Test
     @Ignore("#45: https://github.com/trautonen/coveralls-maven-plugin/issues/45")
     public void testGetNameWithClassifier() throws Exception {
