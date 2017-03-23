@@ -29,8 +29,9 @@ package org.eluder.coveralls.maven.plugin.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,17 +40,11 @@ public final class Source implements JsonObject {
     
     private static final Pattern NEWLINE = Pattern.compile("\r\n|\r|\n");
     //private static final String CLASSIFIER_SEPARATOR = "#";
-    
-    public static final int BRANCHES_PARTITION_SIZE = 4;
-    public static final int BRANCHES_LINE_INDEX = 0;
-    public static final int BRANCHES_BLOCK_INDEX = 1;
-    public static final int BRANCHES_BRANCH_INDEX = 2;
-    public static final int BRANCHES_HIT_INDEX = 3;
 
     private final String name;
     private final String digest;
     private final Integer[] coverage;
-    private final ArrayList<Integer> branches;
+    private final List<Branch> branches;
     private String classifier;
     
     public Source(final String name, final String source, final String digest) {
@@ -89,7 +84,18 @@ public final class Source implements JsonObject {
     
     @JsonProperty("branches")
     public Integer[] getBranches() {
-        return branches.toArray(new Integer[branches.size()]);
+        final List<Integer> branchesRaw = new ArrayList<>(branches.size() * 4);
+        for (final Branch b : branches) {
+            branchesRaw.add(b.getLineNumber());
+            branchesRaw.add(b.getBlockNumber());
+            branchesRaw.add(b.getBranchNumber());
+            branchesRaw.add(b.getHits());
+        }
+        return branchesRaw.toArray(new Integer[branchesRaw.size()]);
+    }
+
+    public List<Branch> getBranchesList() {
+        return Collections.unmodifiableList(branches);
     }
 
     @JsonIgnore
@@ -118,7 +124,7 @@ public final class Source implements JsonObject {
                                   final int branchNumber,
                                   final int hits) {
         checkLineRange(lineNumber);
-        this.branches.addAll(Arrays.asList(lineNumber, blockNumber, branchNumber, hits));
+        this.branches.add(new Branch(lineNumber, blockNumber, branchNumber, hits));
     }
 
     public Source merge(final Source source) {

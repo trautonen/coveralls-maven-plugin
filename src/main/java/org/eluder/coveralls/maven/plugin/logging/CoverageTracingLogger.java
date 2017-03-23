@@ -28,6 +28,7 @@ package org.eluder.coveralls.maven.plugin.logging;
 
 import org.apache.maven.plugin.logging.Log;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
+import org.eluder.coveralls.maven.plugin.domain.Branch;
 import org.eluder.coveralls.maven.plugin.domain.Source;
 import org.eluder.coveralls.maven.plugin.source.ChainingSourceCallback;
 import org.eluder.coveralls.maven.plugin.source.SourceCallback;
@@ -108,13 +109,11 @@ public class CoverageTracingLogger extends ChainingSourceCallback implements Log
             }
         }
 
-        final Integer[] branchesRawArray = source.getBranches();
-        int sourceBranches = branchesRawArray.length / Source.BRANCHES_PARTITION_SIZE;
-        for (int i = 0; i < sourceBranches; i++) {
-            if (branchesRawArray[i * Source.BRANCHES_PARTITION_SIZE + Source.BRANCHES_HIT_INDEX] > 0) {
+        this.branches += source.getBranchesList().size();
+        for (final Branch b : source.getBranchesList()) {
+            if (b.getHits() > 0) {
                 coveredBranches++;
             }
         }
-        this.branches += sourceBranches;
     }
 }
