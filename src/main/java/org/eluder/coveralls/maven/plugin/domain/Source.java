@@ -124,7 +124,16 @@ public final class Source implements JsonObject {
                                   final int blockNumber,
                                   final int branchNumber,
                                   final int hits) {
+        addBranchCoverage(false, lineNumber, blockNumber, branchNumber, hits);
+    }
+
+    private void addBranchCoverage(final boolean merge,
+                                   final int lineNumber,
+                                   final int blockNumber,
+                                   final int branchNumber,
+                                   final int hits) {
         checkLineRange(lineNumber);
+        int hitSum = hits;
         final ListIterator<Branch> it = this.branches.listIterator();
         while (it.hasNext()) {
             final Branch b = it.next();
@@ -132,9 +141,12 @@ public final class Source implements JsonObject {
                 b.getBlockNumber() == blockNumber &&
                 b.getBranchNumber() == branchNumber) {
                     it.remove();
+                    if (merge) {
+                        hitSum += b.getHits();
+                    }
                 }
         }
-        this.branches.add(new Branch(lineNumber, blockNumber, branchNumber, hits));
+        this.branches.add(new Branch(lineNumber, blockNumber, branchNumber, hitSum));
     }
 
     public Source merge(final Source source) {
@@ -147,6 +159,13 @@ public final class Source implements JsonObject {
                     int base = copy.coverage[i] != null ? copy.coverage[i] : 0;
                     copy.coverage[i] = base + source.coverage[i];
                 }
+            }
+            for (final Branch b : source.branches) {
+                copy.addBranchCoverage(true,
+                        b.getLineNumber(),
+                        b.getBlockNumber(),
+                        b.getBranchNumber(),
+                        b.getHits());
             }
         }
         return copy;

@@ -89,12 +89,15 @@ public class SourceTest {
 
     @Test
     public void testMerge() {
-        Source source1 = new Source("src/main/java/Hello.java", "public class Hello {\n  \n}\n", "E8BD88CF0BDB77A6408234FD91FD22C3");
+        Source source1 = new Source("src/main/java/Hello.java", "public class Hello {\n  if(true) {\n  }\n}\n", "609BD24390ADB11D11536CA2ADD18BD0");
         source1.addCoverage(1, 2);
         source1.addCoverage(3, 4);
-        Source source2 = new Source("src/main/java/Hello.java", "public class Hello {\n  \n}\n", "E8BD88CF0BDB77A6408234FD91FD22C3");
+        source1.addBranchCoverage(2, 0, 0, 1);
+        Source source2 = new Source("src/main/java/Hello.java", "public class Hello {\n  if(true) {\n  }\n}\n", "609BD24390ADB11D11536CA2ADD18BD0");
         source2.addCoverage(2, 1);
         source2.addCoverage(3, 3);
+        source2.addBranchCoverage(2, 0, 0, 1);
+        source2.addBranchCoverage(2, 0, 1, 3);
 
         Source merged = source1.merge(source2);
         assertFalse(source1 == merged);
@@ -106,6 +109,14 @@ public class SourceTest {
         assertEquals(new Integer(1), merged.getCoverage()[1]);
         assertEquals(new Integer(7), merged.getCoverage()[2]);
         assertNull(merged.getCoverage()[3]);
+        assertEquals(new Integer(2), merged.getBranches()[0]);
+        assertEquals(new Integer(0), merged.getBranches()[1]);
+        assertEquals(new Integer(0), merged.getBranches()[2]);
+        assertEquals(new Integer(2), merged.getBranches()[3]);
+        assertEquals(new Integer(2), merged.getBranches()[4]);
+        assertEquals(new Integer(0), merged.getBranches()[5]);
+        assertEquals(new Integer(1), merged.getBranches()[6]);
+        assertEquals(new Integer(3), merged.getBranches()[7]);
     }
 
     @Test
