@@ -62,10 +62,12 @@ public class CoverageTracingLoggerTest {
     
     @Test
     public void testLogForSources() throws Exception {
-        Source source1 = new Source("Source1.java", "public class Source1 {\n    \n}\n", "0ABCEBD0C34F82CA8CF631A48BDBC941");
+        Source source1 = new Source("Source1.java", "public class Source1 {\n  if(true) { }\n}\n", "FE0538639E8CE73733E77659C1043B5C");
         source1.addCoverage(1, 0);
         source1.addCoverage(2, 0);
         source1.addCoverage(3, 0);
+        source1.addBranchCoverage(2, 0, 0, 3);
+        source1.addBranchCoverage(2, 0, 1, 0);
         Source source2 = new Source("Source2.java", "public class Source2 {\n    new Interface() { public void run() { } };\n}\n", "34BD6501A6D1CE5181AECEA688C7D382");
         source2.addCoverage(1, 1);
         source2.addCoverage(3, 1);
@@ -85,11 +87,18 @@ public class CoverageTracingLoggerTest {
         assertEquals(6, coverageTracingLogger.getRelevant());
         assertEquals(3, coverageTracingLogger.getCovered());
         assertEquals(3, coverageTracingLogger.getMissed());
+        assertEquals(2, coverageTracingLogger.getBranches());
+        assertEquals(1, coverageTracingLogger.getCoveredBranches());
+        assertEquals(1, coverageTracingLogger.getMissedBranches());
         verify(sourceCallbackMock, times(2)).onSource(any(Source.class));
         verify(logMock).info("Gathered code coverage metrics for 2 source files with 8 lines of code:");
         verify(logMock).info("- 6 relevant lines");
         verify(logMock).info("- 3 covered lines");
         verify(logMock).info("- 3 missed lines");
+        verify(logMock).info("- 2 branches");
+        verify(logMock).info("- 2 branches");
+        verify(logMock).info("- 1 covered branches");
+        verify(logMock).info("- 1 missed branches");
     }
     
 }
