@@ -65,10 +65,38 @@ public class CoberturaParser extends AbstractXmlEventParser {
         } else
         
         if (isStartElement(xml, "line") && !inMethods && source != null) {
-            source.addCoverage(
-                    Integer.parseInt(xml.getAttributeValue(null, "number")),
-                    Integer.valueOf(xml.getAttributeValue(null, "hits"))
-            );
+            final int nr = Integer.parseInt(xml.getAttributeValue(null, "number"));
+            source.addCoverage(nr, Integer.valueOf(xml.getAttributeValue(null, "hits")));
+            if (Boolean.parseBoolean(xml.getAttributeValue(null, "branch"))) {
+                final String value = xml.getAttributeValue(null, "condition-coverage");
+
+                // Is "condition-coverage" attribute always here?
+                if (value == null) {
+                    return;
+                }
+
+                // C'mon Cobertura, human readable format for XML ?
+                final String[] values = value // 50% (2/4)
+                        .replace(" ", "")     // 50%(2/4)
+                        .replace("%", "/")    // 50/(2/4)
+                        .replace("(", "")     // 50/2/4)
+                        .replace(")", "")     // 50/2/4
+                        .split("/");
+
+                final int cb = Integer.parseInt(values[1]);
+                final int tb = Integer.parseInt(values[2]);
+                final int mb = tb - cb;
+
+                // add branches. unfortunately, there is NO block number and
+                // branch number will NOT be unique between coverage changes.
+                int branchId = 0;
+                for (int b = 0; b < cb; b++) {
+                  this.source.addBranchCoverage(nr, 0, branchId++, 1);
+                }
+                for (int b = 0; b < mb; b++) {
+                  this.source.addBranchCoverage(nr, 0, branchId++, 0);
+                }
+            }
         } else
         
         if (isEndElement(xml, "class") && source != null) {
