@@ -40,7 +40,8 @@ public class CoberturaParser extends AbstractXmlEventParser {
 
     protected Source source;
     protected boolean inMethods;
-    
+    private int branchId;
+
     public CoberturaParser(final File coverageFile, final SourceLoader sourceLoader) {
         super(coverageFile, sourceLoader);
     }
@@ -54,6 +55,7 @@ public class CoberturaParser extends AbstractXmlEventParser {
             if (classifierPosition > 0) {
                 source.setClassifier(className.substring(classifierPosition + 1));
             }
+            this.branchId = 0;
         } else
         
         if (isStartElement(xml, "methods") && source != null) {
@@ -89,12 +91,11 @@ public class CoberturaParser extends AbstractXmlEventParser {
 
                 // add branches. unfortunately, there is NO block number and
                 // branch number will NOT be unique between coverage changes.
-                int branchId = 0;
                 for (int b = 0; b < cb; b++) {
-                  this.source.addBranchCoverage(nr, 0, branchId++, 1);
+                  this.source.addBranchCoverage(nr, 0, this.branchId++, 1);
                 }
                 for (int b = 0; b < mb; b++) {
-                  this.source.addBranchCoverage(nr, 0, branchId++, 0);
+                  this.source.addBranchCoverage(nr, 0, this.branchId++, 0);
                 }
             }
         } else
