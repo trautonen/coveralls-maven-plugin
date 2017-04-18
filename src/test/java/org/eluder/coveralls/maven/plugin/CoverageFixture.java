@@ -29,23 +29,23 @@ package org.eluder.coveralls.maven.plugin;
 public final class CoverageFixture {
 
     public static String[][] JAVA_FILES = new String[][] {
-            // file                                                 lines  covered lines               missed lines
-            { "org/eluder/coverage/sample/SimpleCoverage.java",     "14",  "3,6",                      "10,11" },
-            { "org/eluder/coverage/sample/InnerClassCoverage.java", "31",  "3,6,9,10,12,13,16,19,22",  "26,27" },
-            { "org/eluder/coverage/sample/PartialCoverage.java",    "14",  "3,6,7,11",                 "9" }
+            // file                                                 lines  covered lines               missed lines  covered branches missed brnches
+            { "org/eluder/coverage/sample/SimpleCoverage.java",     "14",  "3,6",                      "10,11",      "",              "" },
+            { "org/eluder/coverage/sample/InnerClassCoverage.java", "31",  "3,6,9,10,12,13,16,19,22",  "26,27",      "",              "" },
+            { "org/eluder/coverage/sample/PartialCoverage.java",    "14",  "3,6,7,11",                 "9",          "",              "" }
     };
 
     public static String[][] JAVA_FILES_IT = new String[][] {
-            // file                                                 lines  covered lines               missed lines
-            { "org/eluder/coverage/sample/SimpleCoverage.java",     "14",  "3,6",                      "10,11" },
-            { "org/eluder/coverage/sample/InnerClassCoverage.java", "31",  "3,6,9,10,12,13,16,19,22",  "26,27" },
-            { "org/eluder/coverage/sample/PartialCoverage.java",    "14",  "3,6,7,9,11",               "" }
+            // file                                                 lines  covered lines               missed lines  covered branches missed branches
+            { "org/eluder/coverage/sample/SimpleCoverage.java",     "14",  "3,6",                      "10,11",      "",              "" },
+            { "org/eluder/coverage/sample/InnerClassCoverage.java", "31",  "3,6,9,10,12,13,16,19,22",  "26,27",      "",              "" },
+            { "org/eluder/coverage/sample/PartialCoverage.java",    "14",  "3,6,7,9,11",               "",           "6",             "6" }
     };
 
     public static String[][] JAVASCRIPT_FILES = new String[][] {
-            // file                 lines   covered lines   missed lines
-            { "Localization.js",    "18",   "1,2,4,5,9,13", "6,10" },
-            { "Components.js",      "5",    "1,2",          ""     }
+            // file                 lines   covered lines   missed lines covered branches missed branches
+            { "Localization.js",    "18",   "1,2,4,5,9,13", "6,10",      "",              "" },
+            { "Components.js",      "5",    "1,2",          "",          "",              "" }
     };
     
     public static int getTotalLines(String[][] fixture) {
