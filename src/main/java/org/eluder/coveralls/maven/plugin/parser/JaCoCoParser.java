@@ -40,7 +40,8 @@ public class JaCoCoParser extends AbstractXmlEventParser {
 
     private String packageName;
     private Source source;
-    
+    private int branchId;
+
     public JaCoCoParser(final File coverageFile, final SourceLoader sourceLoader) {
         super(coverageFile, sourceLoader);
     }
@@ -54,6 +55,7 @@ public class JaCoCoParser extends AbstractXmlEventParser {
         if (isStartElement(xml, "sourcefile") && packageName != null) {
             String sourceFile = this.packageName + "/" + xml.getAttributeValue(null, "name");
             this.source = loadSource(sourceFile);
+            this.branchId = 0;
         } else
         
         if (isStartElement(xml, "line") && this.source != null) {
@@ -67,12 +69,11 @@ public class JaCoCoParser extends AbstractXmlEventParser {
 
             // add branches. unfortunately, there is NO block number and
             // branch number will NOT be unique between coverage changes.
-            int branchId = 0;
             for (int b = 0; b < cb; b++) {
-              this.source.addBranchCoverage(nr, 0, branchId++, 1);
+              this.source.addBranchCoverage(nr, 0, this.branchId++, 1);
             }
             for (int b = 0; b < mb; b++) {
-              this.source.addBranchCoverage(nr, 0, branchId++, 0);
+              this.source.addBranchCoverage(nr, 0, this.branchId++, 0);
             }
         } else
         
