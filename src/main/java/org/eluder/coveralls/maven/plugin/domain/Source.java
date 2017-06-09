@@ -85,13 +85,14 @@ public final class Source implements JsonObject {
     public void setClassifier(final String classifier) {
         this.classifier = classifier;
     }
-    
+
     public void addCoverage(final int lineNumber, final Integer coverage) {
         int index = lineNumber - 1;
         if (index >= this.coverage.length) {
-            throw new IllegalArgumentException("Line number " + lineNumber + " is greater than the source file " + name + " size");
+            System.err.println("Line number " + lineNumber + " is greater than the source file " + name + " size");
+        } else {
+            this.coverage[lineNumber - 1] = coverage;
         }
-        this.coverage[lineNumber - 1] = coverage;
     }
 
     public Source merge(final Source source) {
