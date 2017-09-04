@@ -20,3 +20,9 @@ mvn -Pjacoco clean verify jacoco:report
 ```
 mvn -Psaga clean test saga:coverage
 ```
+
+### Clover
+
+```
+mvn -Pclover clean test clover:aggregate clover:clover
+```
