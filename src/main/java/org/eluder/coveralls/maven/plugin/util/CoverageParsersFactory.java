@@ -28,6 +28,7 @@ package org.eluder.coveralls.maven.plugin.util;
 
 import org.apache.maven.project.MavenProject;
 import org.eluder.coveralls.maven.plugin.CoverageParser;
+import org.eluder.coveralls.maven.plugin.parser.CloverParser;
 import org.eluder.coveralls.maven.plugin.parser.CoberturaParser;
 import org.eluder.coveralls.maven.plugin.parser.JaCoCoParser;
 import org.eluder.coveralls.maven.plugin.parser.SagaParser;
@@ -48,6 +49,9 @@ public class CoverageParsersFactory {
     private static final String COBERTURA_FILE = "/coverage.xml";
     private static final String COBERTURA_PREFIX = "/cobertura";
 
+    private static final String CLOVER_FILE = "/clover.xml";
+    private static final String CLOVER_PREFIX = "/clover";
+
     private static final String SAGA_FILE = "/total-coverage.xml";
     private static final String SAGA_PREFIX = "/saga-coverage";
     
@@ -56,6 +60,7 @@ public class CoverageParsersFactory {
     private List<File> jacocoReports;
     private List<File> coberturaReports;
     private List<File> sagaReports;
+    private List<File> cloverReports;
     private List<String> relativeReportDirs;
 
     public CoverageParsersFactory(final MavenProject project, final SourceLoader sourceLoader) {
@@ -90,6 +95,7 @@ public class CoverageParsersFactory {
         ExistingFiles jacocoFiles = ExistingFiles.create(jacocoReports);
         ExistingFiles coberturaFiles = ExistingFiles.create(coberturaReports);
         ExistingFiles sagaFiles = ExistingFiles.create(sagaReports);
+        ExistingFiles cloverFiles = ExistingFiles.create(cloverReports);
         for (MavenProject p : projects) {
             File reportingDirectory = new File(p.getModel().getReporting().getOutputDirectory());
             File buildDirectory = new File(p.getBuild().getDirectory());
@@ -98,6 +104,7 @@ public class CoverageParsersFactory {
             jacocoFiles.add(new File(reportingDirectory, JACOCO_IT_PREFIX + JACOCO_FILE));
             coberturaFiles.add(new File(reportingDirectory, COBERTURA_PREFIX + COBERTURA_FILE));
             sagaFiles.add(new File(buildDirectory, SAGA_PREFIX + SAGA_FILE));
+            cloverFiles.add(new File(reportingDirectory, CLOVER_PREFIX + CLOVER_FILE));
 
             if (relativeReportDirs != null) {
                 for (String relativeReportPath : relativeReportDirs) {
@@ -114,6 +121,8 @@ public class CoverageParsersFactory {
                     coberturaFiles.add(new File(relativeBuildDirectory, COBERTURA_FILE));
                     sagaFiles.add(new File(relativeReportingDirectory, SAGA_FILE));
                     sagaFiles.add(new File(relativeBuildDirectory, SAGA_FILE));
+                    cloverFiles.add(new File(relativeReportingDirectory, CLOVER_FILE));
+                    cloverFiles.add(new File(relativeBuildDirectory, CLOVER_FILE));
                 }
             }
         }
@@ -126,6 +135,9 @@ public class CoverageParsersFactory {
         }
         for (File sagaFile : sagaFiles) {
             parsers.add(new SagaParser(sagaFile, sourceLoader));
+        }
+        for (File cloverFile : cloverFiles) {
+            parsers.add(new CloverParser(cloverFile, sourceLoader));
         }
         
         if (parsers.isEmpty()) {

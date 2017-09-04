@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1504486364458" clover="4.2.0">
+   <project name="sample 1.0-SNAPSHOT (Aggregated)" timestamp="1504486362996">
+      <metrics coveredelements="17" complexity="9" loc="56" methods="8" classes="4" statements="11" packages="1" coveredconditionals="2" coveredmethods="6" elements="21" ncloc="42" files="3" conditionals="2" coveredstatements="9"/>
+      <package name="org.eluder.coverage.sample">
+         <metrics coveredelements="17" complexity="9" loc="56" methods="8" classes="4" statements="11" coveredconditionals="2" coveredmethods="6" elements="21" ncloc="42" files="3" conditionals="2" coveredstatements="9"/>
+         <file path="/Users/dogeared/Projects/coveralls-maven-plugin/sample/module1/src/main/java/org/eluder/coverage/sample/InnerClassCoverage.java" name="InnerClassCoverage.java">
+            <metrics coveredelements="9" coveredconditionals="0" complexity="5" loc="30" coveredmethods="4" methods="5" elements="11" classes="2" ncloc="23" statements="6" conditionals="0" coveredstatements="5"/>
+            <class name="InnerClassCoverage">
+               <metrics coveredelements="7" coveredconditionals="0" complexity="3" coveredmethods="3" methods="3" elements="7" statements="4" conditionals="0" coveredstatements="4"/>
+            </class>
+            <class name="InnerClassCoverage.InnerClass">
+               <metrics coveredelements="2" coveredconditionals="0" complexity="2" coveredmethods="1" methods="2" elements="4" statements="2" conditionals="0" coveredstatements="1"/>
+            </class>
+            <line complexity="1" visibility="public" signature="anonymous() : void" num="5" count="1" type="method"/>
+            <line num="6" count="1" type="stmt"/>
+            <line complexity="1" visibility="public" signature="run() : void" num="7" count="1" type="method"/>
+            <line num="9" count="1" type="stmt"/>
+            <line num="12" count="1" type="stmt"/>
+            <line complexity="1" visibility="public" signature="delegate() : boolean" num="15" count="1" type="method"/>
+            <line num="16" count="1" type="stmt"/>
+            <line complexity="1" visibility="public" signature="isInner() : boolean" num="21" count="1" type="method"/>
+            <line num="22" count="1" type="stmt"/>
+            <line complexity="1" visibility="public" signature="run() : void" num="25" count="0" type="method"/>
+            <line num="26" count="0" type="stmt"/>
+         </file>
+         <file path="/Users/dogeared/Projects/coveralls-maven-plugin/sample/module1/src/main/java/org/eluder/coverage/sample/SimpleCoverage.java" name="SimpleCoverage.java">
+            <metrics coveredelements="2" coveredconditionals="0" complexity="2" loc="13" coveredmethods="1" methods="2" elements="4" classes="1" ncloc="9" statements="2" conditionals="0" coveredstatements="1"/>
+            <class name="SimpleCoverage">
+               <metrics coveredelements="2" coveredconditionals="0" complexity="2" coveredmethods="1" methods="2" elements="4" statements="2" conditionals="0" coveredstatements="1"/>
+            </class>
+            <line complexity="1" visibility="public" signature="isTested() : boolean" num="5" count="1" type="method"/>
+            <line num="6" count="1" type="stmt"/>
+            <line complexity="1" visibility="public" signature="neverRun() : void" num="9" count="0" type="method"/>
+            <line num="10" count="0" type="stmt"/>
+         </file>
+         <file path="/Users/dogeared/Projects/coveralls-maven-plugin/sample/module2/src/main/java/org/eluder/coverage/sample/PartialCoverage.java" name="PartialCoverage.java">
+            <metrics coveredelements="6" coveredconditionals="2" complexity="2" loc="13" coveredmethods="1" methods="1" elements="6" classes="1" ncloc="10" statements="3" conditionals="2" coveredstatements="3"/>
+            <class name="PartialCoverage">
+               <metrics coveredelements="6" coveredconditionals="2" complexity="2" coveredmethods="1" methods="1" elements="6" statements="3" conditionals="2" coveredstatements="3"/>
+            </class>
+            <line complexity="2" visibility="public" signature="partial(boolean) : void" num="5" count="2" type="method"/>
+            <line num="6" count="2" type="stmt"/>
+            <line falsecount="1" truecount="1" num="6" type="cond"/>
+            <line num="7" count="1" type="stmt"/>
+            <line num="9" count="1" type="stmt"/>
+         </file>
+      </package>
+   </project>
+   <testproject name="sample 1.0-SNAPSHOT (Aggregated)" timestamp="1504486362996">
+      <metrics coveredelements="2" complexity="1" loc="12" methods="1" classes="1" statements="1" packages="1" coveredconditionals="0" coveredmethods="1" elements="2" ncloc="8" files="1" conditionals="0" coveredstatements="1"/>
+      <package name="org.eluder.coverage.sample">
+         <metrics coveredelements="2" complexity="1" loc="12" methods="1" classes="1" statements="1" coveredconditionals="0" coveredmethods="1" elements="2" ncloc="8" files="1" conditionals="0" coveredstatements="1"/>
+         <file path="/Users/dogeared/Projects/coveralls-maven-plugin/sample/module2/src/test/java/org/eluder/coverage/sample/PartialCoverageIT.java" name="PartialCoverageIT.java">
+            <metrics coveredelements="2" coveredconditionals="0" complexity="1" loc="12" coveredmethods="1" methods="1" elements="2" classes="1" ncloc="8" statements="1" conditionals="0" coveredstatements="1"/>
+            <class name="PartialCoverageIT">
+               <metrics coveredelements="2" coveredconditionals="0" complexity="1" coveredmethods="1" methods="1" elements="2" statements="1" conditionals="0" coveredstatements="1"/>
+            </class>
+            <line complexity="1" visibility="public" signature="testSum() : void" num="7" count="1" type="method"/>
+            <line num="9" count="1" type="stmt"/>
+         </file>
+      </package>
+   </testproject>
+</coverage>
