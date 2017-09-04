@@ -20,7 +20,7 @@ public class CloverParser extends AbstractXmlEventParser {
     }
 
     @Override
-    protected void onEvent(XMLStreamReader xml, SourceCallback callback) throws XMLStreamException, ProcessingException, IOException {
+    protected void onEvent(final XMLStreamReader xml, final SourceCallback callback) throws XMLStreamException, ProcessingException, IOException {
         if (isStartElement(xml, "package")) {
             this.packageName = xml.getAttributeValue(null, "name");
         } else if (isStartElement(xml, "file") && packageName != null) {
@@ -47,7 +47,7 @@ public class CloverParser extends AbstractXmlEventParser {
         }
     }
 
-    private String getSourceFile(String fileName) {
+    private String getSourceFile(final String fileName) {
         return this.packageName.replace('.', '/') + "/" + fileName;
     }
 }
