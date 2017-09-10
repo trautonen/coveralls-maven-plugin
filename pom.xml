@@ -42,6 +42,7 @@
     <jgit.version>4.5.0.201609210915-r</jgit.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
+    <maven.javadoc.version>2.10.3</maven.javadoc.version>
     <maven.cobertura.version>2.7</maven.cobertura.version>
     <maven.checkstyle.version>2.17</maven.checkstyle.version>
     <maven.version>3.0</maven.version>
