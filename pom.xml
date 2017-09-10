@@ -33,6 +33,14 @@
     <url>https://github.com/dogeared/coveralls-maven-plugin</url>
   </scm>
 
+  <distributionManagement>
+    <repository>
+      <id>bintray-jwtk-coveralls-maven-plugin</id>
+      <name>jwtk-coveralls-maven-plugin</name>
+      <url>https://api.bintray.com/maven/jwtk/coveralls-maven-plugin/jwtk-coveralls/;publish=1</url>
+    </repository>
+  </distributionManagement>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
