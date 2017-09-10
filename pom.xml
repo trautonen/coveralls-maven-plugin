@@ -28,8 +28,8 @@
   </licenses>
 
   <scm>
-    <connection>scm:git:git://github.com/dogeared/coveralls-maven-plugin.git</connection>
-    <developerConnection>scm:git:git://github.com/dogeared/coveralls-maven-plugin.git</developerConnection>
+    <connection>scm:git:https://github.com/dogeared/coveralls-maven-plugin.git</connection>
+    <developerConnection>scm:git:https://github.com/dogeared/coveralls-maven-plugin.git</developerConnection>
     <url>https://github.com/dogeared/coveralls-maven-plugin</url>
   </scm>
 
