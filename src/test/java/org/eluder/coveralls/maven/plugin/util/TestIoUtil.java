@@ -26,9 +26,9 @@ package org.eluder.coveralls.maven.plugin.util;
  * %[license]
  */
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.codehaus.plexus.util.IOUtil;
 
-import javax.xml.bind.DatatypeConverter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -38,8 +38,6 @@ import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 public class TestIoUtil {
 
@@ -76,10 +74,8 @@ public class TestIoUtil {
         }
     }
 
-    public static String getMd5DigestHex(final String content) throws NoSuchAlgorithmException {
-        MessageDigest md = MessageDigest.getInstance("MD5");
-        byte[] digest = md.digest(content.getBytes());
-        return DatatypeConverter.printHexBinary(digest);
+    public static String getMd5DigestHex(final String content) {
+        return DigestUtils.md5Hex(content).toUpperCase();
     }
 
     private static URL getResourceUrl(final String resource) {

@@ -26,16 +26,14 @@ package org.eluder.coveralls.maven.plugin.source;
  * %[license]
  */
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.codehaus.plexus.util.IOUtil;
 import org.eluder.coveralls.maven.plugin.domain.Source;
-import org.eluder.coveralls.maven.plugin.util.Md5DigestInputStream;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URI;
 import java.nio.charset.Charset;
-import java.security.NoSuchAlgorithmException;
 
 public abstract class AbstractSourceLoader implements SourceLoader {
 
@@ -51,13 +49,8 @@ public abstract class AbstractSourceLoader implements SourceLoader {
     public Source load(final String sourceFile) throws IOException {
         InputStream stream = locate(sourceFile);
         if (stream != null) {
-            try (Md5DigestInputStream ds = new Md5DigestInputStream(stream);
-                    InputStreamReader reader = new InputStreamReader(ds, getSourceEncoding())) {
-                String source = IOUtil.toString(reader);
-                return new Source(getFileName(sourceFile), source, ds.getDigestHex());
-            } catch (NoSuchAlgorithmException ex) {
-                throw new IOException("MD5 algorithm not available", ex);
-            }
+            String source = IOUtil.toString(stream);
+            return new Source(getFileName(sourceFile), source, DigestUtils.md5Hex(source).toUpperCase());
         } else {
             return null;
         }
