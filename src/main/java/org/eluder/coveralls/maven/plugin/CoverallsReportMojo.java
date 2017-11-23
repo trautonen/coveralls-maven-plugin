@@ -26,6 +26,14 @@ package org.eluder.coveralls.maven.plugin;
  * %[license]
  */
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -61,14 +69,6 @@ import org.eluder.coveralls.maven.plugin.source.UniqueSourceCallback;
 import org.eluder.coveralls.maven.plugin.util.CoverageParsersFactory;
 import org.eluder.coveralls.maven.plugin.util.SourceLoaderFactory;
 import org.eluder.coveralls.maven.plugin.util.TimestampParser;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 
 @Mojo(name = "report", threadSafe = false, aggregator = true)
 public class CoverallsReportMojo extends AbstractMojo {
@@ -193,6 +193,12 @@ public class CoverallsReportMojo extends AbstractMojo {
      */
     @Parameter(property = "failOnServiceError", defaultValue = "true")
     protected boolean failOnServiceError;
+
+    /**
+     * Fail build if Coveralls service is not available or submission fails for internal errors.
+     */
+    @Parameter(property = "failOnProcessingError", defaultValue = "true")
+    protected boolean failOnProcessingError;
 
     /**
      * Scan subdirectories for source files.
@@ -406,7 +412,7 @@ public class CoverallsReportMojo extends AbstractMojo {
         } catch (ProcessingException ex) {
             long duration = System.currentTimeMillis() - now;
             String message = "Submission failed in " + duration + "ms while processing data";
-            handleSubmissionError(ex, message, true);
+            handleSubmissionError(ex, message, failOnProcessingError);
         } catch (IOException ex) {
             long duration = System.currentTimeMillis() - now;
             String message = "Submission failed in " + duration + "ms while handling I/O operations";
