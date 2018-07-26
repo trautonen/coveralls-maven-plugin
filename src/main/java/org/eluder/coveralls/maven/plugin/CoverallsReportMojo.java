@@ -54,6 +54,7 @@ import org.eluder.coveralls.maven.plugin.service.Jenkins;
 import org.eluder.coveralls.maven.plugin.service.ServiceSetup;
 import org.eluder.coveralls.maven.plugin.service.Shippable;
 import org.eluder.coveralls.maven.plugin.service.Travis;
+import org.eluder.coveralls.maven.plugin.service.TravisPro;
 import org.eluder.coveralls.maven.plugin.service.Wercker;
 import org.eluder.coveralls.maven.plugin.source.SourceCallback;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
@@ -304,6 +305,7 @@ public class CoverallsReportMojo extends AbstractMojo {
         List<ServiceSetup> services = new ArrayList<>();
         services.add(new Shippable(env));
         services.add(new Travis(env));
+        services.add(new TravisPro(env));
         services.add(new Circle(env));
         services.add(new Jenkins(env));
         services.add(new Bamboo(env));
