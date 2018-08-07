@@ -108,6 +108,18 @@ public class JobLoggerTest {
         verify(logMock).isDebugEnabled();
         verifyNoMoreInteractions(logMock);
     }
+
+    @Test
+    public void testLogParallel() {
+        when(jobMock.isParallel()).thenReturn(true);
+
+        new JobLogger(jobMock).log(logMock);
+
+        verify(logMock).info("Starting Coveralls job with parallel option enabled");
+        verify(logMock).isDebugEnabled();
+        verifyNoMoreInteractions(logMock);
+
+    }
     
     @Test
     public void testLogJobWithDebug() throws Exception {

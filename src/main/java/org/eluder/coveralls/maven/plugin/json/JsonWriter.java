@@ -81,6 +81,7 @@ public class JsonWriter implements SourceCallback, Closeable {
             writeOptionalString("service_build_url", job.getServiceBuildUrl());
             writeOptionalString("service_branch", job.getBranch());
             writeOptionalString("service_pull_request", job.getPullRequest());
+            writeOptionalBoolean("parallel", job.isParallel());
             writeOptionalTimestamp("run_at", job.getTimestamp());
             writeOptionalEnvironment("environment", job.getServiceEnvironment());
             writeOptionalObject("git", job.getGit());
@@ -117,6 +118,12 @@ public class JsonWriter implements SourceCallback, Closeable {
     private void writeOptionalString(final String field, final String value) throws ProcessingException, IOException {
         if (StringUtils.isNotBlank(value)) {
             generator.writeStringField(field, value);
+        }
+    }
+
+    private void writeOptionalBoolean(final String field, final boolean value) throws ProcessingException, IOException {
+        if (value) {
+            generator.writeBooleanField(field, value);
         }
     }
     
