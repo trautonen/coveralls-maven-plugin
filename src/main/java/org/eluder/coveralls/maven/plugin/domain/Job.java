@@ -40,6 +40,7 @@ public class Job {
     private String serviceJobId;
     private String serviceBuildNumber;
     private String serviceBuildUrl;
+    private boolean parallel;
     private Properties serviceEnvironment;
     private Date timestamp;
     private boolean dryRun;
@@ -73,6 +74,11 @@ public class Job {
     
     public Job withServiceBuildUrl(final String serviceBuildUrl) {
         this.serviceBuildUrl = serviceBuildUrl;
+        return this;
+    }
+
+    public Job withParallel(final boolean parallel) {
+        this.parallel = parallel;
         return this;
     }
     
@@ -133,7 +139,11 @@ public class Job {
     public Date getTimestamp() {
         return timestamp;
     }
-    
+
+    public boolean isParallel() {
+        return parallel;
+    }
+
     public boolean isDryRun() {
         return dryRun;
     }

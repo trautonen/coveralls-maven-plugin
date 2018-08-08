@@ -92,4 +92,10 @@ public class JobValidatorTest {
         assertThat(errors, is(empty()));
     }
 
+    @Test
+    public void testValidateWithParallel() {
+        ValidationErrors errors = new JobValidator(new Job().withRepoToken("ad3fg5").withParallel(true)).validate();
+        assertThat(errors, is(empty()));
+    }
+
 }

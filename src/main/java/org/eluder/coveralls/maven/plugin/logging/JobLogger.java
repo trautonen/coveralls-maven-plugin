@@ -76,6 +76,9 @@ public class JobLogger implements Logger {
         if (job.isDryRun()) {
             starting.append(" in dry run mode");
         }
+        if (job.isParallel()) {
+            starting.append(" with parallel option enabled");
+        }
         log.info(starting.toString());
         
         if (job.getRepoToken() != null) {
