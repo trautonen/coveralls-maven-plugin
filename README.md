@@ -221,7 +221,7 @@ service environment will not override it.
 | `serviceBuildUrl` | `String` | CI service build url. If not provided the supported service environments are used. |
 | `serviceEnvironment` | `Properties` | CI service specific environment properties. If not provided the supported service environments are used. |
 | `repoToken` | `String` | Coveralls repository token. **Do not publish this parameter unencrypted in public GitHub repositories.** |
-| `parallel` | `Boolean` | **Optional** Coveralls API flag: If this is set, the build will not be considered done until a webhook has been sent to https://coveralls.io/webhook?repo_token=… |
+| `parallel` | `boolean` | **Optional** Coveralls API flag: If this is set, the build will not be considered done until a webhook has been sent to https://coveralls.io/webhook?repo_token=… |
 | `branch` | `String` | Git branch name. If not provided the supported service environments are used. |
 | `pullRequest` | `String` | GitHub pull request identifier. If not provided the supported service environments are used. |
 | `timestampFormat` | `String` | **Default: ${maven.build.timestamp}**<br>Build timestamp format. Must be in format supported by SimpleDateFormat. |
