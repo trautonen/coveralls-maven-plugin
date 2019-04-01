@@ -48,6 +48,7 @@ import org.eluder.coveralls.maven.plugin.logging.Logger;
 import org.eluder.coveralls.maven.plugin.logging.Logger.Position;
 import org.eluder.coveralls.maven.plugin.service.Appveyor;
 import org.eluder.coveralls.maven.plugin.service.Bamboo;
+import org.eluder.coveralls.maven.plugin.service.Buddy;
 import org.eluder.coveralls.maven.plugin.service.Circle;
 import org.eluder.coveralls.maven.plugin.service.General;
 import org.eluder.coveralls.maven.plugin.service.Jenkins;
@@ -309,6 +310,7 @@ public class CoverallsReportMojo extends AbstractMojo {
         services.add(new Bamboo(env));
         services.add(new Appveyor(env));
         services.add(new Wercker(env));
+        services.add(new Buddy(env));
         services.add(new General(env));
         return services;
     }
