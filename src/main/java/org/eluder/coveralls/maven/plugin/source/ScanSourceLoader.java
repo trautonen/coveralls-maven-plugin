@@ -36,6 +36,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ScanSourceLoader extends AbstractSourceLoader {
@@ -44,9 +45,12 @@ public class ScanSourceLoader extends AbstractSourceLoader {
 
     private final File sourceDirectory;
 
-    public ScanSourceLoader(final File base, final File sourceDirectory, final String sourceEncoding) {
+    private final List<String> scanExclusions;
+
+    public ScanSourceLoader(final File base, final File sourceDirectory, final String sourceEncoding, final List<String> scanExclusions) {
         super(base.toURI(), sourceDirectory.toURI(), sourceEncoding);
         this.sourceDirectory = sourceDirectory;
+        this.scanExclusions = scanExclusions;
     }
 
     @Override
@@ -66,6 +70,9 @@ public class ScanSourceLoader extends AbstractSourceLoader {
         if (!cache.containsKey(extension)) {
             DirectoryScanner scanner = new DirectoryScanner();
             scanner.setBasedir(sourceDirectory);
+            if (scanExclusions != null) {
+                scanner.setExcludes(scanExclusions.toArray(new String[0]));
+            }
             scanner.addDefaultExcludes();
             scanner.setIncludes(new String[] {"**/*." + extension});
             scanner.scan();

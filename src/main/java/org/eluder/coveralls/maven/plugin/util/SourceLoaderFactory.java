@@ -43,6 +43,7 @@ public class SourceLoaderFactory {
     private final String sourceEncoding;
     private List<File> sourceDirectories;
     private boolean scanForSources;
+    private List<String> scanExclusions;
 
     public SourceLoaderFactory(final File baseDir, final MavenProject project, final String sourceEncoding) {
         this.baseDir = baseDir;
@@ -57,6 +58,11 @@ public class SourceLoaderFactory {
 
     public SourceLoaderFactory withScanForSources(final boolean scanForSources) {
         this.scanForSources = scanForSources;
+        return this;
+    }
+
+    public SourceLoaderFactory withScanExclusions(final List<String> scanExclusions) {
+        this.scanExclusions = scanExclusions;
         return this;
     }
 
@@ -83,7 +89,7 @@ public class SourceLoaderFactory {
         if (scanForSources) {
             for (File directory: directories) {
                 if (directory.exists() && directory.isDirectory()) {
-                    ScanSourceLoader scanSourceLoader = new ScanSourceLoader(baseDir, directory, sourceEncoding);
+                    ScanSourceLoader scanSourceLoader = new ScanSourceLoader(baseDir, directory, sourceEncoding, scanExclusions);
                     multiSourceLoader.add(scanSourceLoader);
                 }
             }
