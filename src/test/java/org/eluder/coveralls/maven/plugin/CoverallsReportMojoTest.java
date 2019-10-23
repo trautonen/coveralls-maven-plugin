@@ -222,8 +222,6 @@ public class CoverallsReportMojoTest {
         mojo.skip = false;
         mojo.basedir = TestIoUtil.getFile("/");
         
-        when(projectMock.getBasedir()).thenReturn(TestIoUtil.getFile("/"));
-        
         mojo.execute();
     }
     

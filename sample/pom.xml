@@ -7,7 +7,7 @@
   <parent>
     <groupId>org.eluder</groupId>
     <artifactId>eluder-parent</artifactId>
-    <version>8</version>
+    <version>9</version>
     <relativePath></relativePath>
   </parent>
 
@@ -21,9 +21,9 @@
   </prerequisites>
 
   <properties>
-    <maven.jacoco.version>0.7.6.201602180812</maven.jacoco.version>
+    <maven.jacoco.version>0.8.1</maven.jacoco.version>
     <maven.cobertura.version>2.7</maven.cobertura.version>
-    <maven.jasmine.version>2.1</maven.jasmine.version>
+    <maven.jasmine.version>2.2</maven.jasmine.version>
     <maven.saga.version>1.5.5</maven.saga.version>
   </properties>
 
@@ -45,7 +45,7 @@
       <plugin>
         <groupId>org.eluder.coveralls</groupId>
         <artifactId>coveralls-maven-plugin</artifactId>
-        <version>4.1.0</version>
+        <version>4.3.0</version>
         <configuration>
           <sourceDirectories>
             <sourceDirectory>module1/src/main/resources</sourceDirectory>
@@ -59,6 +59,15 @@
         <artifactId>maven-failsafe-plugin</artifactId>
       </plugin>
     </plugins>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>2.6</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
   </build>
 
   <profiles>

@@ -73,8 +73,6 @@ public class EnvironmentTest {
         };
         mojo.serviceName = "service";
         mojo.sourceEncoding = "UTF-8";
-        when(logMock.isDebugEnabled()).thenReturn(true);
-        when(logMock.isInfoEnabled()).thenReturn(true);
         when(serviceMock.isSelected()).thenReturn(true);
     }
     

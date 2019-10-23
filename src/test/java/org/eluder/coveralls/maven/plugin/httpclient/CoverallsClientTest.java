@@ -149,11 +149,9 @@ public class CoverallsClientTest {
         when(element.getName()).thenReturn("HeaderName");
         NameValuePair pair = mock(NameValuePair.class);
         when(pair.getName()).thenReturn("name");
-        when(pair.getValue()).thenReturn("value");
         when(element.getParameters()).thenReturn(new NameValuePair[] { pair } );
         when(header.getElements()).thenReturn(new HeaderElement[] { element } );
         when(httpEntityMock.getContentType()).thenReturn(header);
-        when(httpEntityMock.getContent()).thenReturn(coverallsResponse(new CoverallsResponse("success", false, "")));
         CoverallsClient client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
         client.submit(file);
     }
