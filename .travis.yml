@@ -1,9 +1,11 @@
+dist: xenial
+
 language: java
 
 sudo: false
 
 jdk:
-  - oraclejdk7
+  - openjdk8
 
 env:
   global:
@@ -25,11 +27,3 @@ script: python etc/travis-build.py --settings ~/.m2/sonatype.xml
 
 after_success:
   - mvn clean cobertura:cobertura org.eluder.coveralls:coveralls-maven-plugin:report
-
-notifications:
-  webhooks:
-    urls:
-      - https://webhooks.gitter.im/e/6d8b14c5b83c43490417
-    on_success: always  # options: [always|never|change] default: always
-    on_failure: always  # options: [always|never|change] default: always
-    on_start: never     # options: [always|never|change] default: always
