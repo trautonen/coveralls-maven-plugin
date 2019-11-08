@@ -29,6 +29,7 @@ package org.eluder.coveralls.maven.plugin.parser;
 import org.eluder.coveralls.maven.plugin.CoverageFixture;
 import org.eluder.coveralls.maven.plugin.CoverageParser;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
+import org.eluder.coveralls.maven.plugin.domain.Branch;
 import org.eluder.coveralls.maven.plugin.domain.Source;
 import org.eluder.coveralls.maven.plugin.source.ChainingSourceCallback;
 import org.eluder.coveralls.maven.plugin.source.SourceCallback;
@@ -109,7 +110,9 @@ public abstract class AbstractCoverageParserTest {
         classifierRemover.onComplete();
 
         for (String[] coverageFile : fixture) {
-            assertCoverage(sourceCollector.sources, coverageFile[0], Integer.parseInt(coverageFile[1]), toIntegerSet(coverageFile[2]), toIntegerSet(coverageFile[3]));
+            assertCoverage(sourceCollector.sources, coverageFile[0], Integer.parseInt(coverageFile[1]),
+                    toIntegerSet(coverageFile[2]), toIntegerSet(coverageFile[3]),
+                    toIntegerSet(coverageFile[4]), toIntegerSet(coverageFile[5]));
         }
     }
     
@@ -163,7 +166,10 @@ public abstract class AbstractCoverageParserTest {
         }
     }
 
-    private static void assertCoverage(final Collection<Source> sources, final String name, final int lines, final Set<Integer> coveredLines, final Set<Integer> missedLines) {
+    private static void assertCoverage(final Collection<Source> sources, final String name, final int lines,
+            final Set<Integer> coveredLines, final Set<Integer> missedLines,
+            final Set<Integer> coveredBranches, final Set<Integer> missedBranches) {
+
         Source tested = null;
         for (Source source : sources) {
             if (source.getName().endsWith(name)) {
@@ -188,6 +194,13 @@ public abstract class AbstractCoverageParserTest {
                 assertNull(message, tested.getCoverage()[i]);
             }
         }
-
+        for (final Branch b : tested.getBranchesList()) {
+            final String message = name + " branch " + b.getBranchNumber() + " coverage in line " + b.getLineNumber();
+            if (b.getHits() > 0) {
+                assertTrue(message, coveredBranches.contains(b.getLineNumber()));
+            } else {
+                assertTrue(message, missedBranches.contains(b.getLineNumber()));
+            }
+        }
     }
 }

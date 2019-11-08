@@ -29,6 +29,10 @@ package org.eluder.coveralls.maven.plugin.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -41,6 +45,7 @@ public final class Source implements JsonObject {
     private final String name;
     private final String digest;
     private final Integer[] coverage;
+    private final List<Branch> branches;
     private String classifier;
     
     public Source(final String name, final String source, final String digest) {
@@ -52,6 +57,7 @@ public final class Source implements JsonObject {
         this.digest = digest;
         this.coverage = new Integer[lines];
         this.classifier = classifier;
+        this.branches = new ArrayList<>();
     }
     
     @JsonIgnore
@@ -77,6 +83,22 @@ public final class Source implements JsonObject {
         return coverage;
     }
     
+    @JsonProperty("branches")
+    public Integer[] getBranches() {
+        final List<Integer> branchesRaw = new ArrayList<>(branches.size() * 4);
+        for (final Branch b : branches) {
+            branchesRaw.add(b.getLineNumber());
+            branchesRaw.add(b.getBlockNumber());
+            branchesRaw.add(b.getBranchNumber());
+            branchesRaw.add(b.getHits());
+        }
+        return branchesRaw.toArray(new Integer[branchesRaw.size()]);
+    }
+
+    public List<Branch> getBranchesList() {
+        return Collections.unmodifiableList(branches);
+    }
+
     @JsonIgnore
     public String getClassifier() {
         return classifier;
@@ -86,23 +108,64 @@ public final class Source implements JsonObject {
         this.classifier = classifier;
     }
     
-    public void addCoverage(final int lineNumber, final Integer coverage) {
+    private void checkLineRange(final int lineNumber) {
         int index = lineNumber - 1;
         if (index >= this.coverage.length) {
             throw new IllegalArgumentException("Line number " + lineNumber + " is greater than the source file " + name + " size");
         }
+    }
+
+    public void addCoverage(final int lineNumber, final Integer coverage) {
+        checkLineRange(lineNumber);
         this.coverage[lineNumber - 1] = coverage;
+    }
+
+    public void addBranchCoverage(final int lineNumber,
+                                  final int blockNumber,
+                                  final int branchNumber,
+                                  final int hits) {
+        addBranchCoverage(false, lineNumber, blockNumber, branchNumber, hits);
+    }
+
+    private void addBranchCoverage(final boolean merge,
+                                   final int lineNumber,
+                                   final int blockNumber,
+                                   final int branchNumber,
+                                   final int hits) {
+        checkLineRange(lineNumber);
+        int hitSum = hits;
+        final ListIterator<Branch> it = this.branches.listIterator();
+        while (it.hasNext()) {
+            final Branch b = it.next();
+            if (b.getLineNumber() == lineNumber &&
+                b.getBlockNumber() == blockNumber &&
+                b.getBranchNumber() == branchNumber) {
+                    it.remove();
+                    if (merge) {
+                        hitSum += b.getHits();
+                    }
+                }
+        }
+        this.branches.add(new Branch(lineNumber, blockNumber, branchNumber, hitSum));
     }
 
     public Source merge(final Source source) {
         Source copy = new Source(this.name, this.coverage.length, this.digest, this.classifier);
         System.arraycopy(this.coverage, 0, copy.coverage, 0, this.coverage.length);
+        copy.branches.addAll(this.branches);
         if (copy.equals(source)) {
             for (int i = 0; i < copy.coverage.length; i++) {
                 if (source.coverage[i] != null) {
                     int base = copy.coverage[i] != null ? copy.coverage[i] : 0;
                     copy.coverage[i] = base + source.coverage[i];
                 }
+            }
+            for (final Branch b : source.branches) {
+                copy.addBranchCoverage(true,
+                        b.getLineNumber(),
+                        b.getBlockNumber(),
+                        b.getBranchNumber(),
+                        b.getHits());
             }
         }
         return copy;
