@@ -1,35 +1,15 @@
 language: java
 
 sudo: false
-
+dist: trusty
 jdk:
   - oraclejdk8
 
-env:
-  global:
-    - secure: "pmNBqCAW1rc4WKHEmnroZNwAMus18K1VWhRYwt+CN0acH8griJp612tjwWcI\n9XkZcSPR0CJx1TZqGDZZTFH44Pkm6ELU1kc54xtJR6WMXnubEVoEom0tcv/1\nNyzxv9UFJfaNgaTESww+OXSlO9wQre5ZS0/wn2xrz0+twtOPYDU="
-    - secure: "CZ9mejMLJdrh+a5TFXsNSiYyK9K/zNYOtubv2sPq1OEGhuohdUfLtdsk7bK9\nQcIlhZjrE5Q/wVgjZcFsnVpKhnUSRLC7sTOh6tu08EwpNtnNLl5AeUztOMCs\nxhG5H7jDu9uEH81WDZnIuK4Zq4qxXx523rnqQfk4DsTCKLVh9jI="
+install:
+  - mvn --version
+  - java -version
 
-addons:
-  apt:
-    packages:
-      - python-yaml
-
-before_install:
-  - git submodule update --init --recursive
-
-before_script:
-  - python etc/travis-sonatype.py
-
-script: python etc/travis-build.py --settings ~/.m2/sonatype.xml
+script: mvn verify
 
 after_success:
-  - mvn clean cobertura:cobertura org.eluder.coveralls:coveralls-maven-plugin:report
-
-notifications:
-  webhooks:
-    urls:
-      - https://webhooks.gitter.im/e/6d8b14c5b83c43490417
-    on_success: always  # options: [always|never|change] default: always
-    on_failure: always  # options: [always|never|change] default: always
-    on_start: never     # options: [always|never|change] default: always
+  - mvn clean cobertura:cobertura org.jwtk.coveralls:coveralls-maven-plugin:report
