@@ -5,7 +5,7 @@
 
   <groupId>org.jwtk.coveralls</groupId>
   <artifactId>coveralls-maven-plugin</artifactId>
-  <version>4.4.0</version>
+  <version>4.4.1-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <name>coveralls-maven-plugin</name>
@@ -28,16 +28,16 @@
   </licenses>
 
   <scm>
-    <connection>scm:git:https://github.com/dogeared/coveralls-maven-plugin.git</connection>
-    <developerConnection>scm:git:https://github.com/dogeared/coveralls-maven-plugin.git</developerConnection>
-    <url>https://github.com/dogeared/coveralls-maven-plugin</url>
+    <connection>scm:git:https://github.com/jwtk/coveralls-maven-plugin.git</connection>
+    <developerConnection>scm:git:https://github.com/jwtk/coveralls-maven-plugin.git</developerConnection>
+    <url>https://github.com/jwtk/coveralls-maven-plugin</url>
   </scm>
 
   <distributionManagement>
     <repository>
-      <id>bintray-jwtk-coveralls-maven-plugin</id>
-      <name>jwtk-coveralls-maven-plugin</name>
-      <url>https://api.bintray.com/maven/jwtk/coveralls-maven-plugin/jwtk-coveralls/;publish=1</url>
+      <id>sonatype-nexus-staging</id>
+      <name>Nexus Release Repository</name>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
     </repository>
   </distributionManagement>
 
@@ -263,13 +263,31 @@
         <artifactId>cobertura-maven-plugin</artifactId>
       </plugin>
       <plugin>
-        <groupId>org.eluder.coveralls</groupId>
+        <groupId>org.jwtk.coveralls</groupId>
         <artifactId>coveralls-maven-plugin</artifactId>
         <version>${project.version}</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.5.3</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.apache.maven.scm</groupId>
+            <artifactId>maven-scm-provider-gitexe</artifactId>
+            <version>1.9.5</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <mavenExecutorId>forked-path</mavenExecutorId>
+          <useReleaseProfile>false</useReleaseProfile>
+          <arguments>-Psonatype-oss-release -Pdocs -Psign</arguments>
+          <autoVersionSubmodules>true</autoVersionSubmodules>
+        </configuration>
       </plugin>
     </plugins>
 
@@ -324,4 +342,52 @@
       </plugins>
     </pluginManagement>
   </build>
+  <profiles>
+    <profile>
+      <id>sonatype-oss-release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>3.2.1</version>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>3.0.1</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
