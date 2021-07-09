@@ -12,4 +12,4 @@ install:
 script: mvn verify
 
 after_success:
-  - mvn clean cobertura:cobertura org.jwtk.coveralls:coveralls-maven-plugin:report
+  - mvn clean cobertura:cobertura io.jsonwebtoken.coveralls:coveralls-maven-plugin:report
