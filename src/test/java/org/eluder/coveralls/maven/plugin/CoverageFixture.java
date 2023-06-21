@@ -32,7 +32,7 @@ public final class CoverageFixture {
             // file                                                 lines  covered lines               missed lines  covered branches missed brnches
             { "org/eluder/coverage/sample/SimpleCoverage.java",     "14",  "3,6",                      "10,11",      "",              "" },
             { "org/eluder/coverage/sample/InnerClassCoverage.java", "31",  "3,6,9,10,12,13,16,19,22",  "26,27",      "",              "" },
-            { "org/eluder/coverage/sample/PartialCoverage.java",    "14",  "3,6,7,11",                 "9",          "",              "" }
+            { "org/eluder/coverage/sample/PartialCoverage.java",    "14",  "3,6,7,11",                 "9",          "6",             "6" }
     };
 
     public static String[][] JAVA_FILES_IT = new String[][] {
