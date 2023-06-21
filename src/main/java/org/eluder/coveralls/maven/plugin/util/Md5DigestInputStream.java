@@ -26,11 +26,11 @@ package org.eluder.coveralls.maven.plugin.util;
  * %[license]
  */
 
-import javax.xml.bind.DatatypeConverter;
 import java.io.InputStream;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import org.apache.commons.codec.binary.Hex;
 
 public class Md5DigestInputStream extends DigestInputStream {
 
@@ -39,6 +39,6 @@ public class Md5DigestInputStream extends DigestInputStream {
     }
 
     public String getDigestHex() {
-        return DatatypeConverter.printHexBinary(getMessageDigest().digest());
+        return Hex.encodeHexString(getMessageDigest().digest(), false);
     }
 }
