@@ -28,6 +28,7 @@ package org.eluder.coveralls.maven.plugin.logging;
 
 import org.apache.maven.plugin.logging.Log;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
+import org.eluder.coveralls.maven.plugin.domain.Branch;
 import org.eluder.coveralls.maven.plugin.domain.Source;
 import org.eluder.coveralls.maven.plugin.source.ChainingSourceCallback;
 import org.eluder.coveralls.maven.plugin.source.SourceCallback;
@@ -40,6 +41,8 @@ public class CoverageTracingLogger extends ChainingSourceCallback implements Log
     private long lines = 0;
     private long relevant = 0;
     private long covered = 0;
+    private long branches = 0;
+    private long coveredBranches = 0;
     
     public CoverageTracingLogger(final SourceCallback chained) {
         super(chained);
@@ -65,6 +68,18 @@ public class CoverageTracingLogger extends ChainingSourceCallback implements Log
         return relevant - covered;
     }
     
+    public final long getBranches() {
+        return branches;
+    }
+
+    public final long getCoveredBranches() {
+        return coveredBranches;
+    }
+
+    public final long getMissedBranches() {
+        return branches - coveredBranches;
+    }
+
     @Override
     public Position getPosition() {
         return Position.AFTER;
@@ -76,6 +91,9 @@ public class CoverageTracingLogger extends ChainingSourceCallback implements Log
         log.info("- " + getRelevant() + " relevant lines");
         log.info("- " + getCovered() + " covered lines");
         log.info("- " + getMissed() + " missed lines");
+        log.info("- " + getBranches() + " branches");
+        log.info("- " + getCoveredBranches() + " covered branches");
+        log.info("- " + getMissedBranches() + " missed branches");
     }
 
     @Override
@@ -88,6 +106,13 @@ public class CoverageTracingLogger extends ChainingSourceCallback implements Log
                 if (coverage > 0) {
                     covered++;
                 }
+            }
+        }
+
+        this.branches += source.getBranchesList().size();
+        for (final Branch b : source.getBranchesList()) {
+            if (b.getHits() > 0) {
+                coveredBranches++;
             }
         }
     }
