@@ -42,6 +42,13 @@ public final class CoverageFixture {
             { "org/eluder/coverage/sample/PartialCoverage.java",    "14",  "3,6,7,9,11",               "",           "6",             "6" }
     };
 
+    public static String[][] JAVA_FILES_CLOVER = new String[][] {
+            // file                                                 lines  covered lines               missed lines
+            { "org/eluder/coverage/sample/SimpleCoverage.java",     "14",  "5,6",                      "9,10" },
+            { "org/eluder/coverage/sample/InnerClassCoverage.java", "31",  "5,6,7,9,12,15,16,21,22",   "25,26" },
+            { "org/eluder/coverage/sample/PartialCoverage.java",    "14",  "5,6,7,9",                  "" }
+    };
+
     public static String[][] JAVASCRIPT_FILES = new String[][] {
             // file                 lines   covered lines   missed lines covered branches missed branches
             { "Localization.js",    "18",   "1,2,4,5,9,13", "6,10",      "",              "" },

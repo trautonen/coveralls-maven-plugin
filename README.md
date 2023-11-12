@@ -17,8 +17,9 @@ service.
 ### Features
 
 * Supports [Cobertura](http://mojo.codehaus.org/cobertura-maven-plugin/),
-  [JaCoCo](http://www.eclemma.org/jacoco/trunk/doc/maven.html) and
-  [Saga](http://timurstrekalov.github.io/saga/) coverage tools
+  [JaCoCo](http://www.eclemma.org/jacoco/trunk/doc/maven.html),
+  [Saga](http://timurstrekalov.github.io/saga/) coverage tools and
+  [Clover](http://openclover.org/)
 * Multi-module report aggregation
 * Built-in support for [Travis CI](https://travis-ci.org/), [Circle](https://circleci.com/),
   [Codeship](https://www.codeship.io/), [Jenkins](http://jenkins-ci.org/),
@@ -174,6 +175,50 @@ after_success:
   - mvn clean test saga:coverage coveralls:report
 ```
 
+
+#### Clover
+
+**Note:** Atlassian has open-sourced clover and all references here are to the `open clover` project,
+which does not require a license to use.
+
+Set up the Open Clover Maven plugin in the build section of the project pom.xml:
+
+```xml
+<plugin>
+  <groupId>org.openclover</groupId>
+  <artifactId>clover-maven-plugin</artifactId>
+  <version>4.2.0</version>
+  <configuration>
+    <excludes>
+      <exclude>**/*Test*</exclude>
+    </excludes>
+  </configuration>
+  <executions>
+    <execution>
+      <id>clover</id>
+      <phase>test</phase>
+      <goals>
+        <goal>instrument</goal>
+        <goal>check</goal>
+        <goal>clover</goal>
+      </goals>
+    </execution>
+  </executions>
+</plugin>
+```
+
+Execute Maven to create JaCoCo report and submit Coveralls data:
+
+```
+mvn clean test clover:clover coveralls:report
+```
+
+Again, if you are using Travis CI this means you need to add to your `.travis.yml` the lines:
+
+```
+after_success:
+  - mvn clean test clover:clover coveralls:report
+```
 
 #### Aggregate multiple reports
 
