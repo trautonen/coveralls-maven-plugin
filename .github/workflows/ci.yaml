@@ -1,43 +1,25 @@
-#
-#    Copyright 2011-2020 the original author or authors.
-#
-#    This program is free software; you can redistribute it and/or
-#    modify it under the terms of the GNU General Public License
-#    as published by the Free Software Foundation; either version 2
-#    of the License, or (at your option) any later version.
-#
-#    You may obtain a copy of the License at
-#
-#       https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
-#
-
 name: Java CI
 
-on: [push, pull_request]
+on: [workflow_dispatch, push, pull_request]
 
 jobs:
   test:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macOS-latest, windows-latest]
-        java: [11, 17, 21]
-        distribution: ['zulu']
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        java: [11, 17, 21, 22-ea]
+        distribution: ['temurin']
       fail-fast: false
       max-parallel: 4
     name: Test JDK ${{ matrix.java }}, ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v4
-      - name: Set up JDK
+      - name: Set up JDK ${{ matrix.java }} ${{ matrix.distribution }}
         uses: actions/setup-java@v3
         with:
           java-version: ${{ matrix.java }}
           distribution: ${{ matrix.distribution }}
       - name: Test with Maven
-        run: ./mvnw test -B
+        run: ./mvnw test -B -V --no-transfer-progress -D"license.skip=true"
