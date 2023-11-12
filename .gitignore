@@ -13,3 +13,5 @@ target/*
 # Atlassian
 atlassian-ide-plugin.xml
 .factorypath
+release.properties
+pom.xml.releaseBackup
