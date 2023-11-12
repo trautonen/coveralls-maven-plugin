@@ -86,7 +86,7 @@
 
   <properties>
     <!-- Checkstyle -->
-    <checkstyle.config>checkstyle-2space.xml</checkstyle.config>
+    <checkstyle.config>checkstyle-4space.xml</checkstyle.config>
 
     <!-- Automatic Module Name -->
     <module.name>org.eluder.coveralls.maven.plugin</module.name>
