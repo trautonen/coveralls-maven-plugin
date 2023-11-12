@@ -52,15 +52,21 @@
     </license>
   </licenses>
 
+  <developers>
+    <developer>
+      <name>Tapio Rautonen</name>
+    </developer>
+  </developers>
+
   <prerequisites>
     <maven>3.5.0</maven>
   </prerequisites>
 
   <scm>
-    <connection>scm:git:ssh://github.com/hazendaz/ocveralls-maven-plugin.git</connection>
-    <developerConnection>scm:git:ssh://github.com/hazendaz/coveralls-maven-plugin.git</developerConnection>
-    <url>https://github.com/hazendaz/coveralls-maven-plugin</url>
+    <connection>scm:git:ssh://git@github.com/hazendaz/coveralls-maven-plugin.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/hazendaz/coveralls-maven-plugin.git</developerConnection>
     <tag>HEAD</tag>
+    <url>https://github.com/hazendaz/coveralls-maven-plugin</url>
   </scm>
   <issueManagement>
     <system>Github</system>
@@ -77,12 +83,6 @@
       <url>scm:git:ssh://git@github.com/hazendaz/coveralls-maven-plugin.git</url>
     </site>
   </distributionManagement>
-
-  <developers>
-    <developer>
-      <name>Tapio Rautonen</name>
-    </developer>
-  </developers>
 
   <properties>
     <!-- Checkstyle -->
