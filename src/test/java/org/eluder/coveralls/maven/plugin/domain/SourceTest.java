@@ -102,18 +102,18 @@ public class SourceTest {
         assertEquals(source1.getName(), merged.getName());
         assertEquals(source1.getDigest(), merged.getDigest());
         assertEquals(source1.getClassifier(), merged.getClassifier());
-        assertEquals(new Integer(2), merged.getCoverage()[0]);
-        assertEquals(new Integer(1), merged.getCoverage()[1]);
-        assertEquals(new Integer(7), merged.getCoverage()[2]);
+        assertEquals(Integer.valueOf(2), merged.getCoverage()[0]);
+        assertEquals(Integer.valueOf(1), merged.getCoverage()[1]);
+        assertEquals(Integer.valueOf(7), merged.getCoverage()[2]);
         assertNull(merged.getCoverage()[3]);
-        assertEquals(new Integer(2), merged.getBranches()[0]);
-        assertEquals(new Integer(0), merged.getBranches()[1]);
-        assertEquals(new Integer(0), merged.getBranches()[2]);
-        assertEquals(new Integer(2), merged.getBranches()[3]);
-        assertEquals(new Integer(2), merged.getBranches()[4]);
-        assertEquals(new Integer(0), merged.getBranches()[5]);
-        assertEquals(new Integer(1), merged.getBranches()[6]);
-        assertEquals(new Integer(3), merged.getBranches()[7]);
+        assertEquals(Integer.valueOf(2), merged.getBranches()[0]);
+        assertEquals(Integer.valueOf(0), merged.getBranches()[1]);
+        assertEquals(Integer.valueOf(0), merged.getBranches()[2]);
+        assertEquals(Integer.valueOf(2), merged.getBranches()[3]);
+        assertEquals(Integer.valueOf(2), merged.getBranches()[4]);
+        assertEquals(Integer.valueOf(0), merged.getBranches()[5]);
+        assertEquals(Integer.valueOf(1), merged.getBranches()[6]);
+        assertEquals(Integer.valueOf(3), merged.getBranches()[7]);
     }
 
     @Test
