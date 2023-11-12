@@ -44,12 +44,6 @@
   <url>https://github.com/trautonen/coveralls-maven-plugin</url>
   <inceptionYear>2013</inceptionYear>
 
-  <developers>
-    <developer>
-      <name>Tapio Rautonen</name>
-    </developer>
-  </developers>
-
   <licenses>
     <license>
       <name>The MIT License (MIT)</name>
@@ -83,6 +77,12 @@
       <url>scm:git:ssh://git@github.com/hazendaz/coveralls-maven-plugin.git</url>
     </site>
   </distributionManagement>
+
+  <developers>
+    <developer>
+      <name>Tapio Rautonen</name>
+    </developer>
+  </developers>
 
   <properties>
     <!-- Checkstyle -->
@@ -184,8 +184,8 @@
       <artifactId>httpclient</artifactId>
       <exclusions>
         <exclusion>
-          <artifactId>commons-logging</artifactId>
           <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
