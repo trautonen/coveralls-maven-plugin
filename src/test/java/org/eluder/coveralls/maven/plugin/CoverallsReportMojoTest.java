@@ -50,7 +50,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
 import java.io.File;
@@ -62,8 +62,8 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -295,7 +295,7 @@ public class CoverallsReportMojoTest {
         mojo.skip = true;
         mojo.execute();
         
-        verifyZeroInteractions(jobMock);
+        verifyNoInteractions(jobMock);
     }
     
     public static void verifySuccessfullSubmit(Log logMock, String[][] fixture) {

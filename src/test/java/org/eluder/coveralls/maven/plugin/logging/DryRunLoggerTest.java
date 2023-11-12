@@ -25,7 +25,7 @@ package org.eluder.coveralls.maven.plugin.logging;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions ;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
@@ -35,7 +35,7 @@ import org.eluder.coveralls.maven.plugin.logging.Logger.Position;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DryRunLoggerTest {
@@ -60,7 +60,7 @@ public class DryRunLoggerTest {
     public void testLogDryRunDisabled() {
         new DryRunLogger(false, coverallsFileMock).log(logMock);
         
-        verifyZeroInteractions(logMock);
+        verifyNoInteractions(logMock);
     }
     
     @Test
