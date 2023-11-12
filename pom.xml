@@ -210,15 +210,17 @@
     <dependency>
       <groupId>org.apache.maven.plugin-tools</groupId>
       <artifactId>maven-plugin-annotations</artifactId>
-      <scope>provided</scope>
+      <version>3.10.2</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
+      <version>1.7.36</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>jcl-over-slf4j</artifactId>
+      <version>1.7.36</version>
     </dependency>
     <dependency>
       <groupId>org.junit.vintage</groupId>
@@ -245,7 +247,7 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.github.tomakehurst</groupId>
+      <groupId>org.wiremock</groupId>
       <artifactId>wiremock</artifactId>
       <version>3.3.1</version>
       <scope>test</scope>
@@ -257,6 +259,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
+        <version>3.10.2</version>
         <configuration>
           <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
         </configuration>
@@ -274,11 +277,6 @@
             </goals>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <groupId>com.github.hazendz.maven</groupId>
-        <artifactId>coveralls-maven-plugin</artifactId>
-        <version>${project.version}</version>
       </plugin>
     </plugins>
   </build>
