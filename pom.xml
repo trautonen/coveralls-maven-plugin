@@ -303,6 +303,27 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>com.mycila</groupId>
+        <artifactId>license-maven-plugin</artifactId>
+        <configuration>
+          <licenseSets>
+            <licenseSet>
+              <excludes>
+                <exclude>**/cobertura.xml</exclude>
+                <exclude>**/jacoco1.xml</exclude>
+                <exclude>**/jacoco2.xml</exclude>
+                <exclude>**/SimpleCoverage.java</exclude>
+                <exclude>**/InnerClassCoverage.java</exclude>
+                <exclude>**/PartialCoverage.java</exclude>
+                <exclude>**/saga.xml</exclude>
+                <exclude>**/Components.js</exclude>
+                <exclude>**/Localization.js</exclude>
+              </excludes>
+            </licenseSet>
+          </licenseSets>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 
