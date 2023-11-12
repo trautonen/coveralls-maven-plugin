@@ -36,7 +36,7 @@
 
   <groupId>com.github.hazendaz.maven</groupId>
   <artifactId>coveralls-maven-plugin</artifactId>
-  <version>4.4.2-SNAPSHOT</version>
+  <version>4.5.0-M1</version>
   <packaging>maven-plugin</packaging>
 
   <name>coveralls-maven-plugin</name>
@@ -65,7 +65,7 @@
   <scm>
     <connection>scm:git:ssh://git@github.com/hazendaz/coveralls-maven-plugin.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/hazendaz/coveralls-maven-plugin.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>coveralls-maven-plugin-4.5.0-M1</tag>
     <url>https://github.com/hazendaz/coveralls-maven-plugin</url>
   </scm>
   <issueManagement>
@@ -92,7 +92,7 @@
     <module.name>org.eluder.coveralls.maven.plugin</module.name>
 
     <!-- Reproducible Builds -->
-    <project.build.outputTimestamp>1696194468</project.build.outputTimestamp>
+    <project.build.outputTimestamp>1699829795</project.build.outputTimestamp>
 
     <!-- Artifacts -->
     <httpclient.version>4.5.14</httpclient.version>
