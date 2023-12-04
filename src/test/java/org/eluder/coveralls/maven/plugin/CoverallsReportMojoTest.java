@@ -26,6 +26,19 @@ package org.eluder.coveralls.maven.plugin;
  * %[license]
  */
 
+import static org.hamcrest.Matchers.containsString;
+import static org.junit.Assert.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.*;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Reporting;
@@ -55,19 +68,6 @@ import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import static org.hamcrest.Matchers.containsString;
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CoverallsReportMojoTest {
@@ -160,7 +160,8 @@ public class CoverallsReportMojoTest {
         mojo.project = projectMock;
         mojo.sourceEncoding = "UTF-8";
         mojo.failOnServiceError = true;
-        
+        mojo.failOnProcessingError = true;
+
         when(modelMock.getReporting()).thenReturn(reportingMock);
         when(reportingMock.getOutputDirectory()).thenReturn(folder.getRoot().getAbsolutePath());
         when(buildMock.getDirectory()).thenReturn(folder.getRoot().getAbsolutePath());
@@ -252,6 +253,14 @@ public class CoverallsReportMojoTest {
     }
 
     @Test
+    public void testProcessingExceptionWithAllowedProcessingFailure() throws Exception {
+        mojo.failOnProcessingError = false;
+        when(coverallsClientMock.submit(any(File.class))).thenThrow(new ProcessingException());
+        mojo.execute();
+        verify(logMock).warn(anyString());
+    }
+
+    @Test
     public void testProcessingExceptionWithAllowedServiceFailure() throws Exception {
         mojo.failOnServiceError = false;
         when(coverallsClientMock.submit(any(File.class))).thenThrow(new ProcessingException());
@@ -281,7 +290,19 @@ public class CoverallsReportMojoTest {
         mojo.execute();
         verify(logMock).warn(anyString());
     }
-    
+
+    @Test
+    public void testFailWithIOExceptionWithAllowedProcessingFailure() throws Exception {
+        mojo.failOnProcessingError = false;
+        when(coverallsClientMock.submit(any(File.class))).thenThrow(new IOException());
+        try {
+            mojo.execute();
+            fail("Should have failed with MojoFailureException");
+        } catch (MojoFailureException ex) {
+            assertEquals(ex.getCause().getClass(), IOException.class);
+        }
+    }
+
     @Test
     public void testFailWithNullPointerException() throws Exception {
         when(coverallsClientMock.submit(any(File.class))).thenThrow(new NullPointerException());
