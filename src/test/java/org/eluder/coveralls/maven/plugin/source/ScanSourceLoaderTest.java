@@ -54,14 +54,14 @@ public class ScanSourceLoaderTest {
     
     @Test
     public void testMissingSourceFileFromDirectory() throws Exception {
-        ScanSourceLoader sourceLoader = new ScanSourceLoader(folder.getRoot(), folder.getRoot(), "UTF-8");
+        ScanSourceLoader sourceLoader = new ScanSourceLoader(folder.getRoot(), folder.getRoot(), "UTF-8", null);
         assertNull(sourceLoader.load("Foo.java"));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testInvalidSourceFile() throws Exception {
         File subFolder = folder.newFolder();
-        ScanSourceLoader sourceLoader = new ScanSourceLoader(folder.getRoot(), folder.getRoot(), "UTF-8");
+        ScanSourceLoader sourceLoader = new ScanSourceLoader(folder.getRoot(), folder.getRoot(), "UTF-8", null);
         sourceLoader.load(subFolder.getName());
     }
 
@@ -72,7 +72,7 @@ public class ScanSourceLoaderTest {
         File fileB = new File(dir, "BFile.java");
         TestIoUtil.writeFileContent("public class Foo {\r\n    \n}\r", fileA);
         TestIoUtil.writeFileContent("public class Foo {\r\n    \n}\r", fileB);
-        ScanSourceLoader sourceLoader = new ScanSourceLoader(folder.getRoot(), folder.getRoot(), "UTF-8");
+        ScanSourceLoader sourceLoader = new ScanSourceLoader(folder.getRoot(), folder.getRoot(), "UTF-8", null);
         Source sourceA = sourceLoader.load(fileA.getName());
         assertEquals("level1/level2/level3/AFile.java", sourceA.getName());
         assertEquals("2AC359C9A152FD7CD79C4EB147069224", sourceA.getDigest());

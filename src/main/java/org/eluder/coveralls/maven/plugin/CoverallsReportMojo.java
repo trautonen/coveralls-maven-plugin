@@ -207,6 +207,12 @@ public class CoverallsReportMojo extends AbstractMojo {
     protected boolean scanForSources;
 
     /**
+     * A list of exclude patterns to exclude while scanning for sources.
+     */
+    @Parameter(property = "scanExclusions")
+    protected List<String> scanExclusions;
+
+    /**
      * Base directory of the project.
      */
     @Parameter(property = "coveralls.basedir", defaultValue = "${project.basedir}")
@@ -292,6 +298,7 @@ public class CoverallsReportMojo extends AbstractMojo {
         return new SourceLoaderFactory(job.getGit().getBaseDir(), project, sourceEncoding)
                 .withSourceDirectories(sourceDirectories)
                 .withScanForSources(scanForSources)
+                .withScanExclusions(scanExclusions)
                 .createSourceLoader();
     }
 
