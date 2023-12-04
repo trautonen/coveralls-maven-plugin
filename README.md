@@ -1,12 +1,17 @@
 coveralls-maven-plugin
 ======================
 
-[![Build Status](http://img.shields.io/travis/trautonen/coveralls-maven-plugin/master.svg?style=flat-square)](https://travis-ci.org/trautonen/coveralls-maven-plugin)
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
 [![Coverage Status](http://img.shields.io/coveralls/trautonen/coveralls-maven-plugin/master.svg?style=flat-square)](https://coveralls.io/r/trautonen/coveralls-maven-plugin?branch=master)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.eluder.coveralls/coveralls-maven-plugin/badge.svg?style=flat-square)](https://maven-badges.herokuapp.com/maven-central/org.eluder.coveralls/coveralls-maven-plugin/)
 
 Maven plugin for submitting Java code coverage reports to [Coveralls](https://coveralls.io/) web
 service.
+
+## !!! Deprecated !!!
+
+This project is deprecated due to lack of time and interest. Please use https://github.com/hazendaz/coveralls-maven-plugin from now on.
+
 
 ### Requirements
 
